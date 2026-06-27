@@ -13,13 +13,13 @@ requires a major version.
 
 ## Planned adapter capabilities
 
-| Host | Mapping target | Typography policy |
-| --- | --- | --- |
-| LazyVim/Neovim | highlight groups and terminal ANSI colors | Never set the user's font |
-| Yaak | experimental TypeScript plugin theme API | Export only supported properties |
-| Inkdrop UI | CSS custom properties | Respect user font settings by default |
-| Inkdrop Syntax | CodeMirror selectors and variables | Never set `font-family` |
-| Inkdrop Preview | Markdown document CSS variables | May use the prose stack |
+| Host            | Mapping target                            | Typography policy                     |
+| --------------- | ----------------------------------------- | ------------------------------------- |
+| LazyVim/Neovim  | highlight groups and terminal ANSI colors | Never set the user's font             |
+| Yaak            | experimental TypeScript plugin theme API  | Export only supported properties      |
+| Inkdrop UI      | CSS custom properties                     | Respect user font settings by default |
+| Inkdrop Syntax  | CodeMirror selectors and variables        | Never set `font-family`               |
+| Inkdrop Preview | Markdown document CSS variables           | May use the prose stack               |
 
 Adapters accept a resolved theme plus a capability manifest. Unsupported token
 families are omitted explicitly rather than approximated.

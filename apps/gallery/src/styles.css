@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif:wght@400;500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif:wght@400;500&display=swap');
 
 :root {
-  font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+  font-family: 'IBM Plex Mono', 'SFMono-Regular', monospace;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   color-scheme: dark;
@@ -40,9 +40,16 @@ a {
   overflow: hidden;
   color: var(--hue-text-primary);
   background:
-    linear-gradient(90deg, transparent 0 96%, color-mix(in srgb, var(--hue-border-subtle) 10%, transparent) 96% 96.08%, transparent 96.08%),
+    linear-gradient(
+      90deg,
+      transparent 0 96%,
+      color-mix(in srgb, var(--hue-border-subtle) 10%, transparent) 96% 96.08%,
+      transparent 96.08%
+    ),
     var(--hue-surface-canvas);
-  transition: color 220ms ease, background-color 220ms ease;
+  transition:
+    color 220ms ease,
+    background-color 220ms ease;
 }
 
 .site-header {
@@ -63,7 +70,7 @@ a {
   display: flex;
   align-items: center;
   gap: 14px;
-  font-family: "Noto Serif", Georgia, serif;
+  font-family: 'Noto Serif', Georgia, serif;
   font-size: 20px;
 }
 
@@ -104,7 +111,7 @@ nav a.active::after {
   left: 0;
   height: 2px;
   background: var(--hue-status-warning);
-  content: "";
+  content: '';
 }
 
 .mood-switch {
@@ -159,7 +166,9 @@ nav a.active::after {
 
 .mood-icon-huong {
   border-width: 0 0 1px;
-  box-shadow: 0 -3px 0 -2px currentColor, 0 3px 0 -2px currentColor;
+  box-shadow:
+    0 -3px 0 -2px currentColor,
+    0 3px 0 -2px currentColor;
 }
 
 .mood-icon-cung {
@@ -206,7 +215,7 @@ nav a.active::after {
 h1,
 h2 {
   margin: 0;
-  font-family: "Noto Serif", Georgia, serif;
+  font-family: 'Noto Serif', Georgia, serif;
   font-weight: 400;
 }
 
@@ -233,7 +242,9 @@ h1 {
   border: 1px solid var(--hue-accent-primary);
   color: var(--hue-accent-primary);
   font-size: 13px;
-  transition: background 120ms ease, color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .primary-action:hover {
@@ -443,7 +454,9 @@ pre {
   overflow-x: auto;
   color: var(--hue-text-primary);
   background: color-mix(in srgb, var(--hue-surface-raised) 62%, transparent);
-  font: 11px/1.65 "IBM Plex Mono", monospace;
+  font:
+    11px/1.65 'IBM Plex Mono',
+    monospace;
   tab-size: 2;
 }
 
@@ -535,12 +548,12 @@ pre {
   border: 0;
 }
 
-[data-hue-theme="cung"] {
+[data-hue-theme='cung'] {
   color-scheme: light;
 }
 
-[data-hue-theme="cung"] .app,
-[data-hue-theme="cung"] .site-header {
+[data-hue-theme='cung'] .app,
+[data-hue-theme='cung'] .site-header {
   text-shadow: none;
 }
 
