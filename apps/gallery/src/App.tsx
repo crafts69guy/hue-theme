@@ -106,9 +106,9 @@ function Hero({ theme }: { theme: ResolvedTheme }) {
       <div className="rain-lines" aria-hidden="true" />
       <div className="hero-copy">
         <h1>
-          Một hệ màu,
+          Mưa <span className="hero-key hero-key-hue">Huế</span> ngoài hiên,
           <br />
-          ba nhịp Huế
+          sắc màu trong <span className="hero-key hero-key-code">code</span>.
         </h1>
         <p>
           Design tokens cho giao diện, mã nguồn

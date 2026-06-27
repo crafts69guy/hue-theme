@@ -1,7 +1,45 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif:wght@400;500&display=swap");
+@font-face {
+  font-family: "PlemolJP Console NF";
+  src: url("/fonts/PlemolJPConsoleNF-Light.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PlemolJP Console NF";
+  src: url("/fonts/PlemolJPConsoleNF-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PlemolJP Console NF";
+  src: url("/fonts/PlemolJPConsoleNF-Medium.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PlemolJP Console NF";
+  src: url("/fonts/PlemolJPConsoleNF-SemiBold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PlemolJP Console NF";
+  src: url("/fonts/PlemolJPConsoleNF-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
 
 :root {
-  font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+  font-family: "PlemolJP Console NF", monospace;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   color-scheme: dark;
@@ -70,7 +108,7 @@ a {
   display: flex;
   align-items: center;
   gap: 14px;
-  font-family: "Noto Serif", Georgia, serif;
+  font-family: "PlemolJP Console NF", monospace;
   font-size: 20px;
 }
 
@@ -218,7 +256,7 @@ nav a.active::after {
 h1,
 h2 {
   margin: 0;
-  font-family: "Noto Serif", Georgia, serif;
+  font-family: "PlemolJP Console NF", monospace;
   font-weight: 400;
 }
 
@@ -227,6 +265,50 @@ h1 {
   font-size: clamp(56px, 5.6vw, 82px);
   line-height: 0.98;
   letter-spacing: -0.055em;
+}
+
+.hero-key {
+  position: relative;
+  display: inline-block;
+  z-index: 0;
+  font-weight: 500;
+}
+
+.hero-key-hue {
+  color: var(--hue-status-warning);
+}
+
+.hero-key-hue::after {
+  position: absolute;
+  right: 0.04em;
+  bottom: -0.04em;
+  left: 0.04em;
+  z-index: -1;
+  height: 0.08em;
+  background: color-mix(in srgb, var(--hue-status-warning) 55%, transparent);
+  content: "";
+  transform: skewX(-22deg);
+}
+
+.hero-key-code {
+  color: var(--hue-accent-primary);
+  letter-spacing: -0.04em;
+}
+
+.hero-key-code::before,
+.hero-key-code::after {
+  color: var(--hue-accent-secondary);
+  font-weight: 400;
+}
+
+.hero-key-code::before {
+  margin-right: 0.05em;
+  content: "{";
+}
+
+.hero-key-code::after {
+  margin-left: 0.05em;
+  content: "}";
 }
 
 .hero-copy > p {
@@ -458,7 +540,7 @@ pre {
   color: var(--hue-text-primary);
   background: color-mix(in srgb, var(--hue-surface-raised) 62%, transparent);
   font:
-    11px / 1.65 "IBM Plex Mono",
+    11px / 1.65 "PlemolJP Console NF",
     monospace;
   tab-size: 2;
 }

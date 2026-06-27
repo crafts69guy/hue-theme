@@ -18,7 +18,7 @@ await page.screenshot({
 });
 
 const title = await page.locator("h1").innerText();
-if (!title.includes("Một hệ màu")) throw new Error("Hero title is missing");
+if (!title.includes("Mưa Huế ngoài hiên")) throw new Error("Hero title is missing");
 
 await page.getByRole("button", { name: "Cung" }).click();
 if ((await page.locator(".app").getAttribute("data-hue-theme")) !== "cung") {

@@ -21,15 +21,17 @@
   "font": {
     "family": {
       "$type": "fontFamily",
-      "display": { "$value": ["Noto Serif", "Georgia", "serif"] },
-      "ui": { "$value": ["Inter", "system-ui", "sans-serif"] },
-      "mono": { "$value": ["IBM Plex Mono", "SFMono-Regular", "monospace"] }
+      "display": { "$value": ["PlemolJP Console NF", "monospace"] },
+      "ui": { "$value": ["PlemolJP Console NF", "monospace"] },
+      "mono": { "$value": ["PlemolJP Console NF", "monospace"] }
     },
     "weight": {
       "$type": "fontWeight",
+      "light": { "$value": 300 },
       "regular": { "$value": 400 },
       "medium": { "$value": 500 },
-      "semibold": { "$value": 600 }
+      "semibold": { "$value": 600 },
+      "bold": { "$value": 700 }
     }
   },
   "motion": {

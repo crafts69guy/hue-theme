@@ -46,6 +46,15 @@ Version 0.1 specifies the cross-platform semantic contract and gallery.
 LazyVim, Yaak, and Inkdrop adapters are documented as future mappings and are
 not production packages yet.
 
+## Bundled font
+
+The gallery bundles
+[PlemolJP Console NF v3.0.0](https://github.com/yuru7/PlemolJP/releases/tag/v3.0.0)
+in Light (300), Regular (400), Medium (500), SemiBold (600), and Bold (700).
+PlemolJP is distributed under the SIL Open Font License 1.1; its copyright and
+full license are included beside the fonts in
+`apps/gallery/public/fonts/PlemolJP-LICENSE.txt`.
+
 ## License
 
 MIT
