@@ -1,28 +1,29 @@
-import { getTheme, type ResolvedTheme, type ThemeId, themeBundle } from '@hue-theme/tokens';
-import { useReducedMotion } from 'motion/react';
-import { useAnimate } from 'motion/react-mini';
-import { useEffect, useMemo, useState } from 'react';
-import { contrastRatio } from './color';
+import { getTheme, type ResolvedTheme, type ThemeId, themeBundle } from "@hue-theme/tokens";
+import { useReducedMotion } from "motion/react";
+import { useAnimate } from "motion/react-mini";
+import { useEffect, useMemo, useState } from "react";
+import { contrastRatio } from "./color";
+import { HeroBackground } from "./HeroBackground";
 
-const NAVIGATION = ['Overview', 'Tokens', 'Syntax', 'Components', 'Accessibility'];
+const NAVIGATION = ["Overview", "Tokens", "Syntax", "Components", "Accessibility"];
 const FEATURED_TOKENS = [
-  ['surface.canvas', 'Background', 'Nền chủ đạo'],
-  ['text.primary', 'Text', 'Chữ chính'],
-  ['accent.primary', 'Accent', 'Ngọc sông Hương'],
-  ['border.subtle', 'Border', 'Ranh giới'],
+  ["surface.canvas", "Background", "Nền chủ đạo"],
+  ["text.primary", "Text", "Chữ chính"],
+  ["accent.primary", "Accent", "Ngọc sông Hương"],
+  ["border.subtle", "Border", "Ranh giới"],
 ] as const;
 const PALETTE_GROUPS = [
-  ['Surface', ['surface.canvas', 'surface.raised', 'surface.selected']],
-  ['Text', ['text.primary', 'text.secondary', 'text.accent']],
-  ['Accent', ['accent.primary', 'accent.secondary']],
-  ['Status', ['status.success', 'status.warning', 'status.error', 'status.info']],
-  ['Syntax', ['syntax.keyword', 'syntax.string', 'syntax.number', 'syntax.function']],
+  ["Surface", ["surface.canvas", "surface.raised", "surface.selected"]],
+  ["Text", ["text.primary", "text.secondary", "text.accent"]],
+  ["Accent", ["accent.primary", "accent.secondary"]],
+  ["Status", ["status.success", "status.warning", "status.error", "status.info"]],
+  ["Syntax", ["syntax.keyword", "syntax.string", "syntax.number", "syntax.function"]],
 ] as const;
 const AUDIT_TOKENS = [
-  ['text.primary', 4.5],
-  ['text.secondary', 4.5],
-  ['accent.primary', 4.5],
-  ['border.subtle', 3],
+  ["text.primary", 4.5],
+  ["text.secondary", 4.5],
+  ["accent.primary", 4.5],
+  ["border.subtle", 3],
 ] as const;
 
 function GateMark() {
@@ -59,35 +60,35 @@ function Brand() {
       scope.current,
       {
         transform: [
-          'translateY(0) scale(1)',
-          'translateY(-1.5px) scale(1.015)',
-          'translateY(0) scale(1)',
+          "translateY(0) scale(1)",
+          "translateY(-1.5px) scale(1.015)",
+          "translateY(0) scale(1)",
         ],
       },
-      { duration: 0.9, ease: 'easeInOut' },
+      { duration: 0.9, ease: "easeInOut" },
     );
     animate(
-      '.gate-frame',
+      ".gate-frame",
       { opacity: [0.4, 1, 1], strokeDashoffset: [1, 0, 0] },
-      { duration: 1.05, ease: 'easeInOut' },
+      { duration: 1.05, ease: "easeInOut" },
     );
     animate(
-      '.gate-roof',
+      ".gate-roof",
       {
         filter: [
-          'drop-shadow(0 0 0 currentColor)',
-          'drop-shadow(0 0 4px currentColor)',
-          'drop-shadow(0 0 0 currentColor)',
+          "drop-shadow(0 0 0 currentColor)",
+          "drop-shadow(0 0 4px currentColor)",
+          "drop-shadow(0 0 0 currentColor)",
         ],
         opacity: [0.45, 1, 1],
         strokeDashoffset: [1, 0, 0],
       },
-      { delay: 0.12, duration: 0.92, ease: 'easeOut' },
+      { delay: 0.12, duration: 0.92, ease: "easeOut" },
     );
     animate(
-      '.brand-label',
-      { opacity: [0.72, 1], transform: ['translateX(-2px)', 'translateX(0)'] },
-      { delay: 0.16, duration: 0.55, ease: 'easeOut' },
+      ".brand-label",
+      { opacity: [0.72, 1], transform: ["translateX(-2px)", "translateX(0)"] },
+      { delay: 0.16, duration: 0.55, ease: "easeOut" },
     );
   };
 
@@ -116,32 +117,32 @@ function CungIcon({ active }: { active: boolean }) {
     const controls = [
       animate(
         scope.current,
-        { transform: ['translateY(0)', 'translateY(-1.2px)', 'translateY(0)'] },
-        { duration: 2.8, ease: 'easeInOut', repeat: Number.POSITIVE_INFINITY },
+        { transform: ["translateY(0)", "translateY(-1.2px)", "translateY(0)"] },
+        { duration: 2.8, ease: "easeInOut", repeat: Number.POSITIVE_INFINITY },
       ),
       animate(
-        '.bridge-outline',
+        ".bridge-outline",
         { opacity: [0.45, 1, 1], strokeDashoffset: [1, 0, 0] },
-        { duration: 3.4, ease: 'easeInOut', repeat: Number.POSITIVE_INFINITY },
+        { duration: 3.4, ease: "easeInOut", repeat: Number.POSITIVE_INFINITY },
       ),
       animate(
-        '.bridge-truss',
+        ".bridge-truss",
         { opacity: [0.25, 1, 1], strokeDashoffset: [1, 0, 0] },
-        { delay: 0.28, duration: 3.4, ease: 'easeInOut', repeat: Number.POSITIVE_INFINITY },
+        { delay: 0.28, duration: 3.4, ease: "easeInOut", repeat: Number.POSITIVE_INFINITY },
       ),
       animate(
-        '.bridge-reflection',
+        ".bridge-reflection",
         { opacity: [0.12, 0.7, 0.12], strokeDashoffset: [1, 0, -1] },
-        { delay: 0.5, duration: 3.4, ease: 'easeInOut', repeat: Number.POSITIVE_INFINITY },
+        { delay: 0.5, duration: 3.4, ease: "easeInOut", repeat: Number.POSITIVE_INFINITY },
       ),
-      ...[0, 1, 2, 3, 4].map(index =>
+      ...[0, 1, 2, 3, 4].map((index) =>
         animate(
           `.bridge-light-${index}`,
-          { opacity: [0.18, 1, 0.18], transform: ['scale(0.75)', 'scale(1.45)', 'scale(0.75)'] },
+          { opacity: [0.18, 1, 0.18], transform: ["scale(0.75)", "scale(1.45)", "scale(0.75)"] },
           {
             delay: index * 0.12,
             duration: 1.45,
-            ease: 'easeInOut',
+            ease: "easeInOut",
             repeat: Number.POSITIVE_INFINITY,
           },
         ),
@@ -178,7 +179,7 @@ function CungIcon({ active }: { active: boolean }) {
 }
 
 function MoodIcon({ active, id }: { active: boolean; id: ThemeId }) {
-  if (id === 'mua') {
+  if (id === "mua") {
     return (
       <svg aria-hidden="true" className="mood-icon mood-icon-mua" viewBox="0 0 36 32">
         <path
@@ -192,7 +193,7 @@ function MoodIcon({ active, id }: { active: boolean; id: ThemeId }) {
     );
   }
 
-  if (id === 'huong') {
+  if (id === "huong") {
     return (
       <svg aria-hidden="true" className="mood-icon mood-icon-huong" viewBox="0 0 36 32">
         <path className="river-steam river-steam-one" d="M11 3.5c2.6 3.2-2.8 5.3-.2 8.5" />
@@ -226,7 +227,7 @@ function Header({
       <Brand />
       <nav aria-label="Primary navigation">
         {NAVIGATION.map((item, index) => (
-          <a key={item} className={index === 0 ? 'active' : ''} href={`#${item.toLowerCase()}`}>
+          <a key={item} className={index === 0 ? "active" : ""} href={`#${item.toLowerCase()}`}>
             {item}
           </a>
         ))}
@@ -236,10 +237,10 @@ function Header({
         {themeBundle.themes
           .slice()
           .reverse()
-          .map(theme => (
+          .map((theme) => (
             <button
               aria-pressed={theme.id === activeTheme}
-              className={theme.id === activeTheme ? 'selected' : ''}
+              className={theme.id === activeTheme ? "selected" : ""}
               key={theme.id}
               onClick={() => onThemeChange(theme.id)}
               type="button"
@@ -279,10 +280,10 @@ function TokenTable({ theme }: { theme: ResolvedTheme }) {
   );
 }
 
-function Hero({ theme }: { theme: ResolvedTheme }) {
+function Hero({ theme, themeId }: { theme: ResolvedTheme; themeId: ThemeId }) {
   return (
     <section className="hero" id="overview">
-      <div className="rain-lines" aria-hidden="true" />
+      <HeroBackground activeTheme={themeId} />
       <div className="hero-copy">
         <h1>
           1 chút <span className="hero-key hero-key-hue">Huế</span>,
@@ -299,11 +300,6 @@ function Hero({ theme }: { theme: ResolvedTheme }) {
         </a>
       </div>
       <TokenTable theme={theme} />
-      <div className="river-line" aria-hidden="true">
-        <i />
-        <i />
-        <i />
-      </div>
     </section>
   );
 }
@@ -320,7 +316,7 @@ function SemanticPalette({ theme }: { theme: ResolvedTheme }) {
           <div className="palette-group" key={label}>
             <span>{label}</span>
             <div>
-              {tokens.map(token => (
+              {tokens.map((token) => (
                 <button
                   key={token}
                   style={{ background: theme.semantic[token] }}
@@ -349,28 +345,28 @@ function SyntaxSpecimen({ theme }: { theme: ResolvedTheme }) {
       <pre>
         <code>
           <span className="line-number">1</span>
-          <span style={{ color: syntax['syntax.keyword'] }}>import</span>
-          {' { tokens } '}
-          <span style={{ color: syntax['syntax.keyword'] }}>from</span>
-          <span style={{ color: syntax['syntax.string'] }}> "@hue-theme/tokens"</span>;{'\n'}
+          <span style={{ color: syntax["syntax.keyword"] }}>import</span>
+          {" { tokens } "}
+          <span style={{ color: syntax["syntax.keyword"] }}>from</span>
+          <span style={{ color: syntax["syntax.string"] }}> "@hue-theme/tokens"</span>;{"\n"}
           <span className="line-number">2</span>
-          {'\n'}
+          {"\n"}
           <span className="line-number">3</span>
-          <span style={{ color: syntax['syntax.keyword'] }}>const</span>{' '}
-          <span style={{ color: syntax['syntax.function'] }}>styles</span> = {'{'}
-          {'\n'}
-          <span className="line-number">4</span> background: tokens.surface.canvas,{'\n'}
-          <span className="line-number">5</span> color: tokens.text.primary,{'\n'}
-          <span className="line-number">6</span> border:{' '}
-          <span style={{ color: syntax['syntax.string'] }}>"1px solid"</span>,{'\n'}
-          <span className="line-number">7</span> radius:{' '}
-          <span style={{ color: syntax['syntax.number'] }}>2</span>,{'\n'}
+          <span style={{ color: syntax["syntax.keyword"] }}>const</span>{" "}
+          <span style={{ color: syntax["syntax.function"] }}>styles</span> = {"{"}
+          {"\n"}
+          <span className="line-number">4</span> background: tokens.surface.canvas,{"\n"}
+          <span className="line-number">5</span> color: tokens.text.primary,{"\n"}
+          <span className="line-number">6</span> border:{" "}
+          <span style={{ color: syntax["syntax.string"] }}>"1px solid"</span>,{"\n"}
+          <span className="line-number">7</span> radius:{" "}
+          <span style={{ color: syntax["syntax.number"] }}>2</span>,{"\n"}
           <span className="line-number">8</span>
-          {'};'}
-          {'\n'}
+          {"};"}
+          {"\n"}
           <span className="line-number">9</span>
-          <span style={{ color: syntax['syntax.comment'] }}>
-            {'// Primitive → semantic → adapter'}
+          <span style={{ color: syntax["syntax.comment"] }}>
+            {"// Primitive → semantic → adapter"}
           </span>
         </code>
       </pre>
@@ -380,7 +376,7 @@ function SyntaxSpecimen({ theme }: { theme: ResolvedTheme }) {
 
 function ContrastAudit({ theme }: { theme: ResolvedTheme }) {
   const rows = useMemo(() => {
-    const background = theme.semantic['surface.canvas'];
+    const background = theme.semantic["surface.canvas"];
     return AUDIT_TOKENS.map(([token, minimum]) => {
       const ratio = contrastRatio(theme.semantic[token], background);
       return { token, minimum, ratio, pass: ratio >= minimum };
@@ -409,7 +405,7 @@ function ContrastAudit({ theme }: { theme: ResolvedTheme }) {
             <span>
               {ratio.toFixed(2)}:1 <small>≥ {minimum}:1</small>
             </span>
-            <strong className={pass ? 'pass' : 'fail'}>{pass ? 'AA Pass' : 'Fail'}</strong>
+            <strong className={pass ? "pass" : "fail"}>{pass ? "AA Pass" : "Fail"}</strong>
           </div>
         ))}
       </div>
@@ -437,14 +433,14 @@ function FooterBand() {
 }
 
 export function App() {
-  const [themeId, setThemeId] = useState<ThemeId>('mua');
+  const [themeId, setThemeId] = useState<ThemeId>("mua");
   const theme = getTheme(themeId);
 
   return (
     <div className="app" data-hue-theme={themeId}>
       <Header activeTheme={themeId} onThemeChange={setThemeId} />
       <main>
-        <Hero theme={theme} />
+        <Hero theme={theme} themeId={themeId} />
         <SemanticPalette theme={theme} />
         <div className="spec-grid">
           <SyntaxSpecimen theme={theme} />
