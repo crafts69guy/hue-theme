@@ -1,0 +1,50 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "$description": "Mưa — a deep dark mood shaped by Huế rain and wet stone.",
+  "meta": { "id": "mua", "label": "Mưa", "appearance": "dark" },
+  "primitive": {
+    "$type": "color",
+    "ink": { "$value": { "colorSpace": "srgb", "components": [0.059, 0.075, 0.075], "hex": "#0F1313" } },
+    "stone": { "$value": { "colorSpace": "srgb", "components": [0.082, 0.106, 0.11], "hex": "#151B1C" } },
+    "rain": { "$value": { "colorSpace": "srgb", "components": [0.337, 0.396, 0.396], "hex": "#566565" } },
+    "paper": { "$value": { "colorSpace": "srgb", "components": [0.929, 0.914, 0.875], "hex": "#EDE9DF" } },
+    "ash": { "$value": { "colorSpace": "srgb", "components": [0.718, 0.718, 0.678], "hex": "#B7B7AD" } },
+    "jade": { "$value": { "colorSpace": "srgb", "components": [0.475, 0.706, 0.604], "hex": "#79B49A" } },
+    "violet": { "$value": { "colorSpace": "srgb", "components": [0.71, 0.635, 0.792], "hex": "#B5A2CA" } },
+    "gold": { "$value": { "colorSpace": "srgb", "components": [0.831, 0.667, 0.373], "hex": "#D4AA5F" } },
+    "vermilion": { "$value": { "colorSpace": "srgb", "components": [0.824, 0.392, 0.353], "hex": "#D2645A" } },
+    "blue": { "$value": { "colorSpace": "srgb", "components": [0.475, 0.651, 0.71], "hex": "#79A6B5" } }
+  },
+  "semantic": {
+    "$type": "color",
+    "surface": {
+      "canvas": { "$value": "{primitive.ink}" },
+      "raised": { "$value": "{primitive.stone}" },
+      "selected": { "$value": "{primitive.rain}" }
+    },
+    "text": {
+      "primary": { "$value": "{primitive.paper}" },
+      "secondary": { "$value": "{primitive.ash}" },
+      "accent": { "$value": "{primitive.jade}" }
+    },
+    "border": { "subtle": { "$value": "{primitive.rain}" } },
+    "accent": {
+      "primary": { "$value": "{primitive.jade}" },
+      "secondary": { "$value": "{primitive.violet}" }
+    },
+    "status": {
+      "success": { "$value": "{primitive.jade}" },
+      "warning": { "$value": "{primitive.gold}" },
+      "error": { "$value": "{primitive.vermilion}" },
+      "info": { "$value": "{primitive.blue}" }
+    },
+    "syntax": {
+      "keyword": { "$value": "{primitive.violet}" },
+      "string": { "$value": "{primitive.jade}" },
+      "number": { "$value": "{primitive.gold}" },
+      "function": { "$value": "{primitive.blue}" },
+      "comment": { "$value": "{primitive.ash}" },
+      "operator": { "$value": "{primitive.vermilion}" }
+    }
+  }
+}

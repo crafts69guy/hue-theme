@@ -1,0 +1,27 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "$description": "Cung — an ivory light mood informed by imperial lacquer and royal purple.",
+  "meta": { "id": "cung", "label": "Cung", "appearance": "light" },
+  "primitive": {
+    "$type": "color",
+    "ink": { "$value": { "colorSpace": "srgb", "components": [0.953, 0.925, 0.851], "hex": "#F3ECD9" } },
+    "stone": { "$value": { "colorSpace": "srgb", "components": [0.91, 0.867, 0.773], "hex": "#E8DDC5" } },
+    "rain": { "$value": { "colorSpace": "srgb", "components": [0.443, 0.392, 0.298], "hex": "#71644C" } },
+    "paper": { "$value": { "colorSpace": "srgb", "components": [0.157, 0.145, 0.122], "hex": "#28251F" } },
+    "ash": { "$value": { "colorSpace": "srgb", "components": [0.345, 0.325, 0.278], "hex": "#585347" } },
+    "jade": { "$value": { "colorSpace": "srgb", "components": [0.208, 0.42, 0.361], "hex": "#356B5C" } },
+    "violet": { "$value": { "colorSpace": "srgb", "components": [0.388, 0.31, 0.459], "hex": "#634F75" } },
+    "gold": { "$value": { "colorSpace": "srgb", "components": [0.545, 0.361, 0.102], "hex": "#8B5C1A" } },
+    "vermilion": { "$value": { "colorSpace": "srgb", "components": [0.62, 0.204, 0.176], "hex": "#9E342D" } },
+    "blue": { "$value": { "colorSpace": "srgb", "components": [0.196, 0.376, 0.443], "hex": "#326071" } }
+  },
+  "semantic": {
+    "$type": "color",
+    "surface": { "canvas": { "$value": "{primitive.ink}" }, "raised": { "$value": "{primitive.stone}" }, "selected": { "$value": "{primitive.rain}" } },
+    "text": { "primary": { "$value": "{primitive.paper}" }, "secondary": { "$value": "{primitive.ash}" }, "accent": { "$value": "{primitive.jade}" } },
+    "border": { "subtle": { "$value": "{primitive.rain}" } },
+    "accent": { "primary": { "$value": "{primitive.jade}" }, "secondary": { "$value": "{primitive.violet}" } },
+    "status": { "success": { "$value": "{primitive.jade}" }, "warning": { "$value": "{primitive.gold}" }, "error": { "$value": "{primitive.vermilion}" }, "info": { "$value": "{primitive.blue}" } },
+    "syntax": { "keyword": { "$value": "{primitive.violet}" }, "string": { "$value": "{primitive.jade}" }, "number": { "$value": "{primitive.gold}" }, "function": { "$value": "{primitive.blue}" }, "comment": { "$value": "{primitive.ash}" }, "operator": { "$value": "{primitive.vermilion}" } }
+  }
+}

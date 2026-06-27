@@ -1,0 +1,15 @@
+{
+  "name": "@hue-theme/tokens",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./generated/themes.ts",
+    "./themes.css": "./generated/themes.css",
+    "./themes.json": "./generated/themes.json"
+  },
+  "files": ["generated", "README.md"],
+  "scripts": {
+    "build": "bun scripts/build.ts",
+    "check": "bun scripts/build.ts --check"
+  }
+}

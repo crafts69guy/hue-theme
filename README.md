@@ -1,0 +1,41 @@
+# Hue Theme
+
+Hue Theme is a portable theme design system rooted in the atmosphere and
+visual culture of Huế, Việt Nam. It uses a three-layer architecture:
+primitive tokens, semantic roles, and platform adapters.
+
+The first release contains the token contract and an interactive gallery for
+three moods:
+
+- **Mưa** — deep charcoal, rain silver, and muted jade.
+- **Hương** — river green, dusk blue, and incense gold.
+- **Cung** — ivory paper, imperial lacquer, and restrained purple.
+
+## Development
+
+```fish
+bun install
+bun run dev
+```
+
+Quality gates:
+
+```fish
+bun run check
+bun test
+bun run build
+```
+
+The source tokens follow the
+[Design Tokens Community Group format](https://www.designtokens.org/tr/2025.10/format/).
+Generated artifacts must not be edited by hand.
+
+## Project status
+
+Version 0.1 specifies the cross-platform semantic contract and gallery.
+LazyVim, Yaak, and Inkdrop adapters are documented as future mappings and are
+not production packages yet.
+
+## License
+
+MIT

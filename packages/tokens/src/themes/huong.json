@@ -1,0 +1,27 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "$description": "Hương — a softer dark mood drawn from the Perfume River and incense.",
+  "meta": { "id": "huong", "label": "Hương", "appearance": "dark" },
+  "primitive": {
+    "$type": "color",
+    "ink": { "$value": { "colorSpace": "srgb", "components": [0.063, 0.094, 0.086], "hex": "#101816" } },
+    "stone": { "$value": { "colorSpace": "srgb", "components": [0.086, 0.137, 0.122], "hex": "#16231F" } },
+    "rain": { "$value": { "colorSpace": "srgb", "components": [0.322, 0.412, 0.373], "hex": "#52695F" } },
+    "paper": { "$value": { "colorSpace": "srgb", "components": [0.922, 0.914, 0.863], "hex": "#EBE9DC" } },
+    "ash": { "$value": { "colorSpace": "srgb", "components": [0.686, 0.718, 0.659], "hex": "#AFB7A8" } },
+    "jade": { "$value": { "colorSpace": "srgb", "components": [0.51, 0.725, 0.635], "hex": "#82B9A2" } },
+    "violet": { "$value": { "colorSpace": "srgb", "components": [0.655, 0.608, 0.737], "hex": "#A79BBC" } },
+    "gold": { "$value": { "colorSpace": "srgb", "components": [0.843, 0.667, 0.361], "hex": "#D7AA5C" } },
+    "vermilion": { "$value": { "colorSpace": "srgb", "components": [0.804, 0.427, 0.365], "hex": "#CD6D5D" } },
+    "blue": { "$value": { "colorSpace": "srgb", "components": [0.482, 0.675, 0.694], "hex": "#7BACB1" } }
+  },
+  "semantic": {
+    "$type": "color",
+    "surface": { "canvas": { "$value": "{primitive.ink}" }, "raised": { "$value": "{primitive.stone}" }, "selected": { "$value": "{primitive.rain}" } },
+    "text": { "primary": { "$value": "{primitive.paper}" }, "secondary": { "$value": "{primitive.ash}" }, "accent": { "$value": "{primitive.jade}" } },
+    "border": { "subtle": { "$value": "{primitive.rain}" } },
+    "accent": { "primary": { "$value": "{primitive.jade}" }, "secondary": { "$value": "{primitive.violet}" } },
+    "status": { "success": { "$value": "{primitive.jade}" }, "warning": { "$value": "{primitive.gold}" }, "error": { "$value": "{primitive.vermilion}" }, "info": { "$value": "{primitive.blue}" } },
+    "syntax": { "keyword": { "$value": "{primitive.violet}" }, "string": { "$value": "{primitive.jade}" }, "number": { "$value": "{primitive.gold}" }, "function": { "$value": "{primitive.blue}" }, "comment": { "$value": "{primitive.ash}" }, "operator": { "$value": "{primitive.vermilion}" } }
+  }
+}
