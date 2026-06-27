@@ -113,11 +113,41 @@ a {
 }
 
 .gate-mark {
-  width: 29px;
+  width: 42px;
   height: 36px;
+  overflow: visible;
   color: var(--hue-status-warning);
   stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.15;
+}
+
+.gate-mark * {
+  vector-effect: non-scaling-stroke;
+}
+
+.gate-frame,
+.gate-roof {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.gate-roof {
+  filter: drop-shadow(0 0 0 currentColor);
+}
+
+.gate-openings {
   stroke-width: 1.3;
+}
+
+.gate-detail {
+  opacity: 0.72;
+  stroke-width: 0.9;
+}
+
+.brand-label {
+  display: inline-block;
 }
 
 nav {
@@ -155,36 +185,67 @@ nav a.active::after {
 .mood-switch {
   align-self: center;
   display: flex;
-  height: 40px;
+  height: 48px;
   min-width: 0;
   margin: 0;
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--hue-border-subtle) 70%, transparent);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--hue-border-subtle) 82%, transparent);
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--hue-text-primary) 3%, transparent),
+    0 1px 4px color-mix(in srgb, #000 26%, transparent);
 }
 
 .mood-switch button {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 9px;
-  min-width: 92px;
-  padding: 0 14px;
+  justify-content: center;
+  gap: 12px;
+  min-width: 0;
+  height: 100%;
+  padding: 0 17px;
   border: 0;
-  border-right: 1px solid color-mix(in srgb, var(--hue-border-subtle) 45%, transparent);
   background: transparent;
   color: var(--hue-text-secondary);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  letter-spacing: 0.025em;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
 }
 
-.mood-switch button:last-child {
-  border-right: 0;
+.mood-switch button:nth-of-type(1) {
+  width: 105px;
+}
+
+.mood-switch button:nth-of-type(2),
+.mood-switch button:nth-of-type(3) {
+  width: 129px;
+}
+
+.mood-switch button + button::before {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 0;
+  width: 1px;
+  background: color-mix(in srgb, var(--hue-border-subtle) 72%, transparent);
+  content: "";
 }
 
 .mood-switch button:hover,
-.mood-switch button:focus-visible,
-.mood-switch button.selected {
+.mood-switch button:focus-visible {
   color: var(--hue-text-primary);
-  background: color-mix(in srgb, var(--hue-accent-primary) 12%, transparent);
+  background: color-mix(in srgb, var(--hue-accent-primary) 7%, transparent);
+}
+
+.mood-switch button.selected {
+  color: var(--hue-accent-primary);
+  background: color-mix(in srgb, var(--hue-accent-primary) 11%, transparent);
+  box-shadow: inset 0 0 0 1px var(--hue-accent-primary);
 }
 
 .mood-switch button:focus-visible,
@@ -195,25 +256,130 @@ nav a.active::after {
 }
 
 .mood-icon {
-  width: 12px;
-  height: 12px;
-  border: 1px solid currentColor;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.55;
 }
 
-.mood-icon-mua {
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
+.mood-icon * {
+  vector-effect: non-scaling-stroke;
 }
 
-.mood-icon-huong {
-  border-width: 0 0 1px;
-  box-shadow:
-    0 -3px 0 -2px currentColor,
-    0 3px 0 -2px currentColor;
+.rain-drop,
+.river-steam,
+.river-wave {
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
-.mood-icon-cung {
-  border-width: 1px 0;
+.mood-switch button:hover .rain-drop,
+.mood-switch button:focus-visible .rain-drop,
+.mood-switch button.selected .rain-drop {
+  animation: mood-rain 900ms ease-in-out infinite;
+}
+
+.rain-drop-two {
+  animation-delay: 140ms;
+}
+
+.rain-drop-three {
+  animation-delay: 280ms;
+}
+
+.mood-switch button:hover .river-steam,
+.mood-switch button:focus-visible .river-steam,
+.mood-switch button.selected .river-steam {
+  animation: mood-steam 1.8s ease-in-out infinite;
+}
+
+.river-steam-two {
+  animation-delay: 160ms;
+}
+
+.river-steam-three {
+  animation-delay: 320ms;
+}
+
+.mood-switch button:hover .river-wave,
+.mood-switch button:focus-visible .river-wave,
+.mood-switch button.selected .river-wave {
+  animation: mood-river 1.45s ease-in-out infinite alternate;
+}
+
+.river-wave-two {
+  animation-delay: 130ms;
+}
+
+.river-wave-three {
+  animation-delay: 260ms;
+}
+
+.bridge-outline,
+.bridge-truss {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  filter: drop-shadow(0 0 0 transparent);
+  transition: filter 220ms ease;
+}
+
+.mood-switch button:hover .bridge-outline,
+.mood-switch button:focus-visible .bridge-outline,
+.mood-switch button.selected .bridge-outline {
+  filter: drop-shadow(0 0 2px currentColor);
+}
+
+.bridge-reflection {
+  opacity: 0.35;
+  stroke-dasharray: 0.08 0.08;
+  stroke-dashoffset: 0;
+  stroke-width: 1.1;
+}
+
+.bridge-light {
+  opacity: 0.7;
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: drop-shadow(0 0 1.5px currentColor);
+}
+
+@keyframes mood-rain {
+  0%,
+  25% {
+    opacity: 0.25;
+    transform: translateY(-1.5px);
+  }
+  70%,
+  100% {
+    opacity: 1;
+    transform: translateY(1.5px);
+  }
+}
+
+@keyframes mood-steam {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: translateY(1px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-1.5px);
+  }
+}
+
+@keyframes mood-river {
+  from {
+    transform: translateX(-1px);
+  }
+  to {
+    transform: translateX(1px);
+  }
 }
 
 .hero {
@@ -673,10 +839,11 @@ pre {
   }
 
   .mood-switch {
-    height: 38px;
+    height: 40px;
   }
 
-  .mood-switch button {
+  .mood-switch button:nth-of-type(n) {
+    width: auto;
     min-width: 0;
     padding: 0 10px;
   }
@@ -774,5 +941,9 @@ pre {
   .app,
   .primary-action {
     transition-duration: 0.01ms;
+  }
+
+  .mood-switch button .mood-icon * {
+    animation: none;
   }
 }
