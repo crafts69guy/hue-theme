@@ -7,7 +7,10 @@
     "./themes.css": "./generated/themes.css",
     "./themes.json": "./generated/themes.json"
   },
-  "files": ["generated", "README.md"],
+  "files": [
+    "generated",
+    "README.md"
+  ],
   "scripts": {
     "build": "bun scripts/build.ts",
     "check": "bun scripts/build.ts --check"

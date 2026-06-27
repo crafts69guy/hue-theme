@@ -21,9 +21,19 @@ bun run dev
 Quality gates:
 
 ```fish
+bun run format
+bun run lint
+bun run quality
 bun run check
 bun test
 bun run build
+```
+
+Biome is the single formatter and linter for TypeScript, React, JavaScript,
+JSON, CSS, and HTML. CI can run the complete non-mutating gate with:
+
+```fish
+bun run ci
 ```
 
 The source tokens follow the

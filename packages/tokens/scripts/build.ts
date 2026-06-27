@@ -32,11 +32,7 @@ function colorHex(token: Token): string {
   throw new Error(`Expected a DTCG color object, received ${JSON.stringify(value)}`);
 }
 
-function resolveValue(
-  value: unknown,
-  source: ThemeSource,
-  stack: string[] = [],
-): string {
+function resolveValue(value: unknown, source: ThemeSource, stack: string[] = []): string {
   if (typeof value === "object" && value !== null && "hex" in value) {
     return colorHex({ $value: value });
   }
@@ -52,13 +48,15 @@ function resolveValue(
     throw new Error(`Circular token alias: ${[...stack, path].join(" -> ")}`);
   }
 
-  const target = path.split(".").reduce<unknown>(
-    (current, key) =>
-      current && typeof current === "object"
-        ? (current as Record<string, unknown>)[key]
-        : undefined,
-    source,
-  );
+  const target = path
+    .split(".")
+    .reduce<unknown>(
+      (current, key) =>
+        current && typeof current === "object"
+          ? (current as Record<string, unknown>)[key]
+          : undefined,
+      source,
+    );
   if (!isToken(target)) throw new Error(`Unresolved token alias {${path}}`);
   return resolveValue(target.$value, source, [...stack, path]);
 }
@@ -81,15 +79,13 @@ function flatten(
 }
 
 function relativeLuminance(hex: string): number {
-  const channels = hex
+  const matches = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
+  if (!matches) throw new Error(`Invalid sRGB hex color: ${hex}`);
+
+  const channels = matches
     .slice(1)
-    .match(/.{2}/g)!
     .map((channel) => Number.parseInt(channel, 16) / 255)
-    .map((channel) =>
-      channel <= 0.04045
-        ? channel / 12.92
-        : ((channel + 0.055) / 1.055) ** 2.4,
-    );
+    .map((channel) => (channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4));
   return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
 }
 
@@ -99,9 +95,7 @@ function contrastRatio(foreground: string, background: string): number {
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
 
-const files = (await readdir(sourceDirectory))
-  .filter((file) => file.endsWith(".json"))
-  .sort();
+const files = (await readdir(sourceDirectory)).filter((file) => file.endsWith(".json")).sort();
 const themes = await Promise.all(
   files.map(async (file) => {
     const source = JSON.parse(
@@ -133,9 +127,7 @@ for (const theme of themes) {
   for (const [token, minimum] of pairs) {
     const ratio = contrastRatio(theme.semantic[token], canvas);
     if (ratio < minimum) {
-      throw new Error(
-        `${theme.id}:${token} contrast ${ratio.toFixed(2)} is below ${minimum}:1`,
-      );
+      throw new Error(`${theme.id}:${token} contrast ${ratio.toFixed(2)} is below ${minimum}:1`);
     }
   }
 }

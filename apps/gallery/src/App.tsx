@@ -1,26 +1,26 @@
-import { useMemo, useState } from 'react';
-import { getTheme, themeBundle, type ThemeId, type ResolvedTheme } from '@hue-theme/tokens';
-import { contrastRatio } from './color';
+import { getTheme, type ResolvedTheme, type ThemeId, themeBundle } from "@hue-theme/tokens";
+import { useMemo, useState } from "react";
+import { contrastRatio } from "./color";
 
-const NAVIGATION = ['Overview', 'Tokens', 'Syntax', 'Components', 'Accessibility'];
+const NAVIGATION = ["Overview", "Tokens", "Syntax", "Components", "Accessibility"];
 const FEATURED_TOKENS = [
-  ['surface.canvas', 'Background', 'Nền chủ đạo'],
-  ['text.primary', 'Text', 'Chữ chính'],
-  ['accent.primary', 'Accent', 'Ngọc sông Hương'],
-  ['border.subtle', 'Border', 'Ranh giới'],
+  ["surface.canvas", "Background", "Nền chủ đạo"],
+  ["text.primary", "Text", "Chữ chính"],
+  ["accent.primary", "Accent", "Ngọc sông Hương"],
+  ["border.subtle", "Border", "Ranh giới"],
 ] as const;
 const PALETTE_GROUPS = [
-  ['Surface', ['surface.canvas', 'surface.raised', 'surface.selected']],
-  ['Text', ['text.primary', 'text.secondary', 'text.accent']],
-  ['Accent', ['accent.primary', 'accent.secondary']],
-  ['Status', ['status.success', 'status.warning', 'status.error', 'status.info']],
-  ['Syntax', ['syntax.keyword', 'syntax.string', 'syntax.number', 'syntax.function']],
+  ["Surface", ["surface.canvas", "surface.raised", "surface.selected"]],
+  ["Text", ["text.primary", "text.secondary", "text.accent"]],
+  ["Accent", ["accent.primary", "accent.secondary"]],
+  ["Status", ["status.success", "status.warning", "status.error", "status.info"]],
+  ["Syntax", ["syntax.keyword", "syntax.string", "syntax.number", "syntax.function"]],
 ] as const;
 const AUDIT_TOKENS = [
-  ['text.primary', 4.5],
-  ['text.secondary', 4.5],
-  ['accent.primary', 4.5],
-  ['border.subtle', 3],
+  ["text.primary", 4.5],
+  ["text.secondary", 4.5],
+  ["accent.primary", 4.5],
+  ["border.subtle", 3],
 ] as const;
 
 function GateMark() {
@@ -47,19 +47,20 @@ function Header({
       </a>
       <nav aria-label="Primary navigation">
         {NAVIGATION.map((item, index) => (
-          <a key={item} className={index === 0 ? 'active' : ''} href={`#${item.toLowerCase()}`}>
+          <a key={item} className={index === 0 ? "active" : ""} href={`#${item.toLowerCase()}`}>
             {item}
           </a>
         ))}
       </nav>
-      <div className="mood-switch" aria-label="Chọn mood">
+      <fieldset className="mood-switch">
+        <legend className="sr-only">Chọn mood</legend>
         {themeBundle.themes
           .slice()
           .reverse()
-          .map(theme => (
+          .map((theme) => (
             <button
               aria-pressed={theme.id === activeTheme}
-              className={theme.id === activeTheme ? 'selected' : ''}
+              className={theme.id === activeTheme ? "selected" : ""}
               key={theme.id}
               onClick={() => onThemeChange(theme.id)}
               type="button"
@@ -68,7 +69,7 @@ function Header({
               {theme.label}
             </button>
           ))}
-      </div>
+      </fieldset>
     </header>
   );
 }
@@ -141,7 +142,7 @@ function SemanticPalette({ theme }: { theme: ResolvedTheme }) {
           <div className="palette-group" key={label}>
             <span>{label}</span>
             <div>
-              {tokens.map(token => (
+              {tokens.map((token) => (
                 <button
                   key={token}
                   style={{ background: theme.semantic[token] }}
@@ -164,34 +165,34 @@ function SyntaxSpecimen({ theme }: { theme: ResolvedTheme }) {
   return (
     <section className="syntax-panel" id="syntax">
       <div className="panel-heading">
-        <h2>Syntax specimen</h2>
+        <h2 id="syntax-specimen-title">Syntax specimen</h2>
         <span>TypeScript⌄</span>
       </div>
-      <pre aria-label="TypeScript syntax preview">
+      <pre>
         <code>
           <span className="line-number">1</span>
-          <span style={{ color: syntax['syntax.keyword'] }}>import</span>
-          {' { tokens } '}
-          <span style={{ color: syntax['syntax.keyword'] }}>from</span>
-          <span style={{ color: syntax['syntax.string'] }}> "@hue-theme/tokens"</span>;{'\n'}
+          <span style={{ color: syntax["syntax.keyword"] }}>import</span>
+          {" { tokens } "}
+          <span style={{ color: syntax["syntax.keyword"] }}>from</span>
+          <span style={{ color: syntax["syntax.string"] }}> "@hue-theme/tokens"</span>;{"\n"}
           <span className="line-number">2</span>
-          {'\n'}
+          {"\n"}
           <span className="line-number">3</span>
-          <span style={{ color: syntax['syntax.keyword'] }}>const</span>{' '}
-          <span style={{ color: syntax['syntax.function'] }}>styles</span> = {'{'}
-          {'\n'}
-          <span className="line-number">4</span> background: tokens.surface.canvas,{'\n'}
-          <span className="line-number">5</span> color: tokens.text.primary,{'\n'}
-          <span className="line-number">6</span> border:{' '}
-          <span style={{ color: syntax['syntax.string'] }}>"1px solid"</span>,{'\n'}
-          <span className="line-number">7</span> radius:{' '}
-          <span style={{ color: syntax['syntax.number'] }}>2</span>,{'\n'}
+          <span style={{ color: syntax["syntax.keyword"] }}>const</span>{" "}
+          <span style={{ color: syntax["syntax.function"] }}>styles</span> = {"{"}
+          {"\n"}
+          <span className="line-number">4</span> background: tokens.surface.canvas,{"\n"}
+          <span className="line-number">5</span> color: tokens.text.primary,{"\n"}
+          <span className="line-number">6</span> border:{" "}
+          <span style={{ color: syntax["syntax.string"] }}>"1px solid"</span>,{"\n"}
+          <span className="line-number">7</span> radius:{" "}
+          <span style={{ color: syntax["syntax.number"] }}>2</span>,{"\n"}
           <span className="line-number">8</span>
-          {'};'}
-          {'\n'}
+          {"};"}
+          {"\n"}
           <span className="line-number">9</span>
-          <span style={{ color: syntax['syntax.comment'] }}>
-            {'// Primitive → semantic → adapter'}
+          <span style={{ color: syntax["syntax.comment"] }}>
+            {"// Primitive → semantic → adapter"}
           </span>
         </code>
       </pre>
@@ -201,7 +202,7 @@ function SyntaxSpecimen({ theme }: { theme: ResolvedTheme }) {
 
 function ContrastAudit({ theme }: { theme: ResolvedTheme }) {
   const rows = useMemo(() => {
-    const background = theme.semantic['surface.canvas'];
+    const background = theme.semantic["surface.canvas"];
     return AUDIT_TOKENS.map(([token, minimum]) => {
       const ratio = contrastRatio(theme.semantic[token], background);
       return { token, minimum, ratio, pass: ratio >= minimum };
@@ -230,7 +231,7 @@ function ContrastAudit({ theme }: { theme: ResolvedTheme }) {
             <span>
               {ratio.toFixed(2)}:1 <small>≥ {minimum}:1</small>
             </span>
-            <strong className={pass ? 'pass' : 'fail'}>{pass ? 'AA Pass' : 'Fail'}</strong>
+            <strong className={pass ? "pass" : "fail"}>{pass ? "AA Pass" : "Fail"}</strong>
           </div>
         ))}
       </div>
@@ -258,7 +259,7 @@ function FooterBand() {
 }
 
 export function App() {
-  const [themeId, setThemeId] = useState<ThemeId>('mua');
+  const [themeId, setThemeId] = useState<ThemeId>("mua");
   const theme = getTheme(themeId);
 
   return (
