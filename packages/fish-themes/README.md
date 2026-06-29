@@ -14,13 +14,23 @@ The Tide files live under `tide/`:
 These files use `set -g`, not `set -U`, so the theme stays runtime-scoped and
 does not write generated colors into `fish_variables`.
 
-Install by sourcing the entrypoint before Tide initializes, for example in
-`~/.config/fish/conf.d/00-hue-tide.fish`:
+Install by sourcing the entrypoint before Tide initializes. For zero-copy use,
+point Fish at a `hue-theme` checkout and source the generated file in place:
 
 ```fish
 set -g hue_flavour mua
-source ~/.config/fish/themes/hue/tide/hue.fish
+
+# Optional when your checkout is not in the default location.
+set -gx HUE_THEME_HOME ~/Developments/github.com/crafts69guy/hue-theme
+
+source $HUE_THEME_HOME/packages/fish-themes/tide/hue.fish
 ```
+
+This keeps Fish synced with rebuilt `hue-theme` output without copying generated
+theme files into dotfiles. If you want dotfiles to choose the checkout at runtime,
+put the resolver in `~/.config/fish/conf.d/00-hue-tide.fish` and source the first
+existing entrypoint from `$HUE_THEME_HOME`, `~/.local/share/hue-theme`, or another
+machine-local checkout path.
 
 Use Tide's wizard for layout/icons, but choose true color:
 
