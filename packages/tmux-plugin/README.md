@@ -1,4 +1,4 @@
-# 🌧 Hue for tmux
+# <img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/hue-mark.svg" height="28" alt="" valign="middle" /> Hue for tmux
 
 > Huế-inspired themes for tmux, packaged as a TPM plugin — generated from the
 > [Hue design token system](https://github.com/crafts69guy/hue-theme).
