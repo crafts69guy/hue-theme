@@ -18,7 +18,8 @@
   "author": "crafts69guy",
   "license": "MIT",
   "scripts": {
-    "build": "yaakcli build"
+    "build": "yaakcli build",
+    "dev": "yaakcli dev"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",
