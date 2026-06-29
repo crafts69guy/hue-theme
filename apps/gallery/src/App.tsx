@@ -1,8 +1,11 @@
 import {
+  ACCENT_TOKENS,
   getTheme,
   type ResolvedTheme,
   type SemanticToken,
-  type StatusToken,
+  STATUS_TOKENS,
+  SURFACE_TOKENS,
+  TEXT_TOKENS,
   type ThemeId,
   themeBundle,
 } from "@hue-theme/tokens";
@@ -19,20 +22,14 @@ const FEATURED_TOKENS = [
   ["accent.primary", "Accent", "Ngọc sông Hương"],
   ["border.subtle", "Border", "Ranh giới"],
 ] as const;
-// Exhaustive over the status contract: omitting a role here is a compile error.
-// Display order follows the literal's insertion order.
-const STATUS_PALETTE: Record<StatusToken, true> = {
-  "status.success": true,
-  "status.info": true,
-  "status.notice": true,
-  "status.warning": true,
-  "status.error": true,
-};
+// Closed families derive straight from the contract-validated token lists, so a
+// new role appears here automatically (no hand-maintained duplication). Syntax
+// is an open family rendered as a curated subset on purpose.
 const PALETTE_GROUPS: ReadonlyArray<readonly [string, readonly SemanticToken[]]> = [
-  ["Surface", ["surface.canvas", "surface.raised", "surface.selected"]],
-  ["Text", ["text.primary", "text.secondary", "text.accent"]],
-  ["Accent", ["accent.primary", "accent.secondary"]],
-  ["Status", Object.keys(STATUS_PALETTE) as StatusToken[]],
+  ["Surface", SURFACE_TOKENS],
+  ["Text", TEXT_TOKENS],
+  ["Accent", ACCENT_TOKENS],
+  ["Status", STATUS_TOKENS],
   ["Syntax", ["syntax.keyword", "syntax.string", "syntax.number", "syntax.function"]],
 ];
 const AUDIT_TOKENS = [
