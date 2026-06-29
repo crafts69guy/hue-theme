@@ -24,8 +24,10 @@ bun run check   # build --check (no writes) + tsc --noEmit
 then writes `generated/themes.{json,ts,css}` and each adapter's output: the Yaak
 plugin (`packages/yaak-plugin`), the Neovim/LazyVim plugin
 (`packages/nvim-plugin`), the Ghostty theme files (`packages/terminal-themes`),
-the tmux TPM plugin (`packages/tmux-plugin`), and the Fish/Tide theme files
-(`packages/fish-themes`). Generated artifacts must not be edited by hand.
+the tmux TPM plugin (`packages/tmux-plugin`), the Fish/Tide theme files
+(`packages/fish-themes`), and the Inkdrop UI/Syntax/Preview packages
+(`packages/inkdrop-hue-*-*-theme`). Generated artifacts must not be edited by
+hand.
 
 ## Exports
 

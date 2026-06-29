@@ -1,0 +1,19 @@
+{
+  "name": "inkdrop-hue-huong-preview-theme",
+  "version": "0.1.0",
+  "theme": "preview",
+  "description": "Huế Hương Preview Theme for Inkdrop",
+  "styleSheets": [
+    "styles/theme.css"
+  ],
+  "keywords": [
+    "inkdrop",
+    "markdown",
+    "hue-theme"
+  ],
+  "author": "crafts69guy",
+  "license": "MIT",
+  "engines": {
+    "inkdrop": "^6.x"
+  }
+}

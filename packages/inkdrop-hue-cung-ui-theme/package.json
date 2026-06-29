@@ -1,0 +1,19 @@
+{
+  "name": "inkdrop-hue-cung-ui-theme",
+  "version": "0.1.0",
+  "theme": "ui",
+  "description": "Huế Cung UI Theme for Inkdrop",
+  "styleSheets": [
+    "styles/theme.css"
+  ],
+  "keywords": [
+    "inkdrop",
+    "markdown",
+    "hue-theme"
+  ],
+  "author": "crafts69guy",
+  "license": "MIT",
+  "engines": {
+    "inkdrop": "^6.x"
+  }
+}

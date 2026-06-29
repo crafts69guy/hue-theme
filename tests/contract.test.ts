@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { themeBundle } from "../packages/tokens/generated/themes";
+import { inkdropManifest } from "../packages/tokens/src/adapters/inkdrop";
 import { yaakManifest } from "../packages/tokens/src/adapters/yaak";
 import { CONTRACT, contractTokens, validateManifest } from "../packages/tokens/src/contract";
 
@@ -24,6 +25,10 @@ describe("Hue semantic contract", () => {
 describe("adapter capability manifest", () => {
   test("Yaak accounts for every contract family", () => {
     expect(() => validateManifest("yaak", yaakManifest)).not.toThrow();
+  });
+
+  test("Inkdrop accounts for every contract family", () => {
+    expect(() => validateManifest("inkdrop", inkdropManifest)).not.toThrow();
   });
 
   test("rejects a family that is neither supported nor omitted", () => {

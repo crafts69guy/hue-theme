@@ -25,9 +25,9 @@ declaration rather than only checking that the moods agree with each other.
 | Ghostty         | shipped | theme file (ANSI palette + bg/fg/cursor)  | Theme carries colors only             |
 | tmux            | shipped | TPM plugin (status/pane/window theme)     | Never set the user's font             |
 | Fish/Tide       | shipped | sourceable Fish prompt theme              | Theme carries colors only             |
-| Inkdrop UI      | planned | CSS custom properties                     | Respect user font settings by default |
-| Inkdrop Syntax  | planned | CodeMirror selectors and variables        | Never set `font-family`               |
-| Inkdrop Preview | planned | Markdown document CSS variables           | May use the prose stack               |
+| Inkdrop UI      | shipped | CSS custom properties                     | Respect user font settings by default |
+| Inkdrop Syntax  | shipped | CodeMirror syntax CSS variables           | Never set `font-family`               |
+| Inkdrop Preview | shipped | Markdown document CSS variables/selectors | Respect user font settings by default |
 
 Each adapter declares a capability manifest of which contract families it
 supports versus explicitly omits; the build asserts every family is accounted
@@ -72,6 +72,15 @@ The Tide adapter (`adapters/tide.ts`) generates sourceable Fish files into
 and emits true-color hex values via `set -g`, keeping generated theme colors out
 of Fish universal variable storage (`fish_variables`). Tide's wizard remains the
 layout/icon tool; Hue owns only the color mapping.
+
+The Inkdrop adapter (`adapters/inkdrop.ts`) generates one installable package per
+mood and theme type into `packages/inkdrop-hue-<mood>-<type>-theme/`, for 9
+packages total (`ui`, `syntax`, and `preview` for each mood). It targets Inkdrop
+6's CSS custom property theme model (`theme` metadata plus `styleSheets`) and
+does not set fonts. UI packages map surfaces/text/borders/accents/status roles
+onto Inkdrop app variables; syntax packages map `syntax.*` plus editor affordance
+variables; preview packages keep rendered Markdown surfaces and code blocks
+aligned with the same roles.
 
 ## Accessibility policy
 

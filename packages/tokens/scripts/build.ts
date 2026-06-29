@@ -1,6 +1,7 @@
 import { chmod, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
 import { ghosttyManifest, renderGhosttyFiles } from "../src/adapters/ghostty";
+import { inkdropManifest, renderInkdropPackages } from "../src/adapters/inkdrop";
 import { neovimManifest, renderNeovimFiles } from "../src/adapters/neovim";
 import { renderTideFiles, tideManifest } from "../src/adapters/tide";
 import { renderTmuxFiles, tmuxManifest } from "../src/adapters/tmux";
@@ -155,6 +156,7 @@ validateManifest("neovim", neovimManifest);
 validateManifest("ghostty", ghosttyManifest);
 validateManifest("tmux", tmuxManifest);
 validateManifest("tide", tideManifest);
+validateManifest("inkdrop", inkdropManifest);
 
 // Secondary check: moods agree with each other (catches open-family drift,
 // where a role is allowed but must still be present in every mood).
@@ -224,6 +226,7 @@ ${Object.entries(theme.semantic)
   .join("\n\n")}\n`;
 
 const yaakPluginSource = renderYaakPluginSource(themes);
+const inkdropPackages = renderInkdropPackages(themes);
 
 const outputs: Array<[string, string]> = [
   [resolve(outputDirectory, "themes.json"), json],
@@ -241,6 +244,12 @@ const outputs: Array<[string, string]> = [
   ),
   ...renderTideFiles(themes).map(
     (file) => [resolve(root, "../fish-themes", file.path), file.content] as [string, string],
+  ),
+  ...inkdropPackages.flatMap((pack) =>
+    pack.files.map(
+      (file) =>
+        [resolve(root, "..", pack.packagePath, file.path), file.content] as [string, string],
+    ),
   ),
 ];
 
