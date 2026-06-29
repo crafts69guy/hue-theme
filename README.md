@@ -7,6 +7,10 @@
 One versioned token contract → many hosts. Editor, terminal, and API-client themes
 are all generated from the same source of truth.
 
+<br/>
+
+<img src="design/Home.png" alt="Huế Mưa across Neovim, tmux, and Ghostty" width="860" />
+
 </div>
 
 ---
