@@ -80,6 +80,16 @@ describe("Hue → Neovim adapter", () => {
     }
   });
 
+  test("supports a transparent option that clears backgrounds", () => {
+    const init = file("lua/hue/init.lua");
+    expect(init).toContain("transparent = false");
+    expect(init).toContain("if M.options.transparent then");
+    expect(init).toContain("hl.bg = nil");
+    expect(init).toContain("TRANSPARENT_GROUPS");
+    // The main editor background must be among the cleared groups.
+    expect(init).toMatch(/TRANSPARENT_GROUPS = \{[\s\S]*"Normal"[\s\S]*\}/);
+  });
+
   test("colors entrypoints load their mood", () => {
     for (const mood of moods) {
       expect(file(`colors/hue-${mood.id}.lua`)).toContain(`require("hue").load("${mood.id}")`);
