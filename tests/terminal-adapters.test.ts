@@ -61,11 +61,11 @@ describe("Hue → tmux adapter", () => {
     expect(() => validateManifest("tmux", tmuxManifest)).not.toThrow();
   });
 
-  test("emits one .conf per mood with status/pane/window styling", () => {
+  test("emits a TPM entrypoint plus one .conf per mood with status/pane/window styling", () => {
     expect(files.map((f) => f.path).sort()).toEqual(
-      moods.map((m) => `tmux/hue-${m.id}.conf`).sort(),
+      [...moods.map((m) => `themes/hue-${m.id}.conf`), "hue.tmux"].sort(),
     );
-    for (const { content } of files) {
+    for (const { content } of files.filter((f) => f.path.endsWith(".conf"))) {
       for (const directive of [
         "status-style",
         "pane-active-border-style",
@@ -77,9 +77,16 @@ describe("Hue → tmux adapter", () => {
     }
   });
 
+  test("entrypoint sources the mood selected by @hue_flavour", () => {
+    const entry = files.find((f) => f.path === "hue.tmux")?.content ?? "";
+    expect(entry).toContain("@hue_flavour");
+    expect(entry).toContain('source-file "$theme"');
+    expect(entry).toMatch(/themes\/hue-\$flavour\.conf/);
+  });
+
   test("uses the mood's accent for the active pane border", () => {
     for (const mood of moods) {
-      const content = files.find((f) => f.path === `tmux/hue-${mood.id}.conf`)?.content ?? "";
+      const content = files.find((f) => f.path === `themes/hue-${mood.id}.conf`)?.content ?? "";
       expect(content).toContain(`pane-active-border-style "fg=${mood.semantic["accent.primary"]}"`);
     }
   });

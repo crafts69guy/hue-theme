@@ -23,7 +23,7 @@ declaration rather than only checking that the moods agree with each other.
 | Yaak            | shipped | TypeScript plugin theme API               | Export only supported properties      |
 | LazyVim/Neovim  | shipped | highlight groups and terminal ANSI colors | Never set the user's font             |
 | Ghostty         | shipped | theme file (ANSI palette + bg/fg/cursor)  | Theme carries colors only             |
-| tmux            | shipped | sourceable status/pane/window theme conf  | Never set the user's font             |
+| tmux            | shipped | TPM plugin (status/pane/window theme)     | Never set the user's font             |
 | Inkdrop UI      | planned | CSS custom properties                     | Respect user font settings by default |
 | Inkdrop Syntax  | planned | CodeMirror selectors and variables        | Never set `font-family`               |
 | Inkdrop Preview | planned | Markdown document CSS variables           | May use the prose stack               |
@@ -53,11 +53,15 @@ The generated Lua is layered: `palette.lua` holds raw per-mood data,
 User configs build custom highlights against this public API rather than the
 internal palette module.
 
-The Ghostty and tmux adapters (`adapters/ghostty.ts`, `adapters/tmux.ts`)
-generate theme files into `packages/terminal-themes/` (`ghostty/hue-<mood>` and
-`tmux/hue-<mood>.conf`). The 16-color ANSI derivation and the `ResolvedMood`
-shape they share with Neovim live in `adapters/terminal.ts` so the terminal
-palette is derived in exactly one place.
+The Ghostty adapter (`adapters/ghostty.ts`) generates `ghostty/hue-<mood>` theme
+files into `packages/terminal-themes/`. The tmux adapter (`adapters/tmux.ts`)
+generates a TPM plugin into `packages/tmux-plugin/` (`themes/hue-<mood>.conf` plus
+the executable `hue.tmux` entrypoint that sources the mood from `@hue_flavour`).
+The 16-color ANSI derivation and the `ResolvedMood` shape they share with Neovim
+live in `adapters/terminal.ts` so the terminal palette is derived in exactly one
+place. Like Neovim, the tmux plugin is released to a standalone repo
+(`scripts/release-tmux.sh`); Ghostty has no plugin mechanism, so its theme file
+is consumed directly.
 
 ## Accessibility policy
 

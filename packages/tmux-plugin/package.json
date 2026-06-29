@@ -1,0 +1,21 @@
+{
+  "name": "@crafts69guy/hue-tmux",
+  "displayName": "Hue tmux Theme",
+  "private": false,
+  "version": "0.1.0",
+  "description": "Hue for tmux — three Huế-inspired moods (Mưa, Hương, Cung) as a TPM plugin, generated from the Hue design token system.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crafts69guy/hue-theme.git",
+    "directory": "packages/tmux-plugin"
+  },
+  "keywords": [
+    "tmux",
+    "tpm",
+    "theme",
+    "hue",
+    "hue-theme"
+  ],
+  "author": "crafts69guy",
+  "license": "MIT"
+}

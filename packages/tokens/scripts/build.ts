@@ -1,4 +1,4 @@
-import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { chmod, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
 import { ghosttyManifest, renderGhosttyFiles } from "../src/adapters/ghostty";
 import { neovimManifest, renderNeovimFiles } from "../src/adapters/neovim";
@@ -231,8 +231,11 @@ const outputs: Array<[string, string]> = [
   ...renderNeovimFiles(themes).map(
     (file) => [resolve(root, "../nvim-plugin", file.path), file.content] as [string, string],
   ),
-  ...[...renderGhosttyFiles(themes), ...renderTmuxFiles(themes)].map(
+  ...renderGhosttyFiles(themes).map(
     (file) => [resolve(root, "../terminal-themes", file.path), file.content] as [string, string],
+  ),
+  ...renderTmuxFiles(themes).map(
+    (file) => [resolve(root, "../tmux-plugin", file.path), file.content] as [string, string],
   ),
 ];
 
@@ -243,6 +246,8 @@ for (const [path, content] of outputs) {
   } else {
     await mkdir(dirname(path), { recursive: true });
     await writeFile(path, content);
+    // TPM executes plugin entrypoints directly, so they must be executable.
+    if (path.endsWith(".tmux")) await chmod(path, 0o755);
   }
 }
 
