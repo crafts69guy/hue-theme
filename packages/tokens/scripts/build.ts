@@ -1,9 +1,10 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
 import { renderYaakPluginSource } from "../src/adapters/yaak";
+import { CONTRACT } from "../src/contract";
 
 type Token = { $value: unknown };
-type Node = Token | Record<string, Node> | string;
+type Node = Token | string | { [key: string]: Node };
 type ThemeSource = {
   $description: string;
   meta: { id: string; label: string; appearance: "dark" | "light" };
@@ -96,6 +97,33 @@ function contrastRatio(foreground: string, background: string): number {
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
 
+// Validate a mood's resolved semantic keys against the declared contract:
+// every token must belong to a declared family; closed families must match
+// exactly; open families must include at least the declared roles.
+function validateAgainstContract(id: string, semantic: Record<string, string>): void {
+  const actual = new Map<string, Set<string>>();
+  for (const key of Object.keys(semantic)) {
+    const dot = key.indexOf(".");
+    const family = key.slice(0, dot);
+    if (!(family in CONTRACT)) {
+      throw new Error(`${id}: token ${key} has no declared family in the contract`);
+    }
+    actual.set(family, (actual.get(family) ?? new Set()).add(key.slice(dot + 1)));
+  }
+  for (const [family, spec] of Object.entries(CONTRACT)) {
+    const declared: readonly string[] = spec.roles;
+    const roles = actual.get(family) ?? new Set<string>();
+    const missing = declared.filter((role) => !roles.has(role));
+    if (missing.length > 0) {
+      throw new Error(`${id}: ${family} is missing role(s): ${missing.join(", ")}`);
+    }
+    const extra = spec.closed ? [...roles].filter((role) => !declared.includes(role)) : [];
+    if (extra.length > 0) {
+      throw new Error(`${id}: ${family} is closed; undeclared role(s): ${extra.join(", ")}`);
+    }
+  }
+}
+
 const files = (await readdir(sourceDirectory)).filter((file) => file.endsWith(".json")).sort();
 const themes = await Promise.all(
   files.map(async (file) => {
@@ -112,6 +140,13 @@ const themes = await Promise.all(
   }),
 );
 
+// Primary check: every mood conforms to the declared contract.
+for (const theme of themes) {
+  validateAgainstContract(theme.id, theme.semantic);
+}
+
+// Secondary check: moods agree with each other (catches open-family drift,
+// where a role is allowed but must still be present in every mood).
 const contracts = themes.map((theme) => Object.keys(theme.semantic).sort().join("\n"));
 if (!contracts.every((contract) => contract === contracts[0])) {
   throw new Error("Every mood must implement the same semantic token contract");
