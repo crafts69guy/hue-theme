@@ -411,6 +411,7 @@ end
 // the terminal shows through. Selection/active states (PmenuSel, Visual,
 // TelescopeSelection, prompt input) keep their bg so they stay legible.
 const TRANSPARENT_GROUPS: readonly string[] = [
+  // Core editor + built-in floats/popups.
   "Normal",
   "NormalNC",
   "NormalFloat",
@@ -424,11 +425,49 @@ const TRANSPARENT_GROUPS: readonly string[] = [
   "PmenuSbar",
   "PmenuExtra",
   "PmenuKind",
+  // Telescope
   "TelescopeNormal",
   "TelescopeBorder",
+  "TelescopeResultsNormal",
+  "TelescopePreviewNormal",
+  // neo-tree
   "NeoTreeNormal",
   "NeoTreeNormalNC",
+  "NeoTreeEndOfBuffer",
+  // which-key
+  "WhichKeyNormal",
   "WhichKeyFloat",
+  "WhichKeyBorder",
+  // Snacks (picker / explorer / dashboard / windows)
+  "SnacksNormal",
+  "SnacksNormalNC",
+  "SnacksWinBar",
+  "SnacksBackdrop",
+  "SnacksPicker",
+  "SnacksPickerNormal",
+  "SnacksPickerList",
+  "SnacksPickerInput",
+  "SnacksPickerPreview",
+  "SnacksPickerBox",
+  "SnacksDashboardNormal",
+  // noice
+  "NoicePopup",
+  "NoicePopupmenu",
+  "NoiceCmdlinePopup",
+  "NoiceMini",
+  // nvim-notify
+  "NotifyBackground",
+  // blink.cmp / nvim-cmp doc + menu windows
+  "BlinkCmpMenu",
+  "BlinkCmpDoc",
+  "BlinkCmpSignatureHelp",
+  "CmpDocumentation",
+  // treesitter-context
+  "TreesitterContext",
+  "TreesitterContextLineNumber",
+  // lazy.nvim / mason UIs
+  "LazyNormal",
+  "MasonNormal",
 ];
 
 /** `lua/hue/init.lua` — colorscheme loader shared by every entrypoint. */

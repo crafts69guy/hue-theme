@@ -86,8 +86,10 @@ describe("Hue → Neovim adapter", () => {
     expect(init).toContain("if M.options.transparent then");
     expect(init).toContain("hl.bg = nil");
     expect(init).toContain("TRANSPARENT_GROUPS");
-    // The main editor background must be among the cleared groups.
-    expect(init).toMatch(/TRANSPARENT_GROUPS = \{[\s\S]*"Normal"[\s\S]*\}/);
+    // Core editor + popular plugin containers must be among the cleared groups.
+    for (const group of ["Normal", "NormalFloat", "SnacksPickerNormal", "NoicePopup"]) {
+      expect(init).toMatch(new RegExp(`TRANSPARENT_GROUPS = \\{[\\s\\S]*"${group}"[\\s\\S]*\\}`));
+    }
   });
 
   test("colors entrypoints load their mood", () => {
