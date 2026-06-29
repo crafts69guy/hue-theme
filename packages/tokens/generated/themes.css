@@ -9,9 +9,10 @@
   --hue-accent-primary: #356B5C;
   --hue-accent-secondary: #634F75;
   --hue-status-success: #356B5C;
+  --hue-status-info: #326071;
+  --hue-status-notice: #634F75;
   --hue-status-warning: #8B5C1A;
   --hue-status-error: #9E342D;
-  --hue-status-info: #326071;
   --hue-syntax-keyword: #634F75;
   --hue-syntax-string: #356B5C;
   --hue-syntax-number: #8B5C1A;
@@ -31,9 +32,10 @@
   --hue-accent-primary: #82B9A2;
   --hue-accent-secondary: #A79BBC;
   --hue-status-success: #82B9A2;
+  --hue-status-info: #7BACB1;
+  --hue-status-notice: #A79BBC;
   --hue-status-warning: #D7AA5C;
   --hue-status-error: #CD6D5D;
-  --hue-status-info: #7BACB1;
   --hue-syntax-keyword: #A79BBC;
   --hue-syntax-string: #82B9A2;
   --hue-syntax-number: #D7AA5C;
@@ -53,9 +55,10 @@
   --hue-accent-primary: #79B49A;
   --hue-accent-secondary: #B5A2CA;
   --hue-status-success: #79B49A;
+  --hue-status-info: #79A6B5;
+  --hue-status-notice: #B5A2CA;
   --hue-status-warning: #D4AA5F;
   --hue-status-error: #D2645A;
-  --hue-status-info: #79A6B5;
   --hue-syntax-keyword: #B5A2CA;
   --hue-syntax-string: #79B49A;
   --hue-syntax-number: #D4AA5F;

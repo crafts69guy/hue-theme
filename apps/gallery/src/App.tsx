@@ -1,4 +1,11 @@
-import { getTheme, type ResolvedTheme, type ThemeId, themeBundle } from "@hue-theme/tokens";
+import {
+  getTheme,
+  type ResolvedTheme,
+  type SemanticToken,
+  type StatusToken,
+  type ThemeId,
+  themeBundle,
+} from "@hue-theme/tokens";
 import { useReducedMotion } from "motion/react";
 import { useAnimate } from "motion/react-mini";
 import { useEffect, useMemo, useState } from "react";
@@ -12,13 +19,22 @@ const FEATURED_TOKENS = [
   ["accent.primary", "Accent", "Ngọc sông Hương"],
   ["border.subtle", "Border", "Ranh giới"],
 ] as const;
-const PALETTE_GROUPS = [
+// Exhaustive over the status contract: omitting a role here is a compile error.
+// Display order follows the literal's insertion order.
+const STATUS_PALETTE: Record<StatusToken, true> = {
+  "status.success": true,
+  "status.info": true,
+  "status.notice": true,
+  "status.warning": true,
+  "status.error": true,
+};
+const PALETTE_GROUPS: ReadonlyArray<readonly [string, readonly SemanticToken[]]> = [
   ["Surface", ["surface.canvas", "surface.raised", "surface.selected"]],
   ["Text", ["text.primary", "text.secondary", "text.accent"]],
   ["Accent", ["accent.primary", "accent.secondary"]],
-  ["Status", ["status.success", "status.warning", "status.error", "status.info"]],
+  ["Status", Object.keys(STATUS_PALETTE) as StatusToken[]],
   ["Syntax", ["syntax.keyword", "syntax.string", "syntax.number", "syntax.function"]],
-] as const;
+];
 const AUDIT_TOKENS = [
   ["text.primary", 4.5],
   ["text.secondary", 4.5],

@@ -54,9 +54,10 @@
     },
     "status": {
       "success": { "$value": "{primitive.jade}" },
+      "info": { "$value": "{primitive.blue}" },
+      "notice": { "$value": "{primitive.violet}" },
       "warning": { "$value": "{primitive.gold}" },
-      "error": { "$value": "{primitive.vermilion}" },
-      "info": { "$value": "{primitive.blue}" }
+      "error": { "$value": "{primitive.vermilion}" }
     },
     "syntax": {
       "keyword": { "$value": "{primitive.violet}" },
