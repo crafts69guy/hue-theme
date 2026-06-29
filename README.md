@@ -1,63 +1,103 @@
-# Hue Theme
+<div align="center">
 
-Hue Theme is a portable theme design system rooted in the atmosphere and
-visual culture of Huế, Việt Nam. It uses a three-layer architecture:
-primitive tokens, semantic roles, and platform adapters.
+# 🌧 Hue Theme
 
-It centers on a versioned token contract and an interactive gallery, with host
-adapters generated from three moods:
+**A portable theme design system rooted in the atmosphere and visual culture of Huế, Việt Nam.**
 
-- **Huế Mưa** — deep charcoal, rain silver, and muted jade.
-- **Huế Hương** — river green, dusk blue, and incense gold.
-- **Huế Cung** — ivory paper, imperial lacquer, and restrained purple.
+One versioned token contract → many hosts. Editor, terminal, and API-client themes
+are all generated from the same source of truth.
+
+</div>
+
+---
+
+## Moods
+
+| Mood | Appearance | Feel |
+| --- | --- | --- |
+| **Huế Mưa** | dark | deep charcoal, rain silver, muted jade |
+| **Huế Hương** | dark | river green, dusk blue, incense gold |
+| **Huế Cung** | light | ivory paper, imperial lacquer, royal purple |
+
+Explore them in the interactive gallery: `bun run dev` (Vite + React, in `apps/gallery`).
+
+## Themes
+
+Every theme below is generated from the token contract, so the three moods stay
+identical across hosts.
+
+| Host | Package | Get it |
+| --- | --- | --- |
+| **Neovim / LazyVim** | [`packages/nvim-plugin`](packages/nvim-plugin) | [`crafts69guy/hue-nvim`](https://github.com/crafts69guy/hue-nvim) · lazy.nvim |
+| **tmux** | [`packages/tmux-plugin`](packages/tmux-plugin) | [`crafts69guy/hue-tmux`](https://github.com/crafts69guy/hue-tmux) · TPM |
+| **Ghostty** | [`packages/terminal-themes`](packages/terminal-themes) | theme file (`theme = hue-mua`) |
+| **Yaak** | [`packages/yaak-plugin`](packages/yaak-plugin) | sideload / plugin registry |
+| Inkdrop | — | _planned_ |
+
+## How it works
+
+Three layers, each with a single responsibility:
+
+```mermaid
+flowchart LR
+    P["Primitive tokens<br/>(authored colors)"] --> S["Semantic roles<br/>(stable contract)"]
+    S --> A["Adapters"]
+    A --> N["Neovim"]
+    A --> T["tmux"]
+    A --> G["Ghostty"]
+    A --> Y["Yaak"]
+```
+
+1. **Primitive** — authored colors with cultural metadata, per mood, in DTCG format.
+2. **Semantic** — stable roles (`surface.canvas`, `status.notice`, `syntax.keyword`, …)
+   declared once in a versioned, validated contract.
+3. **Adapters** — map semantic roles onto a host API without mutating source data.
+   Each adapter declares which contract families it supports or explicitly omits.
+
+The build validates every mood against the contract and WCAG AA contrast, then
+writes the generated artifacts. See [`docs/architecture.md`](docs/architecture.md)
+for the full picture and [`docs/cultural-direction.md`](docs/cultural-direction.md)
+for the design rationale.
+
+## Repository layout
+
+```
+packages/
+  tokens/           # source tokens + build — the single source of truth
+  nvim-plugin/      # generated Neovim colorscheme   → hue-nvim
+  tmux-plugin/      # generated tmux TPM plugin       → hue-tmux
+  terminal-themes/  # generated Ghostty theme files
+  yaak-plugin/      # generated Yaak theme plugin
+apps/
+  gallery/          # interactive mood gallery (Vite + React)
+```
 
 ## Development
 
 ```fish
 bun install
-bun run dev
+bun run dev        # build tokens + run the gallery
 ```
 
-Quality gates:
+Quality gates (Biome is the single formatter/linter for TS, React, JS, JSON, CSS, HTML):
 
 ```fish
-bun run format
-bun run lint
-bun run quality
-bun run check
-bun test
-bun run build
+bun run quality    # biome check + token/gallery check + tests
+bun run ci         # the full non-mutating gate, incl. build
 ```
 
-Biome is the single formatter and linter for TypeScript, React, JavaScript,
-JSON, CSS, and HTML. CI can run the complete non-mutating gate with:
-
-```fish
-bun run ci
-```
-
-The source tokens follow the
+Source tokens follow the
 [Design Tokens Community Group format](https://www.designtokens.org/tr/2025.10/format/).
-Generated artifacts must not be edited by hand.
-
-## Project status
-
-The semantic contract, the interactive gallery, and host adapters for Yaak
-(`packages/yaak-plugin`), Neovim/LazyVim (`packages/nvim-plugin`), Ghostty
-(`packages/terminal-themes`), and tmux (`packages/tmux-plugin`, a TPM plugin)
-are implemented. The Neovim, tmux, and Ghostty themes are published for
-consumption (the first two as standalone repos, Ghostty as a theme file). The
-Inkdrop adapters are documented as future mappings and are not packages yet.
+**Generated artifacts must not be edited by hand** — change the tokens or adapters
+and rebuild.
 
 ## Bundled font
 
 The gallery bundles
 [PlemolJP Console NF v3.0.0](https://github.com/yuru7/PlemolJP/releases/tag/v3.0.0)
-in Light (300), Regular (400), Medium (500), SemiBold (600), and Bold (700).
-PlemolJP is distributed under the SIL Open Font License 1.1; its copyright and
-full license are included beside the fonts in
-`apps/gallery/public/fonts/PlemolJP-LICENSE.txt`.
+in Light (300) through Bold (700), under the SIL Open Font License 1.1. Its full
+license sits beside the fonts in `apps/gallery/public/fonts/PlemolJP-LICENSE.txt`.
 
 ## License
 
-MIT
+[MIT](LICENSE)
