@@ -488,6 +488,102 @@ function M.load(mood)
   end
 end
 
+-- Public API for user configs building custom highlights from Hue colors.
+-- See lua/hue/colors.lua (palette access) and lua/hue/util.lua (color math).
+local colors = require("hue.colors")
+M.colors = colors.get
+M.raw = colors.raw
+M.util = require("hue.util")
+
+return M
+`;
+}
+
+/**
+ * \`lua/hue/colors.lua\` — public palette accessor layered over palette.lua.
+ * Resolves the active (or requested) mood and exposes the semantic roles both
+ * grouped by family (\`get().accent.primary\`) and flat (\`raw()["accent.primary"]\`).
+ */
+function renderColors(): string {
+  return `${HEADER}
+local M = {}
+
+local cache = {}
+
+-- Resolve a mood id from an explicit arg, the active colorscheme, or Mưa.
+local function resolve(mood)
+  if mood then
+    return mood
+  end
+  local name = vim.g.colors_name
+  return (name and name:match("^hue%-(.+)$")) or "mua"
+end
+
+--- Flat semantic map for a mood, e.g. \`raw()["accent.primary"]\`.
+function M.raw(mood)
+  local entry = require("hue.palette")[resolve(mood)]
+  if not entry then
+    error("hue: unknown mood '" .. tostring(mood) .. "'")
+  end
+  return entry.semantic
+end
+
+--- Semantic palette grouped by family, e.g. \`get().accent.primary\`.
+function M.get(mood)
+  local id = resolve(mood)
+  if cache[id] then
+    return cache[id]
+  end
+  local grouped = {}
+  for role, value in pairs(M.raw(id)) do
+    local family, name = role:match("^(.-)%.(.+)$")
+    grouped[family] = grouped[family] or {}
+    grouped[family][name] = value
+  end
+  cache[id] = grouped
+  return grouped
+end
+
+return M
+`;
+}
+
+/**
+ * \`lua/hue/util.lua\` — small, dependency-free color math for consumers that
+ * derive shades from Hue roles (e.g. faint diff backgrounds). Static content.
+ */
+function renderUtil(): string {
+  return `${HEADER}
+local M = {}
+
+local function clamp(n)
+  return math.max(0, math.min(255, n))
+end
+
+local function to_rgb(hex)
+  hex = hex:gsub("#", "")
+  return tonumber(hex:sub(1, 2), 16), tonumber(hex:sub(3, 4), 16), tonumber(hex:sub(5, 6), 16)
+end
+
+local function to_hex(r, g, b)
+  return string.format("#%02X%02X%02X", math.floor(clamp(r) + 0.5), math.floor(clamp(g) + 0.5), math.floor(clamp(b) + 0.5))
+end
+
+-- Linear sRGB blend; \`alpha\` is the weight of \`fg\` over \`bg\`.
+function M.blend(fg, bg, alpha)
+  local fr, fg_, fb = to_rgb(fg)
+  local br, bg_, bb = to_rgb(bg)
+  return to_hex(alpha * fr + (1 - alpha) * br, alpha * fg_ + (1 - alpha) * bg_, alpha * fb + (1 - alpha) * bb)
+end
+
+function M.darken(hex, amount, bg)
+  return M.blend(hex, bg or "#000000", amount)
+end
+
+function M.lighten(hex, amount)
+  return M.blend(hex, "#FFFFFF", amount)
+end
+
 return M
 `;
 }
@@ -524,6 +620,8 @@ export function renderNeovimFiles(moods: ResolvedMood[]): Array<{ path: string; 
   const files: Array<{ path: string; content: string }> = [
     { path: "lua/hue/palette.lua", content: renderPalette(moods) },
     { path: "lua/hue/groups.lua", content: renderGroups() },
+    { path: "lua/hue/colors.lua", content: renderColors() },
+    { path: "lua/hue/util.lua", content: renderUtil() },
     { path: "lua/hue/init.lua", content: renderInit() },
   ];
   for (const mood of moods) {

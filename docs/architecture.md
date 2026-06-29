@@ -44,6 +44,13 @@ Colors are applied with `vim.api.nvim_set_hl` and cover core editor groups,
 Treesitter `@`-captures, LSP semantic tokens, diagnostics/git, terminal ANSI, and
 common LazyVim plugins. The colorscheme sets `background` but never a font.
 
+The generated Lua is layered: `palette.lua` holds raw per-mood data,
+`colors.lua` is the public accessor (`require("hue").colors()` grouped by family,
+`.raw()` flat), `util.lua` provides dependency-free color math
+(`blend`/`darken`/`lighten`), and `groups.lua` maps roles to highlight specs.
+User configs build custom highlights against this public API rather than the
+internal palette module.
+
 ## Accessibility policy
 
 - Primary and secondary body text: WCAG 2.2 AA, at least 4.5:1.

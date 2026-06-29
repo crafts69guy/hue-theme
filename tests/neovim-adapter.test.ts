@@ -24,6 +24,8 @@ describe("Hue → Neovim adapter", () => {
       [
         "lua/hue/palette.lua",
         "lua/hue/groups.lua",
+        "lua/hue/colors.lua",
+        "lua/hue/util.lua",
         "lua/hue/init.lua",
         ...moods.flatMap((m) => [`colors/hue-${m.id}.lua`, `lua/lualine/themes/hue-${m.id}.lua`]),
       ].sort(),
@@ -59,6 +61,22 @@ describe("Hue → Neovim adapter", () => {
       expect(block, `terminal block for ${mood.id}`).not.toBeNull();
       const colors = [...(block?.[1] ?? "").matchAll(/"(#[0-9A-F]{6})"/g)];
       expect(colors).toHaveLength(16);
+    }
+  });
+
+  test("exposes a public color API (colors/raw/util) from init.lua", () => {
+    const init = file("lua/hue/init.lua");
+    expect(init).toContain("M.colors = colors.get");
+    expect(init).toContain("M.raw = colors.raw");
+    expect(init).toContain('M.util = require("hue.util")');
+
+    const colors = file("lua/hue/colors.lua");
+    expect(colors).toContain("function M.get(mood)");
+    expect(colors).toContain("function M.raw(mood)");
+
+    const util = file("lua/hue/util.lua");
+    for (const fn of ["M.blend", "M.darken", "M.lighten"]) {
+      expect(util).toContain(`function ${fn}`);
     }
   });
 
