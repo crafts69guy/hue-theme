@@ -1,45 +1,65 @@
-# Hue tmux Theme
+# 🌧 Hue for tmux
 
-Three Huế-inspired moods for [tmux](https://github.com/tmux/tmux), packaged as a
-[TPM](https://github.com/tmux-plugins/tpm) plugin and generated from the Hue
-design token system:
+> Huế-inspired themes for tmux, packaged as a TPM plugin — generated from the
+> [Hue design token system](https://github.com/crafts69guy/hue-theme).
 
-- **Huế Mưa** (`mua`) — a deep dark mood shaped by Huế rain and wet stone.
-- **Huế Hương** (`huong`) — a softer dark mood drawn from the Perfume River and incense.
-- **Huế Cung** (`cung`) — an ivory light mood informed by imperial lacquer and royal purple.
+Three moods drawn from the atmosphere and visual culture of Huế, Việt Nam:
 
-Each mood styles the status bar, window list, pane borders, messages, copy mode,
-and clock. It never sets your font.
+| Mood | `@hue_flavour` | Appearance | Feel |
+| --- | --- | --- | --- |
+| **Huế Mưa** | `mua` | dark | deep dark, rain and wet stone |
+| **Huế Hương** | `huong` | dark | softer dark, river green and incense |
+| **Huế Cung** | `cung` | light | ivory light, lacquer and royal purple |
 
-## How it is built
+Each mood styles the status bar (powerline), window list, pane borders,
+messages, copy mode, and clock. It never sets your font.
 
-`hue.tmux` and `themes/hue-<mood>.conf` are **generated** by the token build — do
-not edit by hand. The mapping lives in
-[`packages/tokens/src/adapters/tmux.ts`](../tokens/src/adapters/tmux.ts).
+## Requirements
 
-```bash
-cd ../tokens && bun run build
-```
+- tmux ≥ 3.0 with a true-color terminal (`set -g default-terminal "tmux-256color"`
+  plus a `*:Tc` override)
+- [TPM](https://github.com/tmux-plugins/tpm) (recommended)
 
-## Install (TPM)
+## Installation
+
+With [TPM](https://github.com/tmux-plugins/tpm), in `~/.config/tmux/tmux.conf`:
 
 ```tmux
-# ~/.config/tmux/tmux.conf
 set -g @plugin 'crafts69guy/hue-tmux'
 set -g @hue_flavour 'mua'   # or 'huong' / 'cung'
 ```
 
-Then press `prefix + I` to install. TPM runs `hue.tmux`, which sources the
-selected mood. Update later with `prefix + U`.
+Then press `prefix + I` to install. Update later with `prefix + U`.
 
-Without TPM, source a mood directly:
+Set `@hue_flavour` **before** TPM runs so the entrypoint sources the right mood.
+
+### Without TPM
+
+Clone the repo and run the entrypoint:
 
 ```tmux
-run-shell "~/.config/tmux/plugins/hue-tmux/hue.tmux"
+run-shell "/path/to/hue-tmux/hue.tmux"
 ```
 
-## Distribution note
+…or source a mood file directly:
 
-This plugin lives inside the `hue-theme` monorepo. TPM clones a repository root,
-so releases publish this directory's contents (with `hue.tmux` + `themes/` at the
-root) to a standalone `hue-tmux` repository via `scripts/release-tmux.sh`.
+```tmux
+source-file "/path/to/hue-tmux/themes/hue-mua.conf"
+```
+
+## Configuration
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `@hue_flavour` | `mua` | Mood to load: `mua`, `huong`, or `cung`. |
+
+## Credits
+
+Generated from the
+[Hue design token system](https://github.com/crafts69guy/hue-theme) — `hue.tmux`
+and `themes/` are build output, not hand-edited. Rooted in the visual culture of
+Huế, Việt Nam.
+
+## License
+
+[MIT](./LICENSE)
