@@ -24,6 +24,11 @@ requires a major version.
 Adapters accept a resolved theme plus a capability manifest. Unsupported token
 families are omitted explicitly rather than approximated.
 
+The Yaak adapter is implemented in `packages/tokens/src/adapters/yaak.ts`. The
+token build renders all three moods into the Yaak theme plugin at
+`packages/yaak-plugin/`. Only Yaak's supported `base` UI tokens are exported; the
+`syntax.*` family is omitted because Yaak's theme API has no syntax slots.
+
 ## Accessibility policy
 
 - Primary and secondary body text: WCAG 2.2 AA, at least 4.5:1.

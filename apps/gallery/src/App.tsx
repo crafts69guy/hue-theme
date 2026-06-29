@@ -1,4 +1,14 @@
-import { getTheme, type ResolvedTheme, type ThemeId, themeBundle } from "@hue-theme/tokens";
+import {
+  ACCENT_TOKENS,
+  getTheme,
+  type ResolvedTheme,
+  type SemanticToken,
+  STATUS_TOKENS,
+  SURFACE_TOKENS,
+  TEXT_TOKENS,
+  type ThemeId,
+  themeBundle,
+} from "@hue-theme/tokens";
 import { useReducedMotion } from "motion/react";
 import { useAnimate } from "motion/react-mini";
 import { useEffect, useMemo, useState } from "react";
@@ -12,13 +22,16 @@ const FEATURED_TOKENS = [
   ["accent.primary", "Accent", "Ngọc sông Hương"],
   ["border.subtle", "Border", "Ranh giới"],
 ] as const;
-const PALETTE_GROUPS = [
-  ["Surface", ["surface.canvas", "surface.raised", "surface.selected"]],
-  ["Text", ["text.primary", "text.secondary", "text.accent"]],
-  ["Accent", ["accent.primary", "accent.secondary"]],
-  ["Status", ["status.success", "status.warning", "status.error", "status.info"]],
+// Closed families derive straight from the contract-validated token lists, so a
+// new role appears here automatically (no hand-maintained duplication). Syntax
+// is an open family rendered as a curated subset on purpose.
+const PALETTE_GROUPS: ReadonlyArray<readonly [string, readonly SemanticToken[]]> = [
+  ["Surface", SURFACE_TOKENS],
+  ["Text", TEXT_TOKENS],
+  ["Accent", ACCENT_TOKENS],
+  ["Status", STATUS_TOKENS],
   ["Syntax", ["syntax.keyword", "syntax.string", "syntax.number", "syntax.function"]],
-] as const;
+];
 const AUDIT_TOKENS = [
   ["text.primary", 4.5],
   ["text.secondary", 4.5],
