@@ -29,3 +29,28 @@ export function contractTokens(): string[] {
     spec.roles.map((role: string) => `${family}.${role}`),
   );
 }
+
+// An adapter's capability manifest: every contract family is either supported
+// (mapped onto the host) or explicitly omitted with a reason. This makes a
+// host's gaps a declared decision rather than an implicit absence.
+export type AdapterManifest = {
+  readonly supports: readonly Family[];
+  readonly omits: Partial<Record<Family, string>>;
+};
+
+// Assert an adapter accounts for every contract family exactly once — never
+// both supported and omitted, never neither. Adding a family to the contract
+// then forces every adapter to make a conscious support/omit decision.
+export function validateManifest(adapter: string, manifest: AdapterManifest): void {
+  const supports = new Set<Family>(manifest.supports);
+  for (const family of Object.keys(CONTRACT) as Family[]) {
+    const supported = supports.has(family);
+    const omitted = family in manifest.omits;
+    if (supported && omitted) {
+      throw new Error(`${adapter}: family "${family}" is both supported and omitted`);
+    }
+    if (!supported && !omitted) {
+      throw new Error(`${adapter}: family "${family}" is neither supported nor omitted`);
+    }
+  }
+}

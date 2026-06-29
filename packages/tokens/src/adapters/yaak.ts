@@ -3,6 +3,14 @@
 // families (syntax.*) are omitted explicitly rather than approximated.
 
 import { STATUS_TOKENS, type StatusToken } from "../../generated/themes";
+import type { AdapterManifest } from "../contract";
+
+// Which contract families Yaak supports vs omits. syntax is omitted because
+// Yaak's theme API exposes no syntax-highlighting slots.
+export const yaakManifest = {
+  supports: ["surface", "text", "border", "accent", "status"],
+  omits: { syntax: "Yaak's theme API has no syntax-highlighting slots" },
+} satisfies AdapterManifest;
 
 export type ResolvedMood = {
   id: string;

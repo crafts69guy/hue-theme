@@ -1,7 +1,7 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
-import { renderYaakPluginSource } from "../src/adapters/yaak";
-import { CONTRACT } from "../src/contract";
+import { renderYaakPluginSource, yaakManifest } from "../src/adapters/yaak";
+import { CONTRACT, validateManifest } from "../src/contract";
 
 type Token = { $value: unknown };
 type Node = Token | string | { [key: string]: Node };
@@ -144,6 +144,9 @@ const themes = await Promise.all(
 for (const theme of themes) {
   validateAgainstContract(theme.id, theme.semantic);
 }
+
+// Each adapter must consciously account for every contract family.
+validateManifest("yaak", yaakManifest);
 
 // Secondary check: moods agree with each other (catches open-family drift,
 // where a role is allowed but must still be present in every mood).
