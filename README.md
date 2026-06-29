@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🌧 Hue Theme
+<img src="design/hue-mark.svg" alt="Hue Theme logo" width="72" />
+
+# Hue Theme
 
 **A portable theme design system rooted in the atmosphere and visual culture of Huế, Việt Nam.**
 
