@@ -4,8 +4,8 @@ Hue Theme is a portable theme design system rooted in the atmosphere and
 visual culture of Huế, Việt Nam. It uses a three-layer architecture:
 primitive tokens, semantic roles, and platform adapters.
 
-The first release contains the token contract and an interactive gallery for
-three moods:
+It centers on a versioned token contract and an interactive gallery, with host
+adapters generated from three moods:
 
 - **Huế Mưa** — deep charcoal, rain silver, and muted jade.
 - **Huế Hương** — river green, dusk blue, and incense gold.
@@ -42,10 +42,12 @@ Generated artifacts must not be edited by hand.
 
 ## Project status
 
-The semantic contract, the interactive gallery, the Yaak theme plugin
-(`packages/yaak-plugin`), and the Neovim/LazyVim colorscheme
-(`packages/nvim-plugin`) are implemented. The Inkdrop adapters are documented as
-future mappings and are not packages yet.
+The semantic contract, the interactive gallery, and host adapters for Yaak
+(`packages/yaak-plugin`), Neovim/LazyVim (`packages/nvim-plugin`), Ghostty
+(`packages/terminal-themes`), and tmux (`packages/tmux-plugin`, a TPM plugin)
+are implemented. The Neovim, tmux, and Ghostty themes are published for
+consumption (the first two as standalone repos, Ghostty as a theme file). The
+Inkdrop adapters are documented as future mappings and are not packages yet.
 
 ## Bundled font
 

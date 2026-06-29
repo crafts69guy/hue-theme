@@ -21,8 +21,11 @@ bun run check   # build --check (no writes) + tsc --noEmit
 ```
 
 `bun run build` validates every mood against the contract and WCAG AA contrast,
-then writes `generated/themes.{json,ts,css}` and the Yaak plugin entrypoint.
-Generated artifacts must not be edited by hand.
+then writes `generated/themes.{json,ts,css}` and each adapter's output: the Yaak
+plugin (`packages/yaak-plugin`), the Neovim/LazyVim plugin
+(`packages/nvim-plugin`), the Ghostty theme files (`packages/terminal-themes`),
+and the tmux TPM plugin (`packages/tmux-plugin`). Generated artifacts must not be
+edited by hand.
 
 ## Exports
 

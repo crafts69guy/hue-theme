@@ -40,8 +40,9 @@ token build renders all three moods into the Yaak theme plugin at
 
 The Neovim adapter is implemented in `packages/tokens/src/adapters/neovim.ts`
 and supports every contract family — Neovim has a slot for all of them. The build
-generates the whole `packages/nvim-plugin/` Lua tree (`lua/hue/{palette,groups,
-init}.lua`, `colors/hue-<mood>.lua`, and `lua/lualine/themes/hue-<mood>.lua`).
+generates the whole `packages/nvim-plugin/` Lua tree (`lua/hue/{palette,colors,
+util,groups,init}.lua`, `colors/hue-<mood>.lua`, and
+`lua/lualine/themes/hue-<mood>.lua`).
 Colors are applied with `vim.api.nvim_set_hl` and cover core editor groups,
 Treesitter `@`-captures, LSP semantic tokens, diagnostics/git, terminal ANSI, and
 common LazyVim plugins. The colorscheme sets `background` but never a font.
@@ -51,7 +52,9 @@ The generated Lua is layered: `palette.lua` holds raw per-mood data,
 `.raw()` flat), `util.lua` provides dependency-free color math
 (`blend`/`darken`/`lighten`), and `groups.lua` maps roles to highlight specs.
 User configs build custom highlights against this public API rather than the
-internal palette module.
+internal palette module. `init.lua` also exposes `setup({ transparent = true })`,
+which clears backgrounds on editor, float, and popular-plugin groups after load
+so a translucent terminal shows through (selection/active states keep their bg).
 
 The Ghostty adapter (`adapters/ghostty.ts`) generates `ghostty/hue-<mood>` theme
 files into `packages/terminal-themes/`. The tmux adapter (`adapters/tmux.ts`)
