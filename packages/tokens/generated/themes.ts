@@ -39,7 +39,12 @@ export const themeBundle = {
         "syntax.number": "#8B5C1A",
         "syntax.function": "#326071",
         "syntax.comment": "#585347",
-        "syntax.operator": "#9E342D"
+        "syntax.operator": "#9E342D",
+        "syntax.type": "#326071",
+        "syntax.constant": "#8B5C1A",
+        "syntax.property": "#28251F",
+        "syntax.variable": "#28251F",
+        "syntax.punctuation": "#71644C"
       }
     },
     {
@@ -79,7 +84,12 @@ export const themeBundle = {
         "syntax.number": "#D7AA5C",
         "syntax.function": "#7BACB1",
         "syntax.comment": "#AFB7A8",
-        "syntax.operator": "#CD6D5D"
+        "syntax.operator": "#CD6D5D",
+        "syntax.type": "#7BACB1",
+        "syntax.constant": "#D7AA5C",
+        "syntax.property": "#EBE9DC",
+        "syntax.variable": "#EBE9DC",
+        "syntax.punctuation": "#52695F"
       }
     },
     {
@@ -119,7 +129,12 @@ export const themeBundle = {
         "syntax.number": "#D4AA5F",
         "syntax.function": "#79A6B5",
         "syntax.comment": "#B7B7AD",
-        "syntax.operator": "#D2645A"
+        "syntax.operator": "#D2645A",
+        "syntax.type": "#79A6B5",
+        "syntax.constant": "#D4AA5F",
+        "syntax.property": "#EDE9DF",
+        "syntax.variable": "#EDE9DF",
+        "syntax.punctuation": "#566565"
       }
     }
   ]
@@ -153,7 +168,12 @@ export type SemanticToken =
   | "syntax.number"
   | "syntax.function"
   | "syntax.comment"
-  | "syntax.operator";
+  | "syntax.operator"
+  | "syntax.type"
+  | "syntax.constant"
+  | "syntax.property"
+  | "syntax.variable"
+  | "syntax.punctuation";
 
 export const SURFACE_TOKENS = [
   "surface.canvas",
@@ -196,5 +216,10 @@ export const SYNTAX_TOKENS = [
   "syntax.function",
   "syntax.comment",
   "syntax.operator",
+  "syntax.type",
+  "syntax.constant",
+  "syntax.property",
+  "syntax.variable",
+  "syntax.punctuation",
 ] as const;
 export type SyntaxToken = (typeof SYNTAX_TOKENS)[number];

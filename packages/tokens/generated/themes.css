@@ -19,6 +19,11 @@
   --hue-syntax-function: #326071;
   --hue-syntax-comment: #585347;
   --hue-syntax-operator: #9E342D;
+  --hue-syntax-type: #326071;
+  --hue-syntax-constant: #8B5C1A;
+  --hue-syntax-property: #28251F;
+  --hue-syntax-variable: #28251F;
+  --hue-syntax-punctuation: #71644C;
 }
 
 [data-hue-theme="huong"] {
@@ -42,6 +47,11 @@
   --hue-syntax-function: #7BACB1;
   --hue-syntax-comment: #AFB7A8;
   --hue-syntax-operator: #CD6D5D;
+  --hue-syntax-type: #7BACB1;
+  --hue-syntax-constant: #D7AA5C;
+  --hue-syntax-property: #EBE9DC;
+  --hue-syntax-variable: #EBE9DC;
+  --hue-syntax-punctuation: #52695F;
 }
 
 [data-hue-theme="mua"] {
@@ -65,4 +75,9 @@
   --hue-syntax-function: #79A6B5;
   --hue-syntax-comment: #B7B7AD;
   --hue-syntax-operator: #D2645A;
+  --hue-syntax-type: #79A6B5;
+  --hue-syntax-constant: #D4AA5F;
+  --hue-syntax-property: #EDE9DF;
+  --hue-syntax-variable: #EDE9DF;
+  --hue-syntax-punctuation: #566565;
 }

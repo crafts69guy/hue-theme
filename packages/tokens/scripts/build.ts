@@ -1,5 +1,6 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
+import { neovimManifest, renderNeovimFiles } from "../src/adapters/neovim";
 import { renderYaakPluginSource, yaakManifest } from "../src/adapters/yaak";
 import { CONTRACT, validateManifest } from "../src/contract";
 
@@ -147,6 +148,7 @@ for (const theme of themes) {
 
 // Each adapter must consciously account for every contract family.
 validateManifest("yaak", yaakManifest);
+validateManifest("neovim", neovimManifest);
 
 // Secondary check: moods agree with each other (catches open-family drift,
 // where a role is allowed but must still be present in every mood).
@@ -222,6 +224,9 @@ const outputs: Array<[string, string]> = [
   [resolve(outputDirectory, "themes.ts"), typescript],
   [resolve(outputDirectory, "themes.css"), css],
   [resolve(root, "../yaak-plugin/src/index.ts"), yaakPluginSource],
+  ...renderNeovimFiles(themes).map(
+    (file) => [resolve(root, "../nvim-plugin", file.path), file.content] as [string, string],
+  ),
 ];
 
 for (const [path, content] of outputs) {

@@ -21,7 +21,7 @@ declaration rather than only checking that the moods agree with each other.
 | Host            | Status  | Mapping target                            | Typography policy                     |
 | --------------- | ------- | ----------------------------------------- | ------------------------------------- |
 | Yaak            | shipped | TypeScript plugin theme API               | Export only supported properties      |
-| LazyVim/Neovim  | planned | highlight groups and terminal ANSI colors | Never set the user's font             |
+| LazyVim/Neovim  | shipped | highlight groups and terminal ANSI colors | Never set the user's font             |
 | Inkdrop UI      | planned | CSS custom properties                     | Respect user font settings by default |
 | Inkdrop Syntax  | planned | CodeMirror selectors and variables        | Never set `font-family`               |
 | Inkdrop Preview | planned | Markdown document CSS variables           | May use the prose stack               |
@@ -35,6 +35,14 @@ The Yaak adapter is implemented in `packages/tokens/src/adapters/yaak.ts`. The
 token build renders all three moods into the Yaak theme plugin at
 `packages/yaak-plugin/`. Only Yaak's supported `base` UI tokens are exported; the
 `syntax.*` family is omitted because Yaak's theme API has no syntax slots.
+
+The Neovim adapter is implemented in `packages/tokens/src/adapters/neovim.ts`
+and supports every contract family — Neovim has a slot for all of them. The build
+generates the whole `packages/nvim-plugin/` Lua tree (`lua/hue/{palette,groups,
+init}.lua`, `colors/hue-<mood>.lua`, and `lua/lualine/themes/hue-<mood>.lua`).
+Colors are applied with `vim.api.nvim_set_hl` and cover core editor groups,
+Treesitter `@`-captures, LSP semantic tokens, diagnostics/git, terminal ANSI, and
+common LazyVim plugins. The colorscheme sets `background` but never a font.
 
 ## Accessibility policy
 

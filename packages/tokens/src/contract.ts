@@ -17,7 +17,19 @@ export const CONTRACT = {
   status: { closed: true, roles: ["success", "info", "notice", "warning", "error"] },
   syntax: {
     closed: false,
-    roles: ["keyword", "string", "number", "function", "comment", "operator"],
+    roles: [
+      "keyword",
+      "string",
+      "number",
+      "function",
+      "comment",
+      "operator",
+      "type",
+      "constant",
+      "property",
+      "variable",
+      "punctuation",
+    ],
   },
 } as const satisfies Record<string, FamilySpec>;
 

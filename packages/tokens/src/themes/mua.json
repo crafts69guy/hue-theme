@@ -65,7 +65,12 @@
       "number": { "$value": "{primitive.gold}" },
       "function": { "$value": "{primitive.blue}" },
       "comment": { "$value": "{primitive.ash}" },
-      "operator": { "$value": "{primitive.vermilion}" }
+      "operator": { "$value": "{primitive.vermilion}" },
+      "type": { "$value": "{primitive.blue}" },
+      "constant": { "$value": "{primitive.gold}" },
+      "property": { "$value": "{primitive.paper}" },
+      "variable": { "$value": "{primitive.paper}" },
+      "punctuation": { "$value": "{primitive.rain}" }
     }
   }
 }

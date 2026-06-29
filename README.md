@@ -42,9 +42,10 @@ Generated artifacts must not be edited by hand.
 
 ## Project status
 
-The semantic contract, the interactive gallery, and the Yaak theme plugin
-(`packages/yaak-plugin`) are implemented. The LazyVim and Inkdrop adapters are
-documented as future mappings and are not packages yet.
+The semantic contract, the interactive gallery, the Yaak theme plugin
+(`packages/yaak-plugin`), and the Neovim/LazyVim colorscheme
+(`packages/nvim-plugin`) are implemented. The Inkdrop adapters are documented as
+future mappings and are not packages yet.
 
 ## Bundled font
 
