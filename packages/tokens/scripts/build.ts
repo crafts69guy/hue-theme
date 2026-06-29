@@ -2,6 +2,7 @@ import { chmod, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
 import { ghosttyManifest, renderGhosttyFiles } from "../src/adapters/ghostty";
 import { neovimManifest, renderNeovimFiles } from "../src/adapters/neovim";
+import { renderTideFiles, tideManifest } from "../src/adapters/tide";
 import { renderTmuxFiles, tmuxManifest } from "../src/adapters/tmux";
 import { renderYaakPluginSource, yaakManifest } from "../src/adapters/yaak";
 import { CONTRACT, validateManifest } from "../src/contract";
@@ -153,6 +154,7 @@ validateManifest("yaak", yaakManifest);
 validateManifest("neovim", neovimManifest);
 validateManifest("ghostty", ghosttyManifest);
 validateManifest("tmux", tmuxManifest);
+validateManifest("tide", tideManifest);
 
 // Secondary check: moods agree with each other (catches open-family drift,
 // where a role is allowed but must still be present in every mood).
@@ -236,6 +238,9 @@ const outputs: Array<[string, string]> = [
   ),
   ...renderTmuxFiles(themes).map(
     (file) => [resolve(root, "../tmux-plugin", file.path), file.content] as [string, string],
+  ),
+  ...renderTideFiles(themes).map(
+    (file) => [resolve(root, "../fish-themes", file.path), file.content] as [string, string],
   ),
 ];
 

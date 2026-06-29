@@ -19,11 +19,11 @@ are all generated from the same source of truth.
 
 ## Moods
 
-| Mood | Appearance | Feel |
-| --- | --- | --- |
-| **Huế Mưa** | dark | deep charcoal, rain silver, muted jade |
-| **Huế Hương** | dark | river green, dusk blue, incense gold |
-| **Huế Cung** | light | ivory paper, imperial lacquer, royal purple |
+| Mood          | Appearance | Feel                                        |
+| ------------- | ---------- | ------------------------------------------- |
+| **Huế Mưa**   | dark       | deep charcoal, rain silver, muted jade      |
+| **Huế Hương** | dark       | river green, dusk blue, incense gold        |
+| **Huế Cung**  | light      | ivory paper, imperial lacquer, royal purple |
 
 Explore them in the interactive gallery: `bun run dev` (Vite + React, in `apps/gallery`).
 
@@ -32,13 +32,14 @@ Explore them in the interactive gallery: `bun run dev` (Vite + React, in `apps/g
 Every theme below is generated from the token contract, so the three moods stay
 identical across hosts.
 
-| Host | Package | Get it |
-| --- | --- | --- |
-| **Neovim / LazyVim** | [`packages/nvim-plugin`](packages/nvim-plugin) | [`crafts69guy/hue-nvim`](https://github.com/crafts69guy/hue-nvim) · lazy.nvim |
-| **tmux** | [`packages/tmux-plugin`](packages/tmux-plugin) | [`crafts69guy/hue-tmux`](https://github.com/crafts69guy/hue-tmux) · TPM |
-| **Ghostty** | [`packages/terminal-themes`](packages/terminal-themes) | theme file (`theme = hue-mua`) |
-| **Yaak** | [`packages/yaak-plugin`](packages/yaak-plugin) | sideload / plugin registry |
-| Inkdrop | — | _planned_ |
+| Host                 | Package                                                | Get it                                                                        |
+| -------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| **Neovim / LazyVim** | [`packages/nvim-plugin`](packages/nvim-plugin)         | [`crafts69guy/hue-nvim`](https://github.com/crafts69guy/hue-nvim) · lazy.nvim |
+| **tmux**             | [`packages/tmux-plugin`](packages/tmux-plugin)         | [`crafts69guy/hue-tmux`](https://github.com/crafts69guy/hue-tmux) · TPM       |
+| **Ghostty**          | [`packages/terminal-themes`](packages/terminal-themes) | theme file (`theme = hue-mua`)                                                |
+| **Fish / Tide**      | [`packages/fish-themes`](packages/fish-themes)         | sourceable Fish theme files                                                   |
+| **Yaak**             | [`packages/yaak-plugin`](packages/yaak-plugin)         | sideload / plugin registry                                                    |
+| Inkdrop              | —                                                      | _planned_                                                                     |
 
 ## How it works
 
@@ -51,6 +52,7 @@ flowchart LR
     A --> N["Neovim"]
     A --> T["tmux"]
     A --> G["Ghostty"]
+    A --> F["Fish / Tide"]
     A --> Y["Yaak"]
 ```
 
@@ -73,6 +75,7 @@ packages/
   nvim-plugin/      # generated Neovim colorscheme   → hue-nvim
   tmux-plugin/      # generated tmux TPM plugin       → hue-tmux
   terminal-themes/  # generated Ghostty theme files
+  fish-themes/      # generated Fish/Tide theme files
   yaak-plugin/      # generated Yaak theme plugin
 apps/
   gallery/          # interactive mood gallery (Vite + React)

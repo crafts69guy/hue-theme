@@ -1,0 +1,8 @@
+{
+  "name": "@crafts69guy/hue-fish-themes",
+  "displayName": "Hue Fish Themes",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Generated Hue theme files for Fish shell prompt integrations.",
+  "license": "MIT"
+}

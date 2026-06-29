@@ -24,6 +24,7 @@ declaration rather than only checking that the moods agree with each other.
 | LazyVim/Neovim  | shipped | highlight groups and terminal ANSI colors | Never set the user's font             |
 | Ghostty         | shipped | theme file (ANSI palette + bg/fg/cursor)  | Theme carries colors only             |
 | tmux            | shipped | TPM plugin (status/pane/window theme)     | Never set the user's font             |
+| Fish/Tide       | shipped | sourceable Fish prompt theme              | Theme carries colors only             |
 | Inkdrop UI      | planned | CSS custom properties                     | Respect user font settings by default |
 | Inkdrop Syntax  | planned | CodeMirror selectors and variables        | Never set `font-family`               |
 | Inkdrop Preview | planned | Markdown document CSS variables           | May use the prose stack               |
@@ -65,6 +66,12 @@ live in `adapters/terminal.ts` so the terminal palette is derived in exactly one
 place. Like Neovim, the tmux plugin is released to a standalone repo
 (`scripts/release-tmux.sh`); Ghostty has no plugin mechanism, so its theme file
 is consumed directly.
+
+The Tide adapter (`adapters/tide.ts`) generates sourceable Fish files into
+`packages/fish-themes/tide/`. It maps prompt segments to semantic roles directly
+and emits true-color hex values via `set -g`, keeping generated theme colors out
+of Fish universal variable storage (`fish_variables`). Tide's wizard remains the
+layout/icon tool; Hue owns only the color mapping.
 
 ## Accessibility policy
 

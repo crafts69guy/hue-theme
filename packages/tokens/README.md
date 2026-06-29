@@ -24,8 +24,8 @@ bun run check   # build --check (no writes) + tsc --noEmit
 then writes `generated/themes.{json,ts,css}` and each adapter's output: the Yaak
 plugin (`packages/yaak-plugin`), the Neovim/LazyVim plugin
 (`packages/nvim-plugin`), the Ghostty theme files (`packages/terminal-themes`),
-and the tmux TPM plugin (`packages/tmux-plugin`). Generated artifacts must not be
-edited by hand.
+the tmux TPM plugin (`packages/tmux-plugin`), and the Fish/Tide theme files
+(`packages/fish-themes`). Generated artifacts must not be edited by hand.
 
 ## Exports
 
