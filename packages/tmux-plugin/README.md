@@ -3,6 +3,10 @@
 > Huế-inspired themes for tmux, packaged as a TPM plugin — generated from the
 > [Hue design token system](https://github.com/crafts69guy/hue-theme).
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/Home.png" alt="Huế Mưa tmux status bar (with Neovim)" width="860" />
+</p>
+
 Three moods drawn from the atmosphere and visual culture of Huế, Việt Nam:
 
 | Mood | `@hue_flavour` | Appearance | Feel |
