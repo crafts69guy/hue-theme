@@ -3,9 +3,9 @@
 Three Huế-inspired moods for the [Yaak](https://yaak.app) API client, generated
 from the Hue design token system:
 
-- **Hue · Mưa** — a deep dark mood shaped by Huế rain and wet stone.
-- **Hue · Hương** — a softer dark mood drawn from the Perfume River and incense.
-- **Hue · Cung** — an ivory light mood informed by imperial lacquer and royal purple.
+- **Huế Mưa** — a deep dark mood shaped by Huế rain and wet stone.
+- **Huế Hương** — a softer dark mood drawn from the Perfume River and incense.
+- **Huế Cung** — an ivory light mood informed by imperial lacquer and royal purple.
 
 ## How it is built
 

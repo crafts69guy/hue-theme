@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
   "$description": "Mưa — a deep dark mood shaped by Huế rain and wet stone.",
-  "meta": { "id": "mua", "label": "Mưa", "appearance": "dark" },
+  "meta": { "id": "mua", "label": "Huế Mưa", "appearance": "dark" },
   "primitive": {
     "$type": "color",
     "ink": {

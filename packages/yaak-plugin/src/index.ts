@@ -5,7 +5,7 @@ export const plugin: PluginDefinition = {
   themes: [
     {
       id: "cung",
-      label: "Hue · Cung",
+      label: "Huế Cung",
       dark: false,
       base: {
         surface: "#F3ECD9",
@@ -28,7 +28,7 @@ export const plugin: PluginDefinition = {
     },
     {
       id: "huong",
-      label: "Hue · Hương",
+      label: "Huế Hương",
       dark: true,
       base: {
         surface: "#101816",
@@ -51,7 +51,7 @@ export const plugin: PluginDefinition = {
     },
     {
       id: "mua",
-      label: "Hue · Mưa",
+      label: "Huế Mưa",
       dark: true,
       base: {
         surface: "#0F1313",

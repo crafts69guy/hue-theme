@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
   "$description": "Hương — a softer dark mood drawn from the Perfume River and incense.",
-  "meta": { "id": "huong", "label": "Hương", "appearance": "dark" },
+  "meta": { "id": "huong", "label": "Huế Hương", "appearance": "dark" },
   "primitive": {
     "$type": "color",
     "ink": {
