@@ -1,0 +1,8 @@
+{
+  "name": "@crafts69guy/hue-terminal-themes",
+  "displayName": "Hue Terminal Themes",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Generated Hue theme files for terminal emulators and multiplexers (Ghostty, tmux).",
+  "license": "MIT"
+}
