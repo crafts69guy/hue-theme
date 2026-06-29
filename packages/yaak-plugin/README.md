@@ -28,4 +28,5 @@ omitted on purpose — Yaak's theme API has no syntax-highlighting slots.
 ## Install locally
 
 After `bun run build`, sideload the plugin from this directory via Yaak's
-Settings → Plugins, or run the Yaak CLI in dev mode against this folder.
+Settings → Plugins. For live development run `bun run dev` (yaakcli watch mode)
+so the bundle rebuilds on change and Yaak hot-reloads it.

@@ -7,9 +7,9 @@ primitive tokens, semantic roles, and platform adapters.
 The first release contains the token contract and an interactive gallery for
 three moods:
 
-- **Mưa** — deep charcoal, rain silver, and muted jade.
-- **Hương** — river green, dusk blue, and incense gold.
-- **Cung** — ivory paper, imperial lacquer, and restrained purple.
+- **Huế Mưa** — deep charcoal, rain silver, and muted jade.
+- **Huế Hương** — river green, dusk blue, and incense gold.
+- **Huế Cung** — ivory paper, imperial lacquer, and restrained purple.
 
 ## Development
 
@@ -42,9 +42,9 @@ Generated artifacts must not be edited by hand.
 
 ## Project status
 
-Version 0.1 specifies the cross-platform semantic contract and gallery.
-LazyVim, Yaak, and Inkdrop adapters are documented as future mappings and are
-not production packages yet.
+The semantic contract, the interactive gallery, and the Yaak theme plugin
+(`packages/yaak-plugin`) are implemented. The LazyVim and Inkdrop adapters are
+documented as future mappings and are not packages yet.
 
 ## Bundled font
 
