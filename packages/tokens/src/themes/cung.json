@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
   "$description": "Cung — an ivory light mood informed by imperial lacquer and royal purple.",
-  "meta": { "id": "cung", "label": "Cung", "appearance": "light" },
+  "meta": { "id": "cung", "label": "Huế Cung", "appearance": "light" },
   "primitive": {
     "$type": "color",
     "ink": {

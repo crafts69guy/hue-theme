@@ -4,7 +4,7 @@ export const themeBundle = {
   "themes": [
     {
       "id": "cung",
-      "label": "Cung",
+      "label": "Huế Cung",
       "appearance": "light",
       "description": "Cung — an ivory light mood informed by imperial lacquer and royal purple.",
       "primitive": {
@@ -44,7 +44,7 @@ export const themeBundle = {
     },
     {
       "id": "huong",
-      "label": "Hương",
+      "label": "Huế Hương",
       "appearance": "dark",
       "description": "Hương — a softer dark mood drawn from the Perfume River and incense.",
       "primitive": {
@@ -84,7 +84,7 @@ export const themeBundle = {
     },
     {
       "id": "mua",
-      "label": "Mưa",
+      "label": "Huế Mưa",
       "appearance": "dark",
       "description": "Mưa — a deep dark mood shaped by Huế rain and wet stone.",
       "primitive": {

@@ -47,7 +47,7 @@ describe("Hue → Yaak adapter", () => {
     });
   });
 
-  test("namespaces labels under the Hue brand", () => {
-    expect(mapped.map((theme) => theme.label)).toEqual(["Hue · Cung", "Hue · Hương", "Hue · Mưa"]);
+  test("uses the Huế mood label directly", () => {
+    expect(mapped.map((theme) => theme.label)).toEqual(["Huế Cung", "Huế Hương", "Huế Mưa"]);
   });
 });

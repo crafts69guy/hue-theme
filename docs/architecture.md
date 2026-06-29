@@ -9,20 +9,27 @@
    change primitive or semantic source data.
 
 The semantic contract is versioned. Removing or changing the meaning of a role
-requires a major version.
+requires a major version. The contract is declared in
+`packages/tokens/src/contract.ts`: each family is marked `closed` (themes must
+match its roles exactly, because consumers switch on them exhaustively — e.g.
+`status`) or open (themes must include at least the declared roles — curated
+families such as `syntax`). The build validates every mood against this
+declaration rather than only checking that the moods agree with each other.
 
-## Planned adapter capabilities
+## Adapter capabilities
 
-| Host            | Mapping target                            | Typography policy                     |
-| --------------- | ----------------------------------------- | ------------------------------------- |
-| LazyVim/Neovim  | highlight groups and terminal ANSI colors | Never set the user's font             |
-| Yaak            | experimental TypeScript plugin theme API  | Export only supported properties      |
-| Inkdrop UI      | CSS custom properties                     | Respect user font settings by default |
-| Inkdrop Syntax  | CodeMirror selectors and variables        | Never set `font-family`               |
-| Inkdrop Preview | Markdown document CSS variables           | May use the prose stack               |
+| Host            | Status  | Mapping target                            | Typography policy                     |
+| --------------- | ------- | ----------------------------------------- | ------------------------------------- |
+| Yaak            | shipped | TypeScript plugin theme API               | Export only supported properties      |
+| LazyVim/Neovim  | planned | highlight groups and terminal ANSI colors | Never set the user's font             |
+| Inkdrop UI      | planned | CSS custom properties                     | Respect user font settings by default |
+| Inkdrop Syntax  | planned | CodeMirror selectors and variables        | Never set `font-family`               |
+| Inkdrop Preview | planned | Markdown document CSS variables           | May use the prose stack               |
 
-Adapters accept a resolved theme plus a capability manifest. Unsupported token
-families are omitted explicitly rather than approximated.
+Each adapter declares a capability manifest of which contract families it
+supports versus explicitly omits; the build asserts every family is accounted
+for exactly once. Unsupported families are omitted explicitly rather than
+approximated.
 
 The Yaak adapter is implemented in `packages/tokens/src/adapters/yaak.ts`. The
 token build renders all three moods into the Yaak theme plugin at

@@ -104,7 +104,7 @@ function statusBase(mood: ResolvedMood): Record<YaakStatusSlot, string> {
 export function mapMoodToYaak(mood: ResolvedMood): YaakThemeObject {
   return {
     id: mood.id,
-    label: `Hue · ${mood.label}`,
+    label: mood.label,
     dark: mood.appearance === "dark",
     base: {
       surface: role(mood, "surface.canvas"),
