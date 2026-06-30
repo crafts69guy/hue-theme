@@ -4,7 +4,7 @@
 > from the [Hue design token system](https://github.com/crafts69guy/hue-theme).
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/Home.png" alt="Huế Mưa across the Hue theme system" width="860" />
+  <img src="./assets/yaak-home.png" alt="Huế Hương theme in Yaak with a JSON API response" width="860" />
 </p>
 
 Three moods drawn from the atmosphere and visual culture of Huế, Việt Nam:
