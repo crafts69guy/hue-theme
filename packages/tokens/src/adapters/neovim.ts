@@ -428,7 +428,7 @@ end
 
 // Background-bearing groups cleared to `bg=NONE` when `transparent` is on, so
 // the terminal shows through. Selection/active states (PmenuSel, Visual,
-// TelescopeSelection, prompt input) keep their bg so they stay legible.
+// TelescopeSelection, picker cursor lines) keep their bg so they stay legible.
 const TRANSPARENT_GROUPS: readonly string[] = [
   // Core editor + built-in floats/popups.
   "Normal",
@@ -449,6 +449,8 @@ const TRANSPARENT_GROUPS: readonly string[] = [
   "TelescopeBorder",
   "TelescopeResultsNormal",
   "TelescopePreviewNormal",
+  "TelescopePromptNormal",
+  "TelescopePromptBorder",
   // neo-tree
   "NeoTreeNormal",
   "NeoTreeNormalNC",
@@ -464,8 +466,10 @@ const TRANSPARENT_GROUPS: readonly string[] = [
   "SnacksBackdrop",
   "SnacksPicker",
   "SnacksPickerNormal",
+  "SnacksPickerBorder",
   "SnacksPickerList",
   "SnacksPickerInput",
+  "SnacksPickerInputBorder",
   "SnacksPickerPreview",
   "SnacksPickerBox",
   "SnacksDashboardNormal",
