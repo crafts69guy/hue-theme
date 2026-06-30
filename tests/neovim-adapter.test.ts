@@ -104,6 +104,16 @@ describe("Hue → Neovim adapter", () => {
     }
     expect(groups).toContain('["SnacksPickerNormal"] = { fg = c["text.primary"], bg = c["surface.raised"] }');
     expect(groups).toContain('["SnacksPickerInput"] = { fg = c["text.primary"], bg = c["surface.selected"] }');
+    expect(groups).toContain('["SnacksPickerBorder"] = { fg = c["border.subtle"], bg = c["surface.raised"] }');
+    expect(groups).toContain('["SnacksPickerInputBorder"] = { fg = c["border.subtle"], bg = c["surface.selected"] }');
+  });
+
+  test("keeps popup border colors consistent across plugin floats", () => {
+    const groups = file("lua/hue/groups.lua");
+    expect(groups).toContain('["FloatBorder"] = { fg = c["border.subtle"], bg = c["surface.raised"] }');
+    expect(groups).toContain('["TelescopePromptBorder"] = { fg = c["border.subtle"], bg = c["surface.selected"] }');
+    expect(groups).toContain('["WhichKeyBorder"] = { link = "FloatBorder" }');
+    expect(groups).toContain('["BlinkCmpMenuBorder"] = { link = "FloatBorder" }');
   });
 
   test("colors entrypoints load their mood", () => {
