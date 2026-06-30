@@ -5,74 +5,74 @@
 :root {
   color-scheme: light;
   --page-background: #f3ecd9;
-  --text-color: #28251f;
-  --link-color: #356b5c;
-  --link-hover-color: #356b5c;
+  --text-color: #3c372c;
+  --link-color: #3a6e5f;
+  --link-hover-color: #3a6e5f;
   --table-background: #f3ecd9;
   --table-header-background: #e8ddc5;
-  --table-header-color: #28251f;
+  --table-header-color: #3c372c;
   --md-inline-code-background-color: #e8ddc5;
-  --md-codeblock-color: #28251f;
+  --md-codeblock-color: #3c372c;
   --md-codeblock-background-color: #e8ddc5;
-  --md-inline-mark-text-color: #28251f;
-  --md-inline-mark-background-color: #634f75;
+  --md-inline-mark-text-color: #3c372c;
+  --md-inline-mark-background-color: #6a5384;
   --md-inline-mark-underline-color: #8b5c1a;
   --md-table-background-color: #e8ddc5;
-  --md-blockquote-border-color: #634f75;
-  --md-list-mark-color: #356b5c;
-  --syntax-comment-color: #585347;
-  --syntax-keyword-color: #634f75;
-  --syntax-string-color: #356b5c;
+  --md-blockquote-border-color: #6a5384;
+  --md-list-mark-color: #3a6e5f;
+  --syntax-comment-color: #8a8473;
+  --syntax-keyword-color: #6a5384;
+  --syntax-string-color: #3a6e5f;
   --syntax-number-color: #8b5c1a;
-  --syntax-name-function-color: #326071;
-  --syntax-operator-color: #9e342d;
-  --syntax-punctuation-color: #71644c;
+  --syntax-name-function-color: #3d6480;
+  --syntax-operator-color: #a6403a;
+  --syntax-punctuation-color: #7c7565;
   --mde-preview-heading-color: #8b5c1a;
-  --mde-preview-link-color: #356b5c;
-  --mde-preview-em-color: #28251f;
-  --mde-preview-strong-color: #28251f;
-  --mde-preview-inline-code-text-color: #356b5c;
+  --mde-preview-link-color: #3a6e5f;
+  --mde-preview-em-color: #3c372c;
+  --mde-preview-strong-color: #3c372c;
+  --mde-preview-inline-code-text-color: #3a6e5f;
   --mde-preview-inline-code-background-color: #e8ddc5;
-  --mde-preview-inline-code-border-color: #71644c;
+  --mde-preview-inline-code-border-color: #8c846f;
   --mde-preview-inline-code-border-width: 1px;
   --mde-preview-codeblock-background-color: #e8ddc5;
-  --mde-preview-codeblock-meta-background-color: #71644c;
+  --mde-preview-codeblock-meta-background-color: #cbddd2;
   --mde-preview-image-background-color: #e8ddc5;
-  --mde-preview-inline-mark-background-color: #634f75;
-  --mde-preview-inline-mark-text-color: #28251f;
+  --mde-preview-inline-mark-background-color: #6a5384;
+  --mde-preview-inline-mark-text-color: #3c372c;
   --mde-preview-inline-mark-underline-color: #8b5c1a;
   --mde-preview-table-head-background-color: #e8ddc5;
-  --mde-preview-table-head-text-color: #28251f;
+  --mde-preview-table-head-text-color: #3c372c;
   --mde-preview-table-row-background-color: #f3ecd9;
   --mde-preview-table-row-stripe-background-color: #e8ddc5;
-  --border-color: #71644c66;
-  --md-codeblock-border-color: color-mix(in srgb, #71644c 30%, #e8ddc5);
-  --md-table-border-color: color-mix(in srgb, #71644c 30%, #e8ddc5);
-  --md-inline-code-border-color: #71644c66;
+  --border-color: #8c846f66;
+  --md-codeblock-border-color: color-mix(in srgb, #8c846f 30%, #e8ddc5);
+  --md-table-border-color: color-mix(in srgb, #8c846f 30%, #e8ddc5);
+  --md-inline-code-border-color: #8c846f66;
 }
 
 .mde-preview,
 .mde-preview .markdown-body {
   background: #f3ecd9;
-  color: #28251f;
+  color: #3c372c;
 }
 
 .mde-preview a {
-  color: #356b5c;
+  color: #3a6e5f;
 }
 
 .mde-preview blockquote {
-  color: #585347;
-  border-left-color: #634f75;
+  color: #66604f;
+  border-left-color: #6a5384;
 }
 
 .mde-preview code,
 .mde-preview pre {
   background: #e8ddc5;
-  border-color: color-mix(in srgb, #71644c 30%, #e8ddc5);
+  border-color: color-mix(in srgb, #8c846f 30%, #e8ddc5);
 }
 
 .mde-preview table th,
 .mde-preview table td {
-  border-color: color-mix(in srgb, #71644c 30%, #e8ddc5);
+  border-color: color-mix(in srgb, #8c846f 30%, #e8ddc5);
 }

@@ -1,38 +1,47 @@
 {
   "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
-  "$description": "Hương — a softer dark mood drawn from the Perfume River and incense.",
+  "$description": "Hương — the Perfume River's clear, fresh jade beauty.",
   "meta": { "id": "huong", "label": "Huế Hương", "appearance": "dark" },
   "primitive": {
     "$type": "color",
     "ink": {
-      "$value": { "colorSpace": "srgb", "components": [0.063, 0.094, 0.086], "hex": "#101816" }
+      "$value": { "colorSpace": "srgb", "components": [0.059, 0.114, 0.098], "hex": "#0F1D19" }
     },
     "stone": {
-      "$value": { "colorSpace": "srgb", "components": [0.086, 0.137, 0.122], "hex": "#16231F" }
+      "$value": { "colorSpace": "srgb", "components": [0.094, 0.165, 0.141], "hex": "#182A24" }
+    },
+    "pool": {
+      "$value": { "colorSpace": "srgb", "components": [0.141, 0.306, 0.259], "hex": "#244E42" }
     },
     "rain": {
-      "$value": { "colorSpace": "srgb", "components": [0.322, 0.412, 0.373], "hex": "#52695F" }
+      "$value": { "colorSpace": "srgb", "components": [0.345, 0.443, 0.408], "hex": "#587168" }
     },
     "paper": {
-      "$value": { "colorSpace": "srgb", "components": [0.922, 0.914, 0.863], "hex": "#EBE9DC" }
+      "$value": { "colorSpace": "srgb", "components": [0.839, 0.855, 0.816], "hex": "#D6DAD0" }
     },
     "ash": {
-      "$value": { "colorSpace": "srgb", "components": [0.686, 0.718, 0.659], "hex": "#AFB7A8" }
+      "$value": { "colorSpace": "srgb", "components": [0.596, 0.647, 0.612], "hex": "#98A59C" }
+    },
+    "fog": {
+      "$value": { "colorSpace": "srgb", "components": [0.424, 0.494, 0.463], "hex": "#6C7E76" }
+    },
+    "mist": {
+      "$value": { "colorSpace": "srgb", "components": [0.541, 0.588, 0.557], "hex": "#8A968E" }
     },
     "jade": {
-      "$value": { "colorSpace": "srgb", "components": [0.51, 0.725, 0.635], "hex": "#82B9A2" }
+      "$value": { "colorSpace": "srgb", "components": [0.435, 0.816, 0.659], "hex": "#6FD0A8" }
     },
     "violet": {
-      "$value": { "colorSpace": "srgb", "components": [0.655, 0.608, 0.737], "hex": "#A79BBC" }
+      "$value": { "colorSpace": "srgb", "components": [0.663, 0.627, 0.784], "hex": "#A9A0C8" }
     },
     "gold": {
-      "$value": { "colorSpace": "srgb", "components": [0.843, 0.667, 0.361], "hex": "#D7AA5C" }
+      "$value": { "colorSpace": "srgb", "components": [0.863, 0.733, 0.502], "hex": "#DCBB80" }
     },
     "vermilion": {
-      "$value": { "colorSpace": "srgb", "components": [0.804, 0.427, 0.365], "hex": "#CD6D5D" }
+      "$value": { "colorSpace": "srgb", "components": [0.827, 0.518, 0.471], "hex": "#D38478" }
     },
     "blue": {
-      "$value": { "colorSpace": "srgb", "components": [0.482, 0.675, 0.694], "hex": "#7BACB1" }
+      "$value": { "colorSpace": "srgb", "components": [0.498, 0.729, 0.784], "hex": "#7FBAC8" }
     }
   },
   "semantic": {
@@ -40,7 +49,7 @@
     "surface": {
       "canvas": { "$value": "{primitive.ink}" },
       "raised": { "$value": "{primitive.stone}" },
-      "selected": { "$value": "{primitive.rain}" }
+      "selected": { "$value": "{primitive.pool}" }
     },
     "text": {
       "primary": { "$value": "{primitive.paper}" },
@@ -64,13 +73,13 @@
       "string": { "$value": "{primitive.jade}" },
       "number": { "$value": "{primitive.gold}" },
       "function": { "$value": "{primitive.blue}" },
-      "comment": { "$value": "{primitive.ash}" },
+      "comment": { "$value": "{primitive.fog}" },
       "operator": { "$value": "{primitive.vermilion}" },
       "type": { "$value": "{primitive.blue}" },
       "constant": { "$value": "{primitive.gold}" },
       "property": { "$value": "{primitive.paper}" },
       "variable": { "$value": "{primitive.paper}" },
-      "punctuation": { "$value": "{primitive.rain}" }
+      "punctuation": { "$value": "{primitive.mist}" }
     }
   }
 }

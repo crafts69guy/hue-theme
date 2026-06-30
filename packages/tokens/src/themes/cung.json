@@ -10,29 +10,38 @@
     "stone": {
       "$value": { "colorSpace": "srgb", "components": [0.91, 0.867, 0.773], "hex": "#E8DDC5" }
     },
+    "pool": {
+      "$value": { "colorSpace": "srgb", "components": [0.796, 0.867, 0.824], "hex": "#CBDDD2" }
+    },
     "rain": {
-      "$value": { "colorSpace": "srgb", "components": [0.443, 0.392, 0.298], "hex": "#71644C" }
+      "$value": { "colorSpace": "srgb", "components": [0.549, 0.518, 0.435], "hex": "#8C846F" }
     },
     "paper": {
-      "$value": { "colorSpace": "srgb", "components": [0.157, 0.145, 0.122], "hex": "#28251F" }
+      "$value": { "colorSpace": "srgb", "components": [0.235, 0.216, 0.173], "hex": "#3C372C" }
     },
     "ash": {
-      "$value": { "colorSpace": "srgb", "components": [0.345, 0.325, 0.278], "hex": "#585347" }
+      "$value": { "colorSpace": "srgb", "components": [0.4, 0.376, 0.31], "hex": "#66604F" }
+    },
+    "fog": {
+      "$value": { "colorSpace": "srgb", "components": [0.541, 0.518, 0.451], "hex": "#8A8473" }
+    },
+    "mist": {
+      "$value": { "colorSpace": "srgb", "components": [0.486, 0.459, 0.396], "hex": "#7C7565" }
     },
     "jade": {
-      "$value": { "colorSpace": "srgb", "components": [0.208, 0.42, 0.361], "hex": "#356B5C" }
+      "$value": { "colorSpace": "srgb", "components": [0.227, 0.431, 0.373], "hex": "#3A6E5F" }
     },
     "violet": {
-      "$value": { "colorSpace": "srgb", "components": [0.388, 0.31, 0.459], "hex": "#634F75" }
+      "$value": { "colorSpace": "srgb", "components": [0.416, 0.325, 0.518], "hex": "#6A5384" }
     },
     "gold": {
       "$value": { "colorSpace": "srgb", "components": [0.545, 0.361, 0.102], "hex": "#8B5C1A" }
     },
     "vermilion": {
-      "$value": { "colorSpace": "srgb", "components": [0.62, 0.204, 0.176], "hex": "#9E342D" }
+      "$value": { "colorSpace": "srgb", "components": [0.651, 0.251, 0.227], "hex": "#A6403A" }
     },
     "blue": {
-      "$value": { "colorSpace": "srgb", "components": [0.196, 0.376, 0.443], "hex": "#326071" }
+      "$value": { "colorSpace": "srgb", "components": [0.239, 0.392, 0.502], "hex": "#3D6480" }
     }
   },
   "semantic": {
@@ -40,7 +49,7 @@
     "surface": {
       "canvas": { "$value": "{primitive.ink}" },
       "raised": { "$value": "{primitive.stone}" },
-      "selected": { "$value": "{primitive.rain}" }
+      "selected": { "$value": "{primitive.pool}" }
     },
     "text": {
       "primary": { "$value": "{primitive.paper}" },
@@ -64,13 +73,13 @@
       "string": { "$value": "{primitive.jade}" },
       "number": { "$value": "{primitive.gold}" },
       "function": { "$value": "{primitive.blue}" },
-      "comment": { "$value": "{primitive.ash}" },
+      "comment": { "$value": "{primitive.fog}" },
       "operator": { "$value": "{primitive.vermilion}" },
       "type": { "$value": "{primitive.blue}" },
       "constant": { "$value": "{primitive.gold}" },
       "property": { "$value": "{primitive.paper}" },
       "variable": { "$value": "{primitive.paper}" },
-      "punctuation": { "$value": "{primitive.rain}" }
+      "punctuation": { "$value": "{primitive.mist}" }
     }
   }
 }
