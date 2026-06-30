@@ -1,6 +1,6 @@
 {
   "name": "hue-mua-ui-theme",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "theme": "ui",
   "description": "Hue Mua Theme",
   "styleSheets": [

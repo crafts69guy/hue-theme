@@ -57,7 +57,7 @@ function renderPackageJson(mood: ResolvedMood, type: InkdropThemeType): string {
   return `${JSON.stringify(
     {
       name: packageName(mood, type),
-      version: "0.1.0",
+      version: "0.1.1",
       theme: type,
       description: themeDescription(mood, type),
       styleSheets: ["styles/theme.css"],
