@@ -2,7 +2,7 @@
   "name": "hue-mua-ui-theme",
   "version": "0.1.0",
   "theme": "ui",
-  "description": "Huế Mưa UI Theme for Inkdrop",
+  "description": "Hue Mua Theme",
   "styleSheets": [
     "styles/theme.css"
   ],

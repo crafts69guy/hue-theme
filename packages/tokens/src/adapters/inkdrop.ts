@@ -43,8 +43,13 @@ function packageName(mood: ResolvedMood, type: InkdropThemeType): string {
   return `hue-${mood.id}-${type}-theme`;
 }
 
+function uiThemeLabel(mood: ResolvedMood): string {
+  return `Hue ${mood.id.charAt(0).toUpperCase()}${mood.id.slice(1)} Theme`;
+}
+
 function themeDescription(mood: ResolvedMood, type: InkdropThemeType): string {
-  const label = type === "ui" ? "UI" : type.charAt(0).toUpperCase() + type.slice(1);
+  if (type === "ui") return uiThemeLabel(mood);
+  const label = type.charAt(0).toUpperCase() + type.slice(1);
   return `${mood.label} ${label} Theme for Inkdrop`;
 }
 

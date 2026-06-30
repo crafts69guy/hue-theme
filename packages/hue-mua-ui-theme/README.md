@@ -1,6 +1,6 @@
 # hue-mua-ui-theme
 
-Huế Mưa UI Theme for Inkdrop.
+Hue Mua Theme.
 
 This package is generated from the Hue Theme token contract. Do not edit the
 CSS by hand; update the source tokens or Inkdrop adapter and run the token build.

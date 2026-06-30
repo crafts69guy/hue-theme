@@ -2,7 +2,7 @@
   "name": "hue-cung-ui-theme",
   "version": "0.1.0",
   "theme": "ui",
-  "description": "Huế Cung UI Theme for Inkdrop",
+  "description": "Hue Cung Theme",
   "styleSheets": [
     "styles/theme.css"
   ],
