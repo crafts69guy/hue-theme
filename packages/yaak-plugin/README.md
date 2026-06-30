@@ -1,32 +1,81 @@
-# Hue Yaak Theme
+# <img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/hue-mark.svg" height="28" alt="" valign="middle" /> Hue for Yaak
 
-Three Huế-inspired moods for the [Yaak](https://yaak.app) API client, generated
-from the Hue design token system:
+> Huế-inspired themes for the [Yaak](https://yaak.app) API client — generated
+> from the [Hue design token system](https://github.com/crafts69guy/hue-theme).
 
-- **Huế Mưa** — a deep dark mood shaped by Huế rain and wet stone.
-- **Huế Hương** — a softer dark mood drawn from the Perfume River and incense.
-- **Huế Cung** — an ivory light mood informed by imperial lacquer and royal purple.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/Home.png" alt="Huế Mưa across the Hue theme system" width="860" />
+</p>
 
-## How it is built
+Three moods drawn from the atmosphere and visual culture of Huế, Việt Nam:
 
-`src/index.ts` is **generated** by the token build — do not edit it by hand.
-The Hue → Yaak mapping lives in
-[`packages/tokens/src/adapters/yaak.ts`](../tokens/src/adapters/yaak.ts), and the
-build writes the plugin entrypoint here.
+| Mood | Theme ID | Appearance | Feel |
+| --- | --- | --- | --- |
+| **Huế Mưa** | `mua` | dark | deep charcoal, rain silver, muted jade |
+| **Huế Hương** | `huong` | dark | river green, dusk blue, incense gold |
+| **Huế Cung** | `cung` | light | ivory paper, imperial lacquer, royal purple |
 
-```bash
-# Regenerate src/index.ts from the source tokens
-cd ../tokens && bun run build
+Each mood styles Yaak's base UI palette: surfaces, text, borders, selection,
+primary actions, and status colors. It does not change fonts, request data, or
+workspace behavior.
 
-# Build the Yaak plugin bundle
-cd ../yaak-plugin && bun install && bun run build
+## Installation
+
+Install the plugin from Yaak's plugin settings with this repository:
+
+```text
+crafts69guy/hue-yaak
 ```
 
-Only Yaak's supported `base` UI tokens are exported. Hue's `syntax.*` roles are
-omitted on purpose — Yaak's theme API has no syntax-highlighting slots.
+Then choose **Huế Mưa**, **Huế Hương**, or **Huế Cung** from Yaak's theme
+selector.
 
-## Install locally
+### Local development
 
-After `bun run build`, sideload the plugin from this directory via Yaak's
-Settings → Plugins. For live development run `bun run dev` (yaakcli watch mode)
-so the bundle rebuilds on change and Yaak hot-reloads it.
+Clone the repository and build the plugin bundle:
+
+```fish
+bun install
+bun run build
+```
+
+Sideload the plugin directory from Yaak's **Settings -> Plugins** screen. For
+live development, run:
+
+```fish
+bun run dev
+```
+
+`yaakcli` watches the plugin and Yaak reloads it as the bundle changes.
+
+## Development
+
+This repository is the Yaak subtree package from
+[`crafts69guy/hue-theme`](https://github.com/crafts69guy/hue-theme). The source
+theme data lives in the token package, and this plugin is generated from that
+contract.
+
+In the monorepo:
+
+```fish
+# Regenerate src/index.ts from source tokens
+bun run --cwd packages/tokens build
+
+# Build the Yaak plugin bundle
+bun run --cwd packages/yaak-plugin build
+```
+
+`src/index.ts` is build output. Do not edit it by hand; change the Hue tokens or
+the Yaak adapter instead. Only Yaak's supported `base` UI tokens are exported.
+Hue's `syntax.*` roles are omitted because Yaak's theme API has no
+syntax-highlighting slots.
+
+## Credits
+
+Generated from the
+[Hue design token system](https://github.com/crafts69guy/hue-theme) — rooted in
+the visual culture of Huế, Việt Nam.
+
+## License
+
+[MIT](./LICENSE)
