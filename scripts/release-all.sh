@@ -19,6 +19,7 @@ DIR="$(cd "$(dirname "$0")" && pwd)"
 WRAPPERS=(
   release-nvim.sh
   release-tmux.sh
+  release-yaak.sh
 )
 
 for wrapper in "${WRAPPERS[@]}"; do
