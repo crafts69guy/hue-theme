@@ -92,6 +92,20 @@ describe("Hue → Neovim adapter", () => {
     }
   });
 
+  test("emits Snacks picker highlights for LazyVim", () => {
+    const groups = file("lua/hue/groups.lua");
+    for (const group of [
+      "SnacksPickerNormal",
+      "SnacksPickerInput",
+      "SnacksPickerCursorLine",
+      "SnacksPickerMatch",
+    ]) {
+      expect(groups).toContain(`["${group}"]`);
+    }
+    expect(groups).toContain('["SnacksPickerNormal"] = { fg = c["text.primary"], bg = c["surface.raised"] }');
+    expect(groups).toContain('["SnacksPickerInput"] = { fg = c["text.primary"], bg = c["surface.selected"] }');
+  });
+
   test("colors entrypoints load their mood", () => {
     for (const mood of moods) {
       expect(file(`colors/hue-${mood.id}.lua`)).toContain(`require("hue").load("${mood.id}")`);
