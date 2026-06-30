@@ -29,13 +29,13 @@ describe("Hue -> Inkdrop adapter", () => {
   test("renders one UI, syntax, and preview package for every mood", () => {
     expect(packages).toHaveLength(9);
     expect(packages.map((pack) => pack.packageName)).toEqual([
-      "hue-cung-ui-theme",
+      "hue-cung-theme",
       "hue-cung-syntax-theme",
       "hue-cung-preview-theme",
-      "hue-huong-ui-theme",
+      "hue-huong-theme",
       "hue-huong-syntax-theme",
       "hue-huong-preview-theme",
-      "hue-mua-ui-theme",
+      "hue-mua-theme",
       "hue-mua-syntax-theme",
       "hue-mua-preview-theme",
     ]);

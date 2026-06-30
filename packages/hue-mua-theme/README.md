@@ -1,4 +1,4 @@
-# hue-mua-ui-theme
+# hue-mua-theme
 
 Hue Mua Theme.
 
@@ -8,5 +8,5 @@ CSS by hand; update the source tokens or Inkdrop adapter and run the token build
 ## Install locally
 
 ```fish
-ipm install ./packages/hue-mua-ui-theme
+ipm install ./packages/hue-mua-theme
 ```

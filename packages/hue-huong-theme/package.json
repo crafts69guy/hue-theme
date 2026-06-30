@@ -1,8 +1,8 @@
 {
-  "name": "hue-mua-ui-theme",
+  "name": "hue-huong-theme",
   "version": "0.1.1",
   "theme": "ui",
-  "description": "Hue Mua Theme",
+  "description": "Hue Huong Theme",
   "styleSheets": [
     "styles/theme.css"
   ],
@@ -14,7 +14,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/crafts69guy/hue-theme",
-    "directory": "packages/hue-mua-ui-theme"
+    "directory": "packages/hue-huong-theme"
   },
   "bugs": {
     "url": "https://github.com/crafts69guy/hue-theme/issues"

@@ -40,6 +40,7 @@ function cssValue(value: string): string {
 }
 
 function packageName(mood: ResolvedMood, type: InkdropThemeType): string {
+  if (type === "ui") return `hue-${mood.id}-theme`;
   return `hue-${mood.id}-${type}-theme`;
 }
 

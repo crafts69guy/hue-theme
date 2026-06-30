@@ -8,21 +8,21 @@
 # Examples:
 #   scripts/publish-inkdrop.sh --dry-run
 #   scripts/publish-inkdrop.sh
-#   scripts/publish-inkdrop.sh hue-mua-ui-theme
-#   scripts/publish-inkdrop.sh packages/hue-mua-ui-theme
+#   scripts/publish-inkdrop.sh hue-mua-theme
+#   scripts/publish-inkdrop.sh packages/hue-mua-theme
 
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 DEFAULT_PACKAGES=(
-  hue-cung-ui-theme
+  hue-cung-theme
   hue-cung-syntax-theme
   hue-cung-preview-theme
-  hue-huong-ui-theme
+  hue-huong-theme
   hue-huong-syntax-theme
   hue-huong-preview-theme
-  hue-mua-ui-theme
+  hue-mua-theme
   hue-mua-syntax-theme
   hue-mua-preview-theme
 )
@@ -41,8 +41,8 @@ Usage:
 Examples:
   scripts/publish-inkdrop.sh --dry-run
   scripts/publish-inkdrop.sh
-  scripts/publish-inkdrop.sh hue-mua-ui-theme
-  scripts/publish-inkdrop.sh packages/hue-mua-ui-theme
+  scripts/publish-inkdrop.sh hue-mua-theme
+  scripts/publish-inkdrop.sh packages/hue-mua-theme
 EOF
 }
 
