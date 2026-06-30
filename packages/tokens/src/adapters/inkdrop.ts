@@ -58,7 +58,7 @@ function renderPackageJson(mood: ResolvedMood, type: InkdropThemeType): string {
   return `${JSON.stringify(
     {
       name: packageName(mood, type),
-      version: "0.1.1",
+      version: "0.2.0",
       theme: type,
       // Inkdrop needs themeAppearance to register the theme as dark/light, and
       // (for UI themes) type: "module" — matching the built-in/working themes.
