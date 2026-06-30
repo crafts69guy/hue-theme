@@ -23,10 +23,10 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.9",
-    "@yaakapp/cli": "^0.3.1",
+    "@yaakapp/cli": "^0.7.0",
     "typescript": "^5.5.2"
   },
   "dependencies": {
-    "@yaakapp/api": "^0.5.3"
+    "@yaakapp/api": "^0.8.3"
   }
 }
