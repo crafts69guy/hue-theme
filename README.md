@@ -96,6 +96,13 @@ bun run quality    # biome check + token/gallery check + tests
 bun run ci         # the full non-mutating gate, incl. build
 ```
 
+Publish the generated Inkdrop packages:
+
+```fish
+bun run publish:inkdrop:dry-run
+bun run publish:inkdrop
+```
+
 Source tokens follow the
 [Design Tokens Community Group format](https://www.designtokens.org/tr/2025.10/format/).
 **Generated artifacts must not be edited by hand** — change the tokens or adapters

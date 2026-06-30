@@ -18,6 +18,8 @@
     "format:check": "biome format .",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
+    "publish:inkdrop": "scripts/publish-inkdrop.sh",
+    "publish:inkdrop:dry-run": "scripts/publish-inkdrop.sh --dry-run",
     "quality": "biome check . && bun run check && bun test",
     "ci": "biome ci . && bun run check && bun test && bun run build"
   },
