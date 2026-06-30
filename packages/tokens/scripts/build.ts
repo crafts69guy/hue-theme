@@ -7,6 +7,7 @@ import { renderTideFiles, tideManifest } from "../src/adapters/tide";
 import { renderTmuxFiles, tmuxManifest } from "../src/adapters/tmux";
 import { renderYaakPluginSource, yaakManifest } from "../src/adapters/yaak";
 import { CONTRACT, validateManifest } from "../src/contract";
+import { contrastRatio } from "../src/color";
 
 type Token = { $value: unknown };
 type Node = Token | string | { [key: string]: Node };
@@ -83,23 +84,6 @@ function flatten(
     }
   }
   return output;
-}
-
-function relativeLuminance(hex: string): number {
-  const matches = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
-  if (!matches) throw new Error(`Invalid sRGB hex color: ${hex}`);
-
-  const channels = matches
-    .slice(1)
-    .map((channel) => Number.parseInt(channel, 16) / 255)
-    .map((channel) => (channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4));
-  return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
-}
-
-function contrastRatio(foreground: string, background: string): number {
-  const a = relativeLuminance(foreground);
-  const b = relativeLuminance(background);
-  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
 
 // Validate a mood's resolved semantic keys against the declared contract:
