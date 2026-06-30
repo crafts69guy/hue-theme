@@ -29,15 +29,15 @@ describe("Hue -> Inkdrop adapter", () => {
   test("renders one UI, syntax, and preview package for every mood", () => {
     expect(packages).toHaveLength(9);
     expect(packages.map((pack) => pack.packageName)).toEqual([
-      "inkdrop-hue-cung-ui-theme",
-      "inkdrop-hue-cung-syntax-theme",
-      "inkdrop-hue-cung-preview-theme",
-      "inkdrop-hue-huong-ui-theme",
-      "inkdrop-hue-huong-syntax-theme",
-      "inkdrop-hue-huong-preview-theme",
-      "inkdrop-hue-mua-ui-theme",
-      "inkdrop-hue-mua-syntax-theme",
-      "inkdrop-hue-mua-preview-theme",
+      "hue-cung-ui-theme",
+      "hue-cung-syntax-theme",
+      "hue-cung-preview-theme",
+      "hue-huong-ui-theme",
+      "hue-huong-syntax-theme",
+      "hue-huong-preview-theme",
+      "hue-mua-ui-theme",
+      "hue-mua-syntax-theme",
+      "hue-mua-preview-theme",
     ]);
   });
 

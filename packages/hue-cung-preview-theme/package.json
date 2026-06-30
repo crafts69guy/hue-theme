@@ -1,0 +1,28 @@
+{
+  "name": "hue-cung-preview-theme",
+  "version": "0.1.0",
+  "theme": "preview",
+  "description": "Huế Cung Preview Theme for Inkdrop",
+  "styleSheets": [
+    "styles/theme.css"
+  ],
+  "keywords": [
+    "inkdrop",
+    "markdown",
+    "hue-theme"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crafts69guy/hue-theme",
+    "directory": "packages/hue-cung-preview-theme"
+  },
+  "bugs": {
+    "url": "https://github.com/crafts69guy/hue-theme/issues"
+  },
+  "homepage": "https://github.com/crafts69guy/hue-theme#readme",
+  "author": "crafts69guy",
+  "license": "MIT",
+  "engines": {
+    "inkdrop": "^6.x"
+  }
+}

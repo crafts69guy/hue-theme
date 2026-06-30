@@ -40,7 +40,7 @@ function cssValue(value: string): string {
 }
 
 function packageName(mood: ResolvedMood, type: InkdropThemeType): string {
-  return `inkdrop-hue-${mood.id}-${type}-theme`;
+  return `hue-${mood.id}-${type}-theme`;
 }
 
 function themeDescription(mood: ResolvedMood, type: InkdropThemeType): string {
@@ -57,6 +57,15 @@ function renderPackageJson(mood: ResolvedMood, type: InkdropThemeType): string {
       description: themeDescription(mood, type),
       styleSheets: ["styles/theme.css"],
       keywords: ["inkdrop", "markdown", "hue-theme"],
+      repository: {
+        type: "git",
+        url: "https://github.com/crafts69guy/hue-theme",
+        directory: `packages/${packageName(mood, type)}`,
+      },
+      bugs: {
+        url: "https://github.com/crafts69guy/hue-theme/issues",
+      },
+      homepage: "https://github.com/crafts69guy/hue-theme#readme",
       author: "crafts69guy",
       license: "MIT",
       engines: { inkdrop: "^6.x" },

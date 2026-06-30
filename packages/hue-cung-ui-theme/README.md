@@ -1,6 +1,6 @@
-# inkdrop-hue-mua-ui-theme
+# hue-cung-ui-theme
 
-Huế Mưa UI Theme for Inkdrop.
+Huế Cung UI Theme for Inkdrop.
 
 This package is generated from the Hue Theme token contract. Do not edit the
 CSS by hand; update the source tokens or Inkdrop adapter and run the token build.
@@ -8,5 +8,5 @@ CSS by hand; update the source tokens or Inkdrop adapter and run the token build
 ## Install locally
 
 ```fish
-ipm install ./packages/inkdrop-hue-mua-ui-theme
+ipm install ./packages/hue-cung-ui-theme
 ```

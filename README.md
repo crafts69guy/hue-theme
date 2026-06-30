@@ -39,7 +39,7 @@ identical across hosts.
 | **Ghostty**          | [`packages/terminal-themes`](packages/terminal-themes) | theme file (`theme = hue-mua`)                                                |
 | **Fish / Tide**      | [`packages/fish-themes`](packages/fish-themes)         | sourceable Fish theme files                                                   |
 | **Yaak**             | [`packages/yaak-plugin`](packages/yaak-plugin)         | sideload / plugin registry                                                    |
-| **Inkdrop**          | `packages/inkdrop-hue-*-*-theme`                       | 9 generated UI/Syntax/Preview packages                                        |
+| **Inkdrop**          | `packages/hue-*-*-theme`                               | 9 generated UI/Syntax/Preview packages                                        |
 
 ## How it works
 
@@ -77,7 +77,7 @@ packages/
   terminal-themes/  # generated Ghostty theme files
   fish-themes/      # generated Fish/Tide theme files
   yaak-plugin/      # generated Yaak theme plugin
-  inkdrop-hue-*/    # generated Inkdrop UI/Syntax/Preview packages
+  hue-*-theme/      # generated Inkdrop UI/Syntax/Preview packages
 apps/
   gallery/          # interactive mood gallery (Vite + React)
 ```

@@ -74,11 +74,11 @@ of Fish universal variable storage (`fish_variables`). Tide's wizard remains the
 layout/icon tool; Hue owns only the color mapping.
 
 The Inkdrop adapter (`adapters/inkdrop.ts`) generates one installable package per
-mood and theme type into `packages/inkdrop-hue-<mood>-<type>-theme/`, for 9
-packages total (`ui`, `syntax`, and `preview` for each mood). It targets Inkdrop
-6's CSS custom property theme model (`theme` metadata plus `styleSheets`) and
-does not set fonts. UI packages map surfaces/text/borders/accents/status roles
-onto Inkdrop app variables; syntax packages map `syntax.*` plus editor affordance
+mood and theme type into `packages/hue-<mood>-<type>-theme/`, for 9 packages
+total (`ui`, `syntax`, and `preview` for each mood). It targets Inkdrop 6's CSS
+custom property theme model (`theme` metadata plus `styleSheets`) and does not
+set fonts. UI packages map surfaces/text/borders/accents/status roles onto
+Inkdrop app variables; syntax packages map `syntax.*` plus editor affordance
 variables; preview packages keep rendered Markdown surfaces and code blocks
 aligned with the same roles.
 
