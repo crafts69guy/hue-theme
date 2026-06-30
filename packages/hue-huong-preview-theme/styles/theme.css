@@ -8,19 +8,15 @@
   --text-color: #ebe9dc;
   --link-color: #82b9a2;
   --link-hover-color: #82b9a2;
-  --border-color: #52695f;
   --table-background: #101816;
   --table-header-background: #16231f;
   --table-header-color: #ebe9dc;
-  --md-inline-code-border-color: #52695f;
   --md-inline-code-background-color: #16231f;
   --md-codeblock-color: #ebe9dc;
-  --md-codeblock-border-color: #52695f;
   --md-codeblock-background-color: #16231f;
   --md-inline-mark-text-color: #ebe9dc;
   --md-inline-mark-background-color: #a79bbc;
   --md-inline-mark-underline-color: #d7aa5c;
-  --md-table-border-color: #52695f;
   --md-table-background-color: #16231f;
   --md-blockquote-border-color: #a79bbc;
   --md-list-mark-color: #82b9a2;
@@ -31,6 +27,28 @@
   --syntax-name-function-color: #7bacb1;
   --syntax-operator-color: #cd6d5d;
   --syntax-punctuation-color: #52695f;
+  --mde-preview-heading-color: #d7aa5c;
+  --mde-preview-link-color: #82b9a2;
+  --mde-preview-em-color: #ebe9dc;
+  --mde-preview-strong-color: #ebe9dc;
+  --mde-preview-inline-code-text-color: #82b9a2;
+  --mde-preview-inline-code-background-color: #16231f;
+  --mde-preview-inline-code-border-color: #52695f;
+  --mde-preview-inline-code-border-width: 1px;
+  --mde-preview-codeblock-background-color: #16231f;
+  --mde-preview-codeblock-meta-background-color: #52695f;
+  --mde-preview-image-background-color: #16231f;
+  --mde-preview-inline-mark-background-color: #a79bbc;
+  --mde-preview-inline-mark-text-color: #ebe9dc;
+  --mde-preview-inline-mark-underline-color: #d7aa5c;
+  --mde-preview-table-head-background-color: #16231f;
+  --mde-preview-table-head-text-color: #ebe9dc;
+  --mde-preview-table-row-background-color: #101816;
+  --mde-preview-table-row-stripe-background-color: #16231f;
+  --border-color: #52695f66;
+  --md-codeblock-border-color: color-mix(in srgb, #52695f 30%, #16231f);
+  --md-table-border-color: color-mix(in srgb, #52695f 30%, #16231f);
+  --md-inline-code-border-color: #52695f66;
 }
 
 .mde-preview,
@@ -51,10 +69,10 @@
 .mde-preview code,
 .mde-preview pre {
   background: #16231f;
-  border-color: #52695f;
+  border-color: color-mix(in srgb, #52695f 30%, #16231f);
 }
 
 .mde-preview table th,
 .mde-preview table td {
-  border-color: #52695f;
+  border-color: color-mix(in srgb, #52695f 30%, #16231f);
 }

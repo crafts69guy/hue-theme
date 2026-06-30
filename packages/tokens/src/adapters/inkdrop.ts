@@ -60,8 +60,15 @@ function renderPackageJson(mood: ResolvedMood, type: InkdropThemeType): string {
       name: packageName(mood, type),
       version: "0.1.1",
       theme: type,
+      // Inkdrop needs themeAppearance to register the theme as dark/light, and
+      // (for UI themes) type: "module" — matching the built-in/working themes.
+      // Without these the theme silently falls back to the default.
+      themeAppearance: mood.appearance,
+      ...(type === "ui" ? { type: "module" } : {}),
       description: themeDescription(mood, type),
-      styleSheets: ["styles/theme.css"],
+      // styleSheets are resolved relative to the package's styles/ directory, so
+      // entries are bare filenames (theme.css -> styles/theme.css), not paths.
+      styleSheets: ["theme.css"],
       keywords: ["inkdrop", "markdown", "hue-theme"],
       repository: {
         type: "git",
@@ -168,11 +175,7 @@ function renderUiCss(mood: ResolvedMood): string {
     "--hovered-text-color": role(mood, "text.primary"),
     "--pressed-text-color": role(mood, "text.primary"),
     "--selected-text-color": role(mood, "text.primary"),
-    "--border-color": role(mood, "border.subtle"),
-    "--strong-border-color": role(mood, "accent.secondary"),
-    "--internal-border-color": role(mood, "border.subtle"),
     "--selected-border-color": role(mood, "accent.primary"),
-    "--solid-internal-border-color": role(mood, "border.subtle"),
     "--solid-border-color": role(mood, "border.subtle"),
     "--solid-selected-border-color": role(mood, "accent.primary"),
     "--primary-color-hover": role(mood, "accent.primary"),
@@ -186,10 +189,8 @@ function renderUiCss(mood: ResolvedMood): string {
     "--menu-active-item-color": role(mood, "text.primary"),
     "--popup-background": role(mood, "surface.raised"),
     "--popup-color": role(mood, "text.primary"),
-    "--popup-border-color": role(mood, "border.subtle"),
     "--tooltip-background": role(mood, "surface.raised"),
     "--tooltip-color": role(mood, "text.secondary"),
-    "--tooltip-border-color": role(mood, "border.subtle"),
     "--table-background": role(mood, "surface.canvas"),
     "--table-header-background": role(mood, "surface.raised"),
     "--table-header-color": role(mood, "text.primary"),
@@ -199,7 +200,6 @@ function renderUiCss(mood: ResolvedMood): string {
     "--checkbox-active-background": role(mood, "accent.primary"),
     "--checkbox-active-border-color": role(mood, "accent.primary"),
     "--dropdown-menu-background": role(mood, "surface.raised"),
-    "--dropdown-menu-border-color": role(mood, "border.subtle"),
     "--dropdown-menu-item-color": role(mood, "text.primary"),
     "--dropdown-hovered-item-background": role(mood, "surface.selected"),
     "--dropdown-hovered-item-color": role(mood, "text.primary"),
@@ -207,11 +207,9 @@ function renderUiCss(mood: ResolvedMood): string {
     "--modal-box-content-background": role(mood, "surface.canvas"),
     "--modal-box-actions-background": role(mood, "surface.raised"),
     "--sidebar-background": role(mood, "surface.raised"),
-    "--sidebar-border-right": `1px solid ${role(mood, "border.subtle")}`,
     "--sidebar-menu-item-inactive-background": role(mood, "surface.canvas"),
     "--sidebar-menu-item-active-background": role(mood, "surface.selected"),
     "--sidebar-menu-section-color": role(mood, "text.secondary"),
-    "--sidebar-menu-section-separator-color": role(mood, "border.subtle"),
     "--sidebar-menu-item-color": role(mood, "text.secondary"),
     "--sidebar-menu-active-item-color": role(mood, "text.primary"),
     "--sidebar-sync-status-view-background": role(mood, "surface.canvas"),
@@ -219,10 +217,8 @@ function renderUiCss(mood: ResolvedMood): string {
     "--scrollbar-track-background": role(mood, "surface.canvas"),
     "--scrollbar-thumb-background": role(mood, "border.subtle"),
     "--note-list-bar-background": role(mood, "surface.raised"),
-    "--note-list-bar-border-right": `1px solid ${role(mood, "border.subtle")}`,
     "--note-list-view-item-header-color": role(mood, "text.primary"),
     "--note-list-view-item-color": role(mood, "text.secondary"),
-    "--note-list-view-item-separator-border": `1px solid ${role(mood, "border.subtle")}`,
     "--note-list-view-item-date-color": role(mood, "accent.primary"),
     "--note-list-view-item-selected-background": role(mood, "surface.selected"),
     "--note-list-view-item-active-background": role(mood, "surface.selected"),
@@ -231,18 +227,100 @@ function renderUiCss(mood: ResolvedMood): string {
     "--editor-header-title-input-background": "transparent",
     "--editor-floating-actions-background": role(mood, "surface.raised"),
     "--editor-drawer-background": role(mood, "surface.raised"),
-    "--editor-drawer-border-left": `1px solid ${role(mood, "border.subtle")}`,
     "--header-note-menu-color": role(mood, "text.secondary"),
     "--notification-item-background": role(mood, "surface.raised"),
     "--preferences-sidebar-background": role(mood, "surface.raised"),
     "--preferences-sidebar-item-active-background": role(mood, "surface.selected"),
     "--preferences-view-background": role(mood, "surface.canvas"),
+    // Text shown ON accent/colored backgrounds (selected items, filled buttons).
+    // Inkdrop has no default here; without it light text on a jade fill is unreadable.
+    "--inverted-text-color": role(mood, "surface.canvas"),
+    "--inverted-muted-text-color": role(mood, "surface.canvas"),
+    "--inverted-light-text-color": role(mood, "surface.canvas"),
+    "--inverted-hovered-text-color": role(mood, "surface.canvas"),
+    "--inverted-pressed-text-color": role(mood, "surface.canvas"),
+    "--inverted-selected-text-color": role(mood, "surface.canvas"),
+    "--inverted-unselected-text-color": role(mood, "surface.raised"),
+    "--inverted-disabled-text-color": role(mood, "surface.raised"),
+    // Note status dots in the note list.
+    "--note-status-active": role(mood, "text.primary"),
+    "--note-status-onhold": role(mood, "status.warning"),
+    "--note-status-completed": role(mood, "status.success"),
+    "--note-status-dropped": role(mood, "status.error"),
+    // Task progress bar in the note header.
+    "--task-progress-view-border-color": role(mood, "border.subtle"),
+    "--task-progress-view-background-color": role(mood, "surface.raised"),
+    "--task-progress-view-foreground-color": role(mood, "accent.primary"),
+    "--task-progress-view-completed-color": role(mood, "status.success"),
+    // ==mark== highlight (kept translucent so highlighted text stays readable).
+    "--mark-background-color": `${role(mood, "status.warning")}39`,
+    "--mark-border-color": `${role(mood, "status.warning")}66`,
+    "--mark-color": role(mood, "text.primary"),
+    "--kbd-background": role(mood, "surface.raised"),
   };
+
+  // Tag/label chips. Inkdrop exposes 11 chromatic families; Hue has 5 chromatic
+  // roles, so we group the families onto the nearest Hue hue (red↔pink, the warm
+  // yellows/browns, the greens, the cyans, the violets). Each chip shows bright
+  // hue text on a dark hue-tinted background derived from canvas via color-mix,
+  // so the palette stays token-driven (no hardcoded chip colors).
+  const tagHues: Record<string, SemanticToken> = {
+    red: "status.error",
+    pink: "status.error",
+    orange: "status.warning",
+    yellow: "status.warning",
+    brown: "status.warning",
+    olive: "status.success",
+    green: "status.success",
+    teal: "status.info",
+    blue: "status.info",
+    violet: "accent.secondary",
+    purple: "accent.secondary",
+  };
+  const canvas = role(mood, "surface.canvas");
+  for (const [name, hueRole] of Object.entries(tagHues)) {
+    const hue = role(mood, hueRole);
+    vars[`--${name}`] = hue;
+    vars[`--${name}-text-color`] = hue;
+    vars[`--${name}-header-color`] = hue;
+    vars[`--${name}-hover`] = hue;
+    vars[`--${name}-focus`] = hue;
+    vars[`--${name}-down`] = hue;
+    vars[`--${name}-active`] = hue;
+    vars[`--${name}-background`] = `color-mix(in srgb, ${hue} 22%, ${canvas})`;
+  }
+
+  // Border treatment, Kanagawa-style two tiers: structural dividers (sidebar,
+  // note list, drawers) use a near-bg hairline = surface.raised so panels read as
+  // filled areas, not boxed outlines; general/floating borders use a translucent
+  // rain mid-line instead of the full-strength one.
+  const hairline = `color-mix(in srgb, ${role(mood, "border.subtle")} 30%, ${role(mood, "surface.raised")})`;
+  const softLine = `${role(mood, "border.subtle")}66`;
+  Object.assign(vars, {
+    "--border-color": softLine,
+    "--internal-border-color": softLine,
+    "--solid-internal-border-color": softLine,
+    "--strong-border-color": softLine,
+    "--popup-border-color": softLine,
+    "--tooltip-border-color": softLine,
+    "--dropdown-menu-border-color": softLine,
+    "--sidebar-border-right": `1px solid ${hairline}`,
+    "--sidebar-menu-section-separator-color": hairline,
+    "--note-list-bar-border-right": `1px solid ${hairline}`,
+    "--note-list-view-item-separator-border": `1px solid ${hairline}`,
+    "--editor-drawer-border-left": `1px solid ${hairline}`,
+  });
 
   return `${renderHeader(mood, "ui")}
 :root {
   color-scheme: ${mood.appearance};
 ${cssVars(vars)}
+}
+
+/* Accent bar on the active note-list row, so the (subtle) selection still reads
+ * at a glance. Inset shadow keeps layout stable (no reflow). */
+.note-list-item-view.active {
+  box-shadow: inset 2px 0 0 ${cssValue(role(mood, "accent.primary"))};
 }
 `;
 }
@@ -257,14 +335,13 @@ function renderSyntaxCss(mood: ResolvedMood): string {
     "--editor-active-line-background-color": role(mood, "surface.raised"),
     "--editor-special-char-color": role(mood, "border.subtle"),
     "--editor-spelling-error-color": role(mood, "status.error"),
-    "--editor-gutter-border-right-color": role(mood, "border.subtle"),
+    "--editor-gutter-border-right": `1px solid ${role(mood, "border.subtle")}`,
     "--editor-gutter-color": role(mood, "text.secondary"),
     "--editor-gutter-background-color": "transparent",
     "--editor-gutter-background-solid-color": role(mood, "surface.canvas"),
     "--editor-active-line-gutter-background-color": role(mood, "surface.raised"),
     "--editor-panel-background-color": role(mood, "surface.raised"),
     "--editor-panel-color": role(mood, "text.secondary"),
-    "--editor-panel-border-color": role(mood, "border.subtle"),
     "--editor-tooltip-border-color": role(mood, "border.subtle"),
     "--editor-tooltip-background-color": role(mood, "surface.raised"),
     "--editor-tooltip-autocomplete-item-selected-background-color": role(mood, "surface.selected"),
@@ -336,7 +413,10 @@ function renderSyntaxCss(mood: ResolvedMood): string {
     "--syntax-brace-color": role(mood, "syntax.punctuation"),
     "--syntax-bracket-color": role(mood, "syntax.punctuation"),
     "--syntax-punctuation-color": role(mood, "syntax.punctuation"),
-    "--syntax-heading-color": role(mood, "accent.primary"),
+    // Headings use the warm status hue (incense gold), distinct from strings/links
+    // which carry the jade accent — so document structure reads in its own hue
+    // instead of a single green wash.
+    "--syntax-heading-color": role(mood, "status.warning"),
     "--syntax-content-separator-color": role(mood, "text.primary"),
     "--syntax-list-color": role(mood, "syntax.operator"),
     "--syntax-quote-color": role(mood, "text.secondary"),
@@ -353,19 +433,78 @@ function renderSyntaxCss(mood: ResolvedMood): string {
     "--syntax-processing-instruction-color": role(mood, "syntax.keyword"),
     "--syntax-meta-color": role(mood, "syntax.comment"),
     "--syntax-invalid-color": role(mood, "status.error"),
-    "--md-inline-code-border-color": role(mood, "border.subtle"),
     "--md-inline-code-background-color": role(mood, "surface.raised"),
     "--md-codeblock-color": role(mood, "text.primary"),
-    "--md-codeblock-border-color": role(mood, "border.subtle"),
     "--md-codeblock-background-color": role(mood, "surface.raised"),
     "--md-inline-mark-text-color": role(mood, "text.primary"),
     "--md-inline-mark-background-color": role(mood, "status.notice"),
     "--md-inline-mark-underline-color": role(mood, "status.warning"),
-    "--md-table-border-color": role(mood, "border.subtle"),
     "--md-table-background-color": role(mood, "surface.raised"),
     "--md-blockquote-border-color": role(mood, "accent.secondary"),
     "--md-list-mark-color": role(mood, "accent.primary"),
+    "--md-inline-code-border-width": "1px",
+    "--md-codeblock-border-width": "1px",
+    "--md-table-border-width": "1px",
+    "--md-task-marker-font-weight": "bold",
+    // Inkdrop renders headings from the per-level slots, not --syntax-heading-color
+    // alone; derive every level/subtype from the base role like the built-in themes
+    // so nothing falls back to Inkdrop's defaults.
+    "--syntax-heading-font-weight": "bold",
+    "--syntax-heading-1-color": "var(--syntax-heading-color)",
+    "--syntax-heading-2-color": "var(--syntax-heading-color)",
+    "--syntax-heading-3-color": "var(--syntax-heading-color)",
+    "--syntax-heading-4-color": "var(--syntax-heading-color)",
+    "--syntax-heading-5-color": "var(--syntax-heading-color)",
+    "--syntax-heading-6-color": "var(--syntax-heading-color)",
+    "--syntax-heading-1-font-weight": "var(--syntax-heading-font-weight)",
+    "--syntax-heading-2-font-weight": "var(--syntax-heading-font-weight)",
+    "--syntax-heading-3-font-weight": "var(--syntax-heading-font-weight)",
+    "--syntax-heading-4-font-weight": "var(--syntax-heading-font-weight)",
+    "--syntax-heading-5-font-weight": "var(--syntax-heading-font-weight)",
+    "--syntax-heading-6-font-weight": "var(--syntax-heading-font-weight)",
+    "--syntax-comment-font-style": "italic",
+    "--syntax-line-comment-color": "var(--syntax-comment-color)",
+    "--syntax-line-comment-font-style": "var(--syntax-comment-font-style)",
+    "--syntax-block-comment-color": "var(--syntax-comment-color)",
+    "--syntax-block-comment-font-style": "var(--syntax-comment-font-style)",
+    "--syntax-doc-comment-color": "var(--syntax-comment-color)",
+    "--syntax-doc-comment-font-style": "var(--syntax-comment-font-style)",
+    "--syntax-arithmetic-operator-color": "var(--syntax-operator-color)",
+    "--syntax-bitwise-operator-color": "var(--syntax-operator-color)",
+    "--syntax-compare-operator-color": "var(--syntax-operator-color)",
+    "--syntax-control-operator-color": "var(--syntax-operator-color)",
+    "--syntax-definition-operator-color": "var(--syntax-operator-color)",
+    "--syntax-deref-operator-color": "var(--syntax-operator-color)",
+    "--syntax-logic-operator-color": "var(--syntax-operator-color)",
+    "--syntax-update-operator-color": "var(--syntax-operator-color)",
+    "--syntax-string-standard-color": "var(--syntax-string-color)",
+    "--syntax-string-special-color": "var(--syntax-string-color)",
+    "--syntax-string-constant-color": "var(--syntax-string-color)",
+    "--syntax-name-special-color": role(mood, "syntax.function"),
+    "--syntax-name-local-color": "var(--editor-foreground-color)",
+    "--syntax-variable-name-special-color": role(mood, "status.error"),
+    "--syntax-variable-name-local-color": "var(--syntax-variable-name-color)",
+    "--syntax-property-name-special-color": "var(--syntax-property-name-color)",
+    "--syntax-property-name-local-color": "var(--syntax-property-name-color)",
+    "--syntax-emphasis-font-style": "italic",
+    "--syntax-strong-font-weight": "bold",
+    "--syntax-quote-font-style": "italic",
+    "--syntax-link-text-decoration": "underline",
+    "--syntax-strikethrough-text-decoration": "line-through",
+    "--syntax-invalid-border-bottom": `1px dotted ${role(mood, "status.error")}`,
   };
+
+  // Code blocks and tables read as filled surfaces with a near-bg hairline rather
+  // than boxed outlines (Kanagawa style); panel/inline-code edges stay a soft line.
+  const hairline = `color-mix(in srgb, ${role(mood, "border.subtle")} 30%, ${role(mood, "surface.raised")})`;
+  const softLine = `${role(mood, "border.subtle")}66`;
+  Object.assign(vars, {
+    "--editor-gutter-border-right": `1px solid ${hairline}`,
+    "--editor-panel-border-color": softLine,
+    "--md-codeblock-border-color": hairline,
+    "--md-table-border-color": hairline,
+    "--md-inline-code-border-color": softLine,
+  });
 
   return `${renderHeader(mood, "syntax")}
 :root {
@@ -381,19 +520,15 @@ function renderPreviewCss(mood: ResolvedMood): string {
     "--text-color": role(mood, "text.primary"),
     "--link-color": role(mood, "text.accent"),
     "--link-hover-color": role(mood, "accent.primary"),
-    "--border-color": role(mood, "border.subtle"),
     "--table-background": role(mood, "surface.canvas"),
     "--table-header-background": role(mood, "surface.raised"),
     "--table-header-color": role(mood, "text.primary"),
-    "--md-inline-code-border-color": role(mood, "border.subtle"),
     "--md-inline-code-background-color": role(mood, "surface.raised"),
     "--md-codeblock-color": role(mood, "text.primary"),
-    "--md-codeblock-border-color": role(mood, "border.subtle"),
     "--md-codeblock-background-color": role(mood, "surface.raised"),
     "--md-inline-mark-text-color": role(mood, "text.primary"),
     "--md-inline-mark-background-color": role(mood, "status.notice"),
     "--md-inline-mark-underline-color": role(mood, "status.warning"),
-    "--md-table-border-color": role(mood, "border.subtle"),
     "--md-table-background-color": role(mood, "surface.raised"),
     "--md-blockquote-border-color": role(mood, "accent.secondary"),
     "--md-list-mark-color": role(mood, "accent.primary"),
@@ -404,7 +539,37 @@ function renderPreviewCss(mood: ResolvedMood): string {
     "--syntax-name-function-color": role(mood, "syntax.function"),
     "--syntax-operator-color": role(mood, "syntax.operator"),
     "--syntax-punctuation-color": role(mood, "syntax.punctuation"),
+    // Inkdrop's rendered preview reads the --mde-preview-* namespace; without these
+    // headings/links/code/tables fall back to defaults.
+    "--mde-preview-heading-color": role(mood, "status.warning"),
+    "--mde-preview-link-color": role(mood, "text.accent"),
+    "--mde-preview-em-color": role(mood, "text.primary"),
+    "--mde-preview-strong-color": role(mood, "text.primary"),
+    "--mde-preview-inline-code-text-color": role(mood, "syntax.string"),
+    "--mde-preview-inline-code-background-color": role(mood, "surface.raised"),
+    "--mde-preview-inline-code-border-color": role(mood, "border.subtle"),
+    "--mde-preview-inline-code-border-width": "1px",
+    "--mde-preview-codeblock-background-color": role(mood, "surface.raised"),
+    "--mde-preview-codeblock-meta-background-color": role(mood, "surface.selected"),
+    "--mde-preview-image-background-color": role(mood, "surface.raised"),
+    "--mde-preview-inline-mark-background-color": role(mood, "status.notice"),
+    "--mde-preview-inline-mark-text-color": role(mood, "text.primary"),
+    "--mde-preview-inline-mark-underline-color": role(mood, "status.warning"),
+    "--mde-preview-table-head-background-color": role(mood, "surface.raised"),
+    "--mde-preview-table-head-text-color": role(mood, "text.primary"),
+    "--mde-preview-table-row-background-color": role(mood, "surface.canvas"),
+    "--mde-preview-table-row-stripe-background-color": role(mood, "surface.raised"),
   };
+
+  // Subtle, filled-surface borders for rendered code blocks and tables.
+  const hairline = `color-mix(in srgb, ${role(mood, "border.subtle")} 30%, ${role(mood, "surface.raised")})`;
+  const softLine = `${role(mood, "border.subtle")}66`;
+  Object.assign(vars, {
+    "--border-color": softLine,
+    "--md-codeblock-border-color": hairline,
+    "--md-table-border-color": hairline,
+    "--md-inline-code-border-color": softLine,
+  });
 
   return `${renderHeader(mood, "preview")}
 :root {
@@ -430,12 +595,12 @@ ${cssVars(vars)}
 .mde-preview code,
 .mde-preview pre {
   background: ${cssValue(role(mood, "surface.raised"))};
-  border-color: ${cssValue(role(mood, "border.subtle"))};
+  border-color: ${cssValue(hairline)};
 }
 
 .mde-preview table th,
 .mde-preview table td {
-  border-color: ${cssValue(role(mood, "border.subtle"))};
+  border-color: ${cssValue(hairline)};
 }
 `;
 }

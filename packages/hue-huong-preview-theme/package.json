@@ -2,9 +2,10 @@
   "name": "hue-huong-preview-theme",
   "version": "0.1.1",
   "theme": "preview",
+  "themeAppearance": "dark",
   "description": "Huế Hương Preview Theme for Inkdrop",
   "styleSheets": [
-    "styles/theme.css"
+    "theme.css"
   ],
   "keywords": [
     "inkdrop",

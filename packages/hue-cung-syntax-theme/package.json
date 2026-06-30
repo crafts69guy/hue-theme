@@ -2,9 +2,10 @@
   "name": "hue-cung-syntax-theme",
   "version": "0.1.1",
   "theme": "syntax",
+  "themeAppearance": "light",
   "description": "Huế Cung Syntax Theme for Inkdrop",
   "styleSheets": [
-    "styles/theme.css"
+    "theme.css"
   ],
   "keywords": [
     "inkdrop",

@@ -2,9 +2,11 @@
   "name": "hue-huong-theme",
   "version": "0.1.1",
   "theme": "ui",
+  "themeAppearance": "dark",
+  "type": "module",
   "description": "Hue Huong Theme",
   "styleSheets": [
-    "styles/theme.css"
+    "theme.css"
   ],
   "keywords": [
     "inkdrop",

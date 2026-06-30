@@ -5,34 +5,43 @@
   "primitive": {
     "$type": "color",
     "ink": {
-      "$value": { "colorSpace": "srgb", "components": [0.059, 0.075, 0.075], "hex": "#0F1313" }
+      "$value": { "colorSpace": "srgb", "components": [0.082, 0.098, 0.106], "hex": "#15191B" }
     },
     "stone": {
-      "$value": { "colorSpace": "srgb", "components": [0.082, 0.106, 0.11], "hex": "#151B1C" }
+      "$value": { "colorSpace": "srgb", "components": [0.137, 0.157, 0.165], "hex": "#23282A" }
+    },
+    "pool": {
+      "$value": { "colorSpace": "srgb", "components": [0.176, 0.275, 0.251], "hex": "#2D4640" }
     },
     "rain": {
-      "$value": { "colorSpace": "srgb", "components": [0.337, 0.396, 0.396], "hex": "#566565" }
+      "$value": { "colorSpace": "srgb", "components": [0.357, 0.435, 0.412], "hex": "#5B6F69" }
     },
     "paper": {
-      "$value": { "colorSpace": "srgb", "components": [0.929, 0.914, 0.875], "hex": "#EDE9DF" }
+      "$value": { "colorSpace": "srgb", "components": [0.812, 0.8, 0.761], "hex": "#CFCCC2" }
     },
     "ash": {
-      "$value": { "colorSpace": "srgb", "components": [0.718, 0.718, 0.678], "hex": "#B7B7AD" }
+      "$value": { "colorSpace": "srgb", "components": [0.616, 0.639, 0.62], "hex": "#9DA39E" }
+    },
+    "fog": {
+      "$value": { "colorSpace": "srgb", "components": [0.431, 0.498, 0.478], "hex": "#6E7F7A" }
+    },
+    "mist": {
+      "$value": { "colorSpace": "srgb", "components": [0.545, 0.58, 0.561], "hex": "#8B948F" }
     },
     "jade": {
-      "$value": { "colorSpace": "srgb", "components": [0.475, 0.706, 0.604], "hex": "#79B49A" }
+      "$value": { "colorSpace": "srgb", "components": [0.498, 0.722, 0.612], "hex": "#7FB89C" }
     },
     "violet": {
-      "$value": { "colorSpace": "srgb", "components": [0.71, 0.635, 0.792], "hex": "#B5A2CA" }
+      "$value": { "colorSpace": "srgb", "components": [0.686, 0.639, 0.808], "hex": "#AFA3CE" }
     },
     "gold": {
-      "$value": { "colorSpace": "srgb", "components": [0.831, 0.667, 0.373], "hex": "#D4AA5F" }
+      "$value": { "colorSpace": "srgb", "components": [0.851, 0.737, 0.541], "hex": "#D9BC8A" }
     },
     "vermilion": {
-      "$value": { "colorSpace": "srgb", "components": [0.824, 0.392, 0.353], "hex": "#D2645A" }
+      "$value": { "colorSpace": "srgb", "components": [0.8, 0.502, 0.475], "hex": "#CC8079" }
     },
     "blue": {
-      "$value": { "colorSpace": "srgb", "components": [0.475, 0.651, 0.71], "hex": "#79A6B5" }
+      "$value": { "colorSpace": "srgb", "components": [0.518, 0.682, 0.753], "hex": "#84AEC0" }
     }
   },
   "semantic": {
@@ -40,7 +49,7 @@
     "surface": {
       "canvas": { "$value": "{primitive.ink}" },
       "raised": { "$value": "{primitive.stone}" },
-      "selected": { "$value": "{primitive.rain}" }
+      "selected": { "$value": "{primitive.pool}" }
     },
     "text": {
       "primary": { "$value": "{primitive.paper}" },
@@ -64,13 +73,13 @@
       "string": { "$value": "{primitive.jade}" },
       "number": { "$value": "{primitive.gold}" },
       "function": { "$value": "{primitive.blue}" },
-      "comment": { "$value": "{primitive.ash}" },
+      "comment": { "$value": "{primitive.fog}" },
       "operator": { "$value": "{primitive.vermilion}" },
       "type": { "$value": "{primitive.blue}" },
       "constant": { "$value": "{primitive.gold}" },
       "property": { "$value": "{primitive.paper}" },
       "variable": { "$value": "{primitive.paper}" },
-      "punctuation": { "$value": "{primitive.rain}" }
+      "punctuation": { "$value": "{primitive.mist}" }
     }
   }
 }

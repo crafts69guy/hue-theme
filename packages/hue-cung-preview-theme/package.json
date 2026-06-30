@@ -2,9 +2,10 @@
   "name": "hue-cung-preview-theme",
   "version": "0.1.1",
   "theme": "preview",
+  "themeAppearance": "light",
   "description": "Huế Cung Preview Theme for Inkdrop",
   "styleSheets": [
-    "styles/theme.css"
+    "theme.css"
   ],
   "keywords": [
     "inkdrop",

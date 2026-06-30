@@ -2,9 +2,11 @@
   "name": "hue-cung-theme",
   "version": "0.1.1",
   "theme": "ui",
+  "themeAppearance": "light",
+  "type": "module",
   "description": "Hue Cung Theme",
   "styleSheets": [
-    "styles/theme.css"
+    "theme.css"
   ],
   "keywords": [
     "inkdrop",

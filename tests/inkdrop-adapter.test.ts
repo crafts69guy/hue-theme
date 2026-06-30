@@ -18,6 +18,8 @@ function packageJson(pack: ReturnType<typeof renderInkdropPackages>[number]) {
   return JSON.parse(fileContent(pack, "package.json")) as {
     name: string;
     theme: InkdropThemeType;
+    themeAppearance?: string;
+    type?: string;
     styleSheets: string[];
     engines: { inkdrop: string };
   };
@@ -47,7 +49,7 @@ describe("Hue -> Inkdrop adapter", () => {
       expect(metadata.name).toBe(pack.packageName);
       expect(THEME_TYPES).toContain(metadata.theme);
       expect(metadata.theme).toBe(pack.themeType);
-      expect(metadata.styleSheets).toEqual(["styles/theme.css"]);
+      expect(metadata.styleSheets).toEqual(["theme.css"]);
       expect(metadata.engines.inkdrop).toBe("^6.x");
     }
   });
@@ -83,6 +85,52 @@ describe("Hue -> Inkdrop adapter", () => {
       const matches = css.match(/#[0-9a-f]{6}/g) ?? [];
       expect(matches.length).toBeGreaterThan(20);
       for (const value of matches) expect(value).toMatch(HEX);
+    }
+  });
+
+  // Regression: Inkdrop only registers a theme that declares themeAppearance and
+  // resolves its stylesheet relative to styles/ (bare filename). Missing either
+  // makes the app silently fall back to its default theme.
+  test("declares the metadata Inkdrop needs to load the theme", () => {
+    for (const pack of packages) {
+      const metadata = packageJson(pack);
+      expect(metadata.styleSheets).toEqual(["theme.css"]);
+      expect(metadata.themeAppearance).toBe(pack.moodId === "cung" ? "light" : "dark");
+      // Only UI themes carry type: "module", matching the built-in themes.
+      expect(metadata.type).toBe(pack.themeType === "ui" ? "module" : undefined);
+    }
+  });
+
+  // Regression: Inkdrop colors editor headings from the per-level slots and the
+  // rendered preview from the --mde-preview-* namespace. Emitting only the base
+  // --syntax-heading-color / --md-* left headings and preview on Inkdrop defaults.
+  test("emits the full variable contract Inkdrop actually consumes", () => {
+    const syntax = packages.filter((pack) => pack.themeType === "syntax");
+    for (const pack of syntax) {
+      const css = fileContent(pack, "styles/theme.css");
+      for (let level = 1; level <= 6; level += 1) {
+        expect(css).toContain(`--syntax-heading-${level}-color:`);
+      }
+      // Correct gutter-border property name (not the *-color variant we shipped before).
+      expect(css).toContain("--editor-gutter-border-right:");
+      expect(css).not.toContain("--editor-gutter-border-right-color:");
+    }
+    for (const pack of packages.filter((p) => p.themeType === "preview")) {
+      const css = fileContent(pack, "styles/theme.css");
+      expect(css).toContain("--mde-preview-heading-color:");
+      expect(css).toContain("--mde-preview-link-color:");
+    }
+  });
+
+  // Regression: tag/label chips are Hue-tinted via the chromatic families, each
+  // with a color-mix background derived from the canvas.
+  test("emits Hue-tinted tag chip colors in UI packages", () => {
+    for (const pack of packages.filter((p) => p.themeType === "ui")) {
+      const css = fileContent(pack, "styles/theme.css");
+      for (const family of ["red", "yellow", "green", "blue", "violet"]) {
+        expect(css).toContain(`--${family}-background:`);
+      }
+      expect(css).toContain("color-mix(in srgb,");
     }
   });
 });

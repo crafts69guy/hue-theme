@@ -2,9 +2,10 @@
   "name": "hue-mua-syntax-theme",
   "version": "0.1.1",
   "theme": "syntax",
+  "themeAppearance": "dark",
   "description": "Huế Mưa Syntax Theme for Inkdrop",
   "styleSheets": [
-    "styles/theme.css"
+    "theme.css"
   ],
   "keywords": [
     "inkdrop",
