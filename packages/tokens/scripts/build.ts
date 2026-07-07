@@ -1,6 +1,7 @@
 import { chmod, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
 import { ghosttyManifest, renderGhosttyFiles } from "../src/adapters/ghostty";
+import { herdrManifest, renderHerdrFiles } from "../src/adapters/herdr";
 import { inkdropManifest, renderInkdropPackages } from "../src/adapters/inkdrop";
 import { neovimManifest, renderNeovimFiles } from "../src/adapters/neovim";
 import { renderTideFiles, tideManifest } from "../src/adapters/tide";
@@ -138,6 +139,7 @@ for (const theme of themes) {
 validateManifest("yaak", yaakManifest);
 validateManifest("neovim", neovimManifest);
 validateManifest("ghostty", ghosttyManifest);
+validateManifest("herdr", herdrManifest);
 validateManifest("tmux", tmuxManifest);
 validateManifest("tide", tideManifest);
 validateManifest("inkdrop", inkdropManifest);
@@ -222,6 +224,9 @@ const outputs: Array<[string, string]> = [
   ),
   ...renderGhosttyFiles(themes).map(
     (file) => [resolve(root, "../terminal-themes", file.path), file.content] as [string, string],
+  ),
+  ...renderHerdrFiles(themes).map(
+    (file) => [resolve(root, "../herdr-plugin", file.path), file.content] as [string, string],
   ),
   ...renderTmuxFiles(themes).map(
     (file) => [resolve(root, "../tmux-plugin", file.path), file.content] as [string, string],

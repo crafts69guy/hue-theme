@@ -1,0 +1,20 @@
+{
+  "name": "@crafts69guy/hue-herdr",
+  "displayName": "Hue herdr Theme",
+  "private": false,
+  "version": "0.1.0",
+  "description": "Hue for herdr — three Huế-inspired moods (Mưa, Hương, Cung) as a herdr plugin, generated from the Hue design token system.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crafts69guy/hue-theme.git",
+    "directory": "packages/herdr-plugin"
+  },
+  "keywords": [
+    "herdr",
+    "theme",
+    "hue",
+    "hue-theme"
+  ],
+  "author": "crafts69guy",
+  "license": "MIT"
+}
