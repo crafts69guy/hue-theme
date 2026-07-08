@@ -58,7 +58,8 @@ function renderPackageJson(mood: ResolvedMood): string {
       // palette.css loads first so the area-specific layers can reuse Hue vars.
       styleSheets: ["palette.css", "ui.css", "syntax.css", "preview.css"],
       scripts: {
-        prepublishOnly: "generate-palette",
+        prepublishOnly:
+          "generate-palette && node -e \"const fs=require('fs');const p='palette.json';fs.writeFileSync(p,JSON.stringify(JSON.parse(fs.readFileSync(p,'utf8')),null,2)+'\\\\n');\"",
       },
       keywords: ["inkdrop", "markdown", "mermaid", "hue-theme"],
       repository: {

@@ -42,7 +42,8 @@ describe("Hue -> Inkdrop adapter", () => {
       expect(metadata.theme).toBe(true);
       expect(metadata.styleSheets).toEqual(STYLE_SHEETS);
       expect(metadata.engines.inkdrop).toBe("^6.0.0");
-      expect(metadata.scripts?.prepublishOnly).toBe("generate-palette");
+      expect(metadata.scripts?.prepublishOnly).toContain("generate-palette");
+      expect(metadata.scripts?.prepublishOnly).toContain("palette.json");
       expect(metadata.devDependencies?.["@inkdropapp/theme-dev-helpers"]).toBe("^0.6.1");
     }
   });

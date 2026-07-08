@@ -11,7 +11,7 @@
     "preview.css"
   ],
   "scripts": {
-    "prepublishOnly": "generate-palette"
+    "prepublishOnly": "generate-palette && node -e \"const fs=require('fs');const p='palette.json';fs.writeFileSync(p,JSON.stringify(JSON.parse(fs.readFileSync(p,'utf8')),null,2)+'\\\\n');\""
   },
   "keywords": [
     "inkdrop",
