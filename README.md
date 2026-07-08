@@ -92,9 +92,16 @@ bun run dev        # build tokens + run the gallery
 Quality gates (Biome is the single formatter/linter for TS, React, JS, JSON, CSS, HTML):
 
 ```fish
+bun run format     # apply Biome formatting/import-order fixes before CI
+bun run format:check
 bun run quality    # biome check + token/gallery check + tests
 bun run ci         # the full non-mutating gate, incl. build
 ```
+
+`bun run ci` starts with `biome ci .`, so formatting or import-order drift fails
+before typechecks, tests, or builds run. After changing token adapters, run
+`bun run build` first so generated artifacts are refreshed, then `bun run format`
+and `bun run ci`.
 
 Publish the generated Inkdrop packages:
 

@@ -55,9 +55,7 @@ ${ansiLines}
  * Render every mood's herdr fragment. Paths are relative to the
  * `packages/herdr-plugin/` package root.
  */
-export function renderHerdrFiles(
-  moods: ResolvedMood[],
-): Array<{ path: string; content: string }> {
+export function renderHerdrFiles(moods: ResolvedMood[]): Array<{ path: string; content: string }> {
   return moods.map((mood) => ({
     path: `themes/hue-${mood.id}.toml`,
     content: renderHerdrTheme(mood),

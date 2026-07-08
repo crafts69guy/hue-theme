@@ -7,8 +7,8 @@ import { neovimManifest, renderNeovimFiles } from "../src/adapters/neovim";
 import { renderTideFiles, tideManifest } from "../src/adapters/tide";
 import { renderTmuxFiles, tmuxManifest } from "../src/adapters/tmux";
 import { renderYaakPluginSource, yaakManifest } from "../src/adapters/yaak";
-import { CONTRACT, validateManifest } from "../src/contract";
 import { contrastRatio } from "../src/color";
+import { CONTRACT, validateManifest } from "../src/contract";
 
 type Token = { $value: unknown };
 type Node = Token | string | { [key: string]: Node };

@@ -1,5 +1,5 @@
-import type { AdapterManifest } from "../contract";
 import { mixHex } from "../color";
+import type { AdapterManifest } from "../contract";
 import type { ResolvedMood } from "./terminal";
 
 export const tideManifest = {
