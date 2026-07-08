@@ -1,6 +1,6 @@
-// Hue -> Inkdrop adapter. Emits one installable Inkdrop theme package for each
-// mood/theme-type pair. Inkdrop v6 themes are CSS packages with a `theme`
-// metadata field (`ui`, `syntax`, or `preview`) and one or more stylesheets.
+// Hue -> Inkdrop adapter. Emits one installable Inkdrop v6 unified theme package
+// for each mood. Each package covers the app UI, editor/syntax, preview, and
+// Mermaid diagram variables through layered CSS stylesheets.
 
 import type { SemanticToken } from "../../generated/themes";
 import type { AdapterManifest } from "../contract";
@@ -11,17 +11,12 @@ export const inkdropManifest = {
   omits: {},
 } satisfies AdapterManifest;
 
-export type InkdropThemeType = "ui" | "syntax" | "preview";
-
 export type InkdropPackage = {
   packageName: string;
   packagePath: string;
   moodId: string;
-  themeType: InkdropThemeType;
   files: Array<{ path: string; content: string }>;
 };
-
-const THEME_TYPES: readonly InkdropThemeType[] = ["ui", "syntax", "preview"];
 
 function role(mood: ResolvedMood, key: SemanticToken): string {
   const value = mood.semantic[key];
@@ -29,9 +24,9 @@ function role(mood: ResolvedMood, key: SemanticToken): string {
   return value;
 }
 
-function cssVars(vars: Record<string, string>): string {
+function cssVars(vars: Record<string, string>, indent = "  "): string {
   return Object.entries(vars)
-    .map(([key, value]) => `  ${key}: ${cssValue(value)};`)
+    .map(([key, value]) => `${indent}${key}: ${cssValue(value)};`)
     .join("\n");
 }
 
@@ -39,41 +34,37 @@ function cssValue(value: string): string {
   return value.replace(/#[0-9A-F]{6}/gi, (hex) => hex.toLowerCase());
 }
 
-function packageName(mood: ResolvedMood, type: InkdropThemeType): string {
-  if (type === "ui") return `hue-${mood.id}-theme`;
-  return `hue-${mood.id}-${type}-theme`;
+function packageName(mood: ResolvedMood): string {
+  return `hue-${mood.id}-theme`;
 }
 
-function uiThemeLabel(mood: ResolvedMood): string {
+function themeLabel(mood: ResolvedMood): string {
   return `Hue ${mood.id.charAt(0).toUpperCase()}${mood.id.slice(1)} Theme`;
 }
 
-function themeDescription(mood: ResolvedMood, type: InkdropThemeType): string {
-  if (type === "ui") return uiThemeLabel(mood);
-  const label = type.charAt(0).toUpperCase() + type.slice(1);
-  return `${mood.label} ${label} Theme for Inkdrop`;
+function themeDescription(mood: ResolvedMood): string {
+  return `${mood.label} unified theme for Inkdrop v6`;
 }
 
-function renderPackageJson(mood: ResolvedMood, type: InkdropThemeType): string {
+function renderPackageJson(mood: ResolvedMood): string {
   return `${JSON.stringify(
     {
-      name: packageName(mood, type),
+      name: packageName(mood),
       version: "0.2.0",
-      theme: type,
-      // Inkdrop needs themeAppearance to register the theme as dark/light, and
-      // (for UI themes) type: "module" — matching the built-in/working themes.
-      // Without these the theme silently falls back to the default.
+      theme: true,
       themeAppearance: mood.appearance,
-      ...(type === "ui" ? { type: "module" } : {}),
-      description: themeDescription(mood, type),
-      // styleSheets are resolved relative to the package's styles/ directory, so
-      // entries are bare filenames (theme.css -> styles/theme.css), not paths.
-      styleSheets: ["theme.css"],
-      keywords: ["inkdrop", "markdown", "hue-theme"],
+      description: themeDescription(mood),
+      // styleSheets are resolved relative to the package's styles/ directory.
+      // palette.css loads first so the area-specific layers can reuse Hue vars.
+      styleSheets: ["palette.css", "ui.css", "syntax.css", "preview.css"],
+      scripts: {
+        prepublishOnly: "generate-palette",
+      },
+      keywords: ["inkdrop", "markdown", "mermaid", "hue-theme"],
       repository: {
         type: "git",
         url: "https://github.com/crafts69guy/hue-theme",
-        directory: `packages/${packageName(mood, type)}`,
+        directory: `packages/${packageName(mood)}`,
       },
       bugs: {
         url: "https://github.com/crafts69guy/hue-theme/issues",
@@ -81,17 +72,23 @@ function renderPackageJson(mood: ResolvedMood, type: InkdropThemeType): string {
       homepage: "https://github.com/crafts69guy/hue-theme#readme",
       author: "crafts69guy",
       license: "MIT",
-      engines: { inkdrop: "^6.x" },
+      engines: { inkdrop: "^6.0.0" },
+      devDependencies: {
+        "@inkdropapp/theme-dev-helpers": "^0.6.1",
+      },
     },
     null,
     2,
   )}\n`;
 }
 
-function renderReadme(mood: ResolvedMood, type: InkdropThemeType): string {
-  return `# ${packageName(mood, type)}
+function renderReadme(mood: ResolvedMood): string {
+  return `# ${packageName(mood)}
 
-${themeDescription(mood, type)}.
+${themeDescription(mood)}.
+
+This unified Inkdrop v6 package styles the app UI, editor syntax, rendered
+Markdown preview, and Mermaid diagrams.
 
 This package is generated from the Hue Theme token contract. Do not edit the
 CSS by hand; update the source tokens or Inkdrop adapter and run the token build.
@@ -99,7 +96,7 @@ CSS by hand; update the source tokens or Inkdrop adapter and run the token build
 ## Install locally
 
 \`\`\`fish
-ipm install ./packages/${packageName(mood, type)}
+ipm install ./packages/${packageName(mood)}
 \`\`\`
 `;
 }
@@ -112,10 +109,28 @@ license text.
 `;
 }
 
-function renderHeader(mood: ResolvedMood, type: InkdropThemeType): string {
+function renderHeader(mood: ResolvedMood, area: "palette" | "ui" | "syntax" | "preview"): string {
   return `/* Generated by scripts/build.ts. Do not edit.
- * ${themeDescription(mood, type)}.
+ * ${themeLabel(mood)} ${area} stylesheet.
  */
+`;
+}
+
+function hueVarName(key: string): string {
+  return `--hue-${key.replaceAll(".", "-")}`;
+}
+
+function renderPaletteCss(mood: ResolvedMood): string {
+  const vars = Object.fromEntries(
+    Object.entries(mood.semantic).map(([key, value]) => [hueVarName(key), value]),
+  );
+
+  return `${renderHeader(mood, "palette")}@layer theme {
+  :root {
+    color-scheme: ${mood.appearance};
+${cssVars(vars, "    ")}
+  }
+}
 `;
 }
 
@@ -311,16 +326,17 @@ function renderUiCss(mood: ResolvedMood): string {
     "--editor-drawer-border-left": `1px solid ${hairline}`,
   });
 
-  return `${renderHeader(mood, "ui")}
-:root {
-  color-scheme: ${mood.appearance};
-${cssVars(vars)}
-}
+  return `${renderHeader(mood, "ui")}@layer theme.ui {
+  :root {
+    color-scheme: ${mood.appearance};
+${cssVars(vars, "    ")}
+  }
 
-/* Accent bar on the active note-list row, so the (subtle) selection still reads
- * at a glance. Inset shadow keeps layout stable (no reflow). */
-.note-list-item-view.active {
-  box-shadow: inset 2px 0 0 ${cssValue(role(mood, "accent.primary"))};
+  /* Accent bar on the active note-list row, so the (subtle) selection still reads
+   * at a glance. Inset shadow keeps layout stable (no reflow). */
+  .note-list-item-view.active {
+    box-shadow: inset 2px 0 0 ${cssValue(role(mood, "accent.primary"))};
+  }
 }
 `;
 }
@@ -506,10 +522,11 @@ function renderSyntaxCss(mood: ResolvedMood): string {
     "--md-inline-code-border-color": softLine,
   });
 
-  return `${renderHeader(mood, "syntax")}
-:root {
-  color-scheme: ${mood.appearance};
-${cssVars(vars)}
+  return `${renderHeader(mood, "syntax")}@layer theme.syntax {
+  :root {
+    color-scheme: ${mood.appearance};
+${cssVars(vars, "    ")}
+  }
 }
 `;
 }
@@ -545,6 +562,8 @@ function renderPreviewCss(mood: ResolvedMood): string {
     "--mde-preview-link-color": role(mood, "text.accent"),
     "--mde-preview-em-color": role(mood, "text.primary"),
     "--mde-preview-strong-color": role(mood, "text.primary"),
+    "--mde-preview-blockquote-text-color": role(mood, "text.secondary"),
+    "--mde-preview-blockquote-border-color": role(mood, "accent.secondary"),
     "--mde-preview-inline-code-text-color": role(mood, "syntax.string"),
     "--mde-preview-inline-code-background-color": role(mood, "surface.raised"),
     "--mde-preview-inline-code-border-color": role(mood, "border.subtle"),
@@ -559,6 +578,49 @@ function renderPreviewCss(mood: ResolvedMood): string {
     "--mde-preview-table-head-text-color": role(mood, "text.primary"),
     "--mde-preview-table-row-background-color": role(mood, "surface.canvas"),
     "--mde-preview-table-row-stripe-background-color": role(mood, "surface.raised"),
+    "--mermaid-background-color": role(mood, "surface.canvas"),
+    "--mermaid-node-background-color": role(mood, "surface.raised"),
+    "--mermaid-node-border-color": role(mood, "accent.primary"),
+    "--mermaid-node-text-color": role(mood, "text.primary"),
+    "--mermaid-line-color": role(mood, "border.subtle"),
+    "--mermaid-label-text-color": role(mood, "text.primary"),
+    "--mermaid-edge-label-background-color": role(mood, "surface.canvas"),
+    "--mermaid-cluster-background-color": `color-mix(in srgb, ${role(mood, "surface.raised")} 72%, transparent)`,
+    "--mermaid-cluster-border-color": role(mood, "border.subtle"),
+    "--mermaid-title-text-color": role(mood, "text.primary"),
+    "--mermaid-primary-color": role(mood, "accent.primary"),
+    "--mermaid-primary-text-color": role(mood, "surface.canvas"),
+    "--mermaid-primary-border-color": role(mood, "accent.primary"),
+    "--mermaid-secondary-color": role(mood, "accent.secondary"),
+    "--mermaid-secondary-text-color": role(mood, "surface.canvas"),
+    "--mermaid-secondary-border-color": role(mood, "accent.secondary"),
+    "--mermaid-tertiary-color": role(mood, "status.warning"),
+    "--mermaid-tertiary-text-color": role(mood, "surface.canvas"),
+    "--mermaid-tertiary-border-color": role(mood, "status.warning"),
+    "--mermaid-note-background-color": role(mood, "status.notice"),
+    "--mermaid-note-border-color": role(mood, "status.warning"),
+    "--mermaid-note-text-color": role(mood, "text.primary"),
+    "--mermaid-actor-background-color": role(mood, "surface.raised"),
+    "--mermaid-actor-border-color": role(mood, "accent.primary"),
+    "--mermaid-actor-text-color": role(mood, "text.primary"),
+    "--mermaid-activation-background-color": role(mood, "surface.selected"),
+    "--mermaid-activation-border-color": role(mood, "accent.primary"),
+    "--mermaid-sequence-number-color": role(mood, "text.secondary"),
+    "--mermaid-loop-text-color": role(mood, "text.primary"),
+    "--mermaid-loop-line-color": role(mood, "border.subtle"),
+    "--mermaid-state-background-color": role(mood, "surface.raised"),
+    "--mermaid-state-border-color": role(mood, "accent.primary"),
+    "--mermaid-state-text-color": role(mood, "text.primary"),
+    "--mermaid-class-background-color": role(mood, "surface.raised"),
+    "--mermaid-class-border-color": role(mood, "accent.secondary"),
+    "--mermaid-class-text-color": role(mood, "text.primary"),
+    "--mermaid-er-entity-background-color": role(mood, "surface.raised"),
+    "--mermaid-er-entity-border-color": role(mood, "accent.primary"),
+    "--mermaid-er-entity-text-color": role(mood, "text.primary"),
+    "--mermaid-gantt-active-task-color": role(mood, "accent.primary"),
+    "--mermaid-gantt-done-task-color": role(mood, "status.success"),
+    "--mermaid-gantt-critical-task-color": role(mood, "status.error"),
+    "--mermaid-git-branch-label-color": role(mood, "surface.canvas"),
   };
 
   // Subtle, filled-surface borders for rendered code blocks and tables.
@@ -571,62 +633,59 @@ function renderPreviewCss(mood: ResolvedMood): string {
     "--md-inline-code-border-color": softLine,
   });
 
-  return `${renderHeader(mood, "preview")}
-:root {
-  color-scheme: ${mood.appearance};
-${cssVars(vars)}
-}
+  return `${renderHeader(mood, "preview")}@layer theme.preview {
+  :root {
+    color-scheme: ${mood.appearance};
+${cssVars(vars, "    ")}
+  }
 
-.mde-preview,
-.mde-preview .markdown-body {
-  background: ${cssValue(role(mood, "surface.canvas"))};
-  color: ${cssValue(role(mood, "text.primary"))};
-}
+  .mde-preview,
+  .mde-preview .markdown-body {
+    background: ${cssValue(role(mood, "surface.canvas"))};
+    color: ${cssValue(role(mood, "text.primary"))};
+  }
 
-.mde-preview a {
-  color: ${cssValue(role(mood, "text.accent"))};
-}
+  .mde-preview a {
+    color: ${cssValue(role(mood, "text.accent"))};
+  }
 
-.mde-preview blockquote {
-  color: ${cssValue(role(mood, "text.secondary"))};
-  border-left-color: ${cssValue(role(mood, "accent.secondary"))};
-}
+  .mde-preview blockquote {
+    color: ${cssValue(role(mood, "text.secondary"))};
+    border-left-color: ${cssValue(role(mood, "accent.secondary"))};
+  }
 
-.mde-preview code,
-.mde-preview pre {
-  background: ${cssValue(role(mood, "surface.raised"))};
-  border-color: ${cssValue(hairline)};
-}
+  .mde-preview code,
+  .mde-preview pre {
+    background: ${cssValue(role(mood, "surface.raised"))};
+    border-color: ${cssValue(hairline)};
+  }
 
-.mde-preview table th,
-.mde-preview table td {
-  border-color: ${cssValue(hairline)};
+  .mde-preview table th,
+  .mde-preview table td {
+    border-color: ${cssValue(hairline)};
+  }
 }
 `;
 }
 
-function renderCss(mood: ResolvedMood, type: InkdropThemeType): string {
-  if (type === "ui") return renderUiCss(mood);
-  if (type === "syntax") return renderSyntaxCss(mood);
-  return renderPreviewCss(mood);
-}
-
-function renderInkdropPackage(mood: ResolvedMood, type: InkdropThemeType): InkdropPackage {
-  const name = packageName(mood, type);
+function renderInkdropPackage(mood: ResolvedMood): InkdropPackage {
+  const name = packageName(mood);
   return {
     packageName: name,
     packagePath: name,
     moodId: mood.id,
-    themeType: type,
     files: [
-      { path: "package.json", content: renderPackageJson(mood, type) },
-      { path: "README.md", content: renderReadme(mood, type) },
+      { path: "package.json", content: renderPackageJson(mood) },
+      { path: "README.md", content: renderReadme(mood) },
       { path: "LICENSE", content: renderLicense() },
-      { path: "styles/theme.css", content: renderCss(mood, type) },
+      { path: "styles/palette.css", content: renderPaletteCss(mood) },
+      { path: "styles/ui.css", content: renderUiCss(mood) },
+      { path: "styles/syntax.css", content: renderSyntaxCss(mood) },
+      { path: "styles/preview.css", content: renderPreviewCss(mood) },
     ],
   };
 }
 
 export function renderInkdropPackages(moods: ResolvedMood[]): InkdropPackage[] {
-  return moods.flatMap((mood) => THEME_TYPES.map((type) => renderInkdropPackage(mood, type)));
+  return moods.map(renderInkdropPackage);
 }

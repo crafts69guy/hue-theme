@@ -1,16 +1,22 @@
 {
   "name": "hue-huong-theme",
   "version": "0.2.0",
-  "theme": "ui",
+  "theme": true,
   "themeAppearance": "dark",
-  "type": "module",
-  "description": "Hue Huong Theme",
+  "description": "Huế Hương unified theme for Inkdrop v6",
   "styleSheets": [
-    "theme.css"
+    "palette.css",
+    "ui.css",
+    "syntax.css",
+    "preview.css"
   ],
+  "scripts": {
+    "prepublishOnly": "generate-palette"
+  },
   "keywords": [
     "inkdrop",
     "markdown",
+    "mermaid",
     "hue-theme"
   ],
   "repository": {
@@ -25,6 +31,9 @@
   "author": "crafts69guy",
   "license": "MIT",
   "engines": {
-    "inkdrop": "^6.x"
+    "inkdrop": "^6.0.0"
+  },
+  "devDependencies": {
+    "@inkdropapp/theme-dev-helpers": "^0.6.1"
   }
 }

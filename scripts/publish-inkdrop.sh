@@ -17,14 +17,8 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 DEFAULT_PACKAGES=(
   hue-cung-theme
-  hue-cung-syntax-theme
-  hue-cung-preview-theme
   hue-huong-theme
-  hue-huong-syntax-theme
-  hue-huong-preview-theme
   hue-mua-theme
-  hue-mua-syntax-theme
-  hue-mua-preview-theme
 )
 
 DRY_RUN=false

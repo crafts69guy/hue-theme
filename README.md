@@ -39,7 +39,7 @@ identical across hosts.
 | **Ghostty**          | [`packages/terminal-themes`](packages/terminal-themes) | theme file (`theme = hue-mua`)                                                |
 | **Fish / Tide**      | [`packages/fish-themes`](packages/fish-themes)         | sourceable Fish theme files                                                   |
 | **Yaak**             | [`packages/yaak-plugin`](packages/yaak-plugin)         | sideload / plugin registry                                                    |
-| **Inkdrop**          | `packages/hue-*-*-theme`                               | 9 generated UI/Syntax/Preview packages                                        |
+| **Inkdrop**          | `packages/hue-*-theme`                                 | 3 unified Inkdrop v6 packages with Mermaid colors                             |
 
 ## How it works
 
@@ -77,7 +77,7 @@ packages/
   terminal-themes/  # generated Ghostty theme files
   fish-themes/      # generated Fish/Tide theme files
   yaak-plugin/      # generated Yaak theme plugin
-  hue-*-theme/      # generated Inkdrop UI/Syntax/Preview packages
+  hue-*-theme/      # generated unified Inkdrop v6 packages
 apps/
   gallery/          # interactive mood gallery (Vite + React)
 ```
@@ -102,6 +102,9 @@ Publish the generated Inkdrop packages:
 bun run publish:inkdrop:dry-run
 bun run publish:inkdrop
 ```
+
+Inkdrop packages target the v6 unified theme model: one package per mood covers
+the app UI, editor syntax, rendered Markdown preview, and Mermaid diagram colors.
 
 Source tokens follow the
 [Design Tokens Community Group format](https://www.designtokens.org/tr/2025.10/format/).
