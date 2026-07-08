@@ -1,9 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { themeBundle } from "../packages/tokens/generated/themes";
+import { renderHerdrFiles, herdrManifest } from "../packages/tokens/src/adapters/herdr";
 import { ghosttyManifest, renderGhosttyFiles } from "../packages/tokens/src/adapters/ghostty";
 import { terminalColors } from "../packages/tokens/src/adapters/terminal";
 import { renderTideFiles, tideManifest } from "../packages/tokens/src/adapters/tide";
 import { renderTmuxFiles, tmuxManifest } from "../packages/tokens/src/adapters/tmux";
+import { contrastRatio } from "../packages/tokens/src/color";
 import { validateManifest } from "../packages/tokens/src/contract";
 
 const HEX = /^#[0-9A-F]{6}$/;
@@ -51,6 +53,32 @@ describe("Hue → Ghostty adapter", () => {
       const content = files.find((f) => f.path === `ghostty/hue-${mood.id}`)?.content ?? "";
       expect(content).toContain(`background = ${mood.semantic["surface.canvas"]}`);
       expect(content).toContain(`foreground = ${mood.semantic["text.primary"]}`);
+    }
+  });
+});
+
+describe("Hue → herdr adapter", () => {
+  const files = renderHerdrFiles(moods);
+
+  test("accounts for every contract family", () => {
+    expect(() => validateManifest("herdr", herdrManifest)).not.toThrow();
+  });
+
+  test("emits one TOML fragment per mood", () => {
+    expect(files.map((f) => f.path).sort()).toEqual(
+      moods.map((m) => `themes/hue-${m.id}.toml`).sort(),
+    );
+  });
+
+  test("uses accent selection with readable canvas text", () => {
+    for (const mood of moods) {
+      const content = files.find((f) => f.path === `themes/hue-${mood.id}.toml`)?.content ?? "";
+      const selectionBackground = mood.semantic["accent.primary"];
+      const selectionForeground = mood.semantic["surface.canvas"];
+
+      expect(content).toContain(`selection_background = "${selectionBackground}"`);
+      expect(content).toContain(`selection_foreground = "${selectionForeground}"`);
+      expect(contrastRatio(selectionForeground, selectionBackground)).toBeGreaterThanOrEqual(4.5);
     }
   });
 });

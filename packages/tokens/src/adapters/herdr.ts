@@ -45,8 +45,8 @@ background = "${role(mood, "surface.canvas")}"
 foreground = "${role(mood, "text.primary")}"
 accent = "${role(mood, "accent.primary")}"
 cursor = "${role(mood, "accent.primary")}"
-selection_background = "${role(mood, "surface.selected")}"
-selection_foreground = "${role(mood, "text.primary")}"
+selection_background = "${role(mood, "accent.primary")}"
+selection_foreground = "${role(mood, "surface.canvas")}"
 ${ansiLines}
 `;
 }
