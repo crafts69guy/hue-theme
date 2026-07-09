@@ -3,6 +3,6 @@
   "displayName": "Hue Terminal Themes",
   "private": true,
   "version": "0.1.0",
-  "description": "Generated Hue theme files for terminal emulators and multiplexers (Ghostty, tmux).",
+  "description": "Generated Hue theme files for terminal emulators and multiplexers (Ghostty, bat; tmux is its own plugin package).",
   "license": "MIT"
 }

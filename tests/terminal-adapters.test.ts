@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { themeBundle } from "../packages/tokens/generated/themes";
+import { batManifest, renderBatFiles } from "../packages/tokens/src/adapters/bat";
 import { ghosttyManifest, renderGhosttyFiles } from "../packages/tokens/src/adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "../packages/tokens/src/adapters/herdr";
 import { terminalColors } from "../packages/tokens/src/adapters/terminal";
@@ -53,6 +54,51 @@ describe("Hue → Ghostty adapter", () => {
       const content = files.find((f) => f.path === `ghostty/hue-${mood.id}`)?.content ?? "";
       expect(content).toContain(`background = ${mood.semantic["surface.canvas"]}`);
       expect(content).toContain(`foreground = ${mood.semantic["text.primary"]}`);
+    }
+  });
+});
+
+describe("Hue → bat adapter", () => {
+  const files = renderBatFiles(moods);
+
+  test("accounts for every contract family", () => {
+    expect(() => validateManifest("bat", batManifest)).not.toThrow();
+  });
+
+  test("emits one .tmTheme per mood", () => {
+    expect(files.map((f) => f.path).sort()).toEqual(
+      moods.map((m) => `bat/hue-${m.id}.tmTheme`).sort(),
+    );
+  });
+
+  test("globals map canvas/text/accent/selection and rules use mood colors", () => {
+    for (const mood of moods) {
+      const content = files.find((f) => f.path === `bat/hue-${mood.id}.tmTheme`)?.content ?? "";
+      expect(content).toContain('<plist version="1.0">');
+      // bat selects themes by this internal name, so it must stay scriptable
+      // ascii matching the other adapters' hue-<mood> naming.
+      expect(content).toContain(`<string>hue-${mood.id}</string>`);
+      for (const hex of [
+        mood.semantic["surface.canvas"],
+        mood.semantic["text.primary"],
+        mood.semantic["accent.primary"],
+        mood.semantic["surface.selected"],
+        mood.semantic["syntax.comment"],
+        mood.semantic["syntax.string"],
+        mood.semantic["status.error"],
+      ]) {
+        expect(content).toContain(`<string>${hex}</string>`);
+      }
+    }
+  });
+
+  test("every scope rule resolves against the contract", () => {
+    // renderBatFiles throws on unknown roles, so rendering all moods without
+    // an exception is the assertion; spot-check one styled rule per file.
+    for (const { content } of files) {
+      expect(content).toMatch(/<string>comment, punctuation\.definition\.comment<\/string>/);
+      expect(content).toContain("<string>italic</string>");
+      expect(content).toContain("<string>bold</string>");
     }
   });
 });

@@ -1,5 +1,6 @@
 import { chmod, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
+import { batManifest, renderBatFiles } from "../src/adapters/bat";
 import { ghosttyManifest, renderGhosttyFiles } from "../src/adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "../src/adapters/herdr";
 import { inkdropManifest, renderInkdropPackages } from "../src/adapters/inkdrop";
@@ -139,6 +140,7 @@ for (const theme of themes) {
 validateManifest("yaak", yaakManifest);
 validateManifest("neovim", neovimManifest);
 validateManifest("ghostty", ghosttyManifest);
+validateManifest("bat", batManifest);
 validateManifest("herdr", herdrManifest);
 validateManifest("tmux", tmuxManifest);
 validateManifest("tide", tideManifest);
@@ -223,6 +225,9 @@ const outputs: Array<[string, string]> = [
     (file) => [resolve(root, "../nvim-plugin", file.path), file.content] as [string, string],
   ),
   ...renderGhosttyFiles(themes).map(
+    (file) => [resolve(root, "../terminal-themes", file.path), file.content] as [string, string],
+  ),
+  ...renderBatFiles(themes).map(
     (file) => [resolve(root, "../terminal-themes", file.path), file.content] as [string, string],
   ),
   ...renderHerdrFiles(themes).map(
