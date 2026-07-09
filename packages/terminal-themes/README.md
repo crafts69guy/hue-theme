@@ -6,6 +6,8 @@ Generated theme files for terminal tools, one per mood (Mưa, Hương, Cung):
   palette plus background/foreground/cursor/selection.
 - [bat](https://github.com/sharkdp/bat): `bat/hue-<mood>.tmTheme` — a
   Sublime/syntect theme mapping Hue's syntax and status roles.
+- [lazygit](https://github.com/jesseduffield/lazygit): `lazygit/hue-<mood>.yml`
+  — a gui.theme fragment merged in via `LG_CONFIG_FILE`.
 
 > tmux is packaged separately as a TPM plugin in
 > [`packages/tmux-plugin`](../tmux-plugin) (Ghostty has no plugin/remote-theme
@@ -18,6 +20,9 @@ mapping lives in
 [`packages/tokens/src/adapters/ghostty.ts`](../tokens/src/adapters/ghostty.ts);
 the bat mapping in
 [`packages/tokens/src/adapters/bat.ts`](../tokens/src/adapters/bat.ts); the
+lazygit mapping in
+[`packages/tokens/src/adapters/lazygit.ts`](../tokens/src/adapters/lazygit.ts);
+the
 shared ANSI derivation lives in
 [`adapters/terminal.ts`](../tokens/src/adapters/terminal.ts).
 
@@ -53,3 +58,19 @@ export BAT_THEME=hue-mua   # fish: set -Ux BAT_THEME hue-mua
 
 bat names themes by the `name` key inside the file, which is set to
 `hue-<mood>` (matching the Ghostty/Neovim theme names), not by the filename.
+
+## Install (lazygit)
+
+lazygit has no config include, but `LG_CONFIG_FILE` merges a comma-separated
+list left to right:
+
+```bash
+mkdir -p ~/.config/lazygit/themes
+cp lazygit/hue-*.yml ~/.config/lazygit/themes/
+ln -sf hue-mua.yml ~/.config/lazygit/themes/hue-current.yml
+export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/themes/hue-current.yml"
+```
+
+Switch moods by re-pointing the `hue-current.yml` symlink. Diffs inside
+lazygit are colored by your pager — delta follows `BAT_THEME`, so pair this
+with the bat themes above.

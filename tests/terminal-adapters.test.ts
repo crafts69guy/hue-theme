@@ -3,6 +3,7 @@ import { themeBundle } from "../packages/tokens/generated/themes";
 import { batManifest, renderBatFiles } from "../packages/tokens/src/adapters/bat";
 import { ghosttyManifest, renderGhosttyFiles } from "../packages/tokens/src/adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "../packages/tokens/src/adapters/herdr";
+import { lazygitManifest, renderLazygitFiles } from "../packages/tokens/src/adapters/lazygit";
 import { terminalColors } from "../packages/tokens/src/adapters/terminal";
 import { renderTideFiles, tideManifest } from "../packages/tokens/src/adapters/tide";
 import { renderTmuxFiles, tmuxManifest } from "../packages/tokens/src/adapters/tmux";
@@ -105,6 +106,41 @@ describe("Hue → bat adapter", () => {
       expect(content).not.toMatch(/<string>markup\.raw<\/string>/);
       expect(content).toContain("markup.quote");
       expect(content).toContain("markup.heading.2");
+    }
+  });
+});
+
+describe("Hue → lazygit adapter", () => {
+  const files = renderLazygitFiles(moods);
+
+  test("accounts for every contract family", () => {
+    expect(() => validateManifest("lazygit", lazygitManifest)).not.toThrow();
+  });
+
+  test("emits one YAML fragment per mood", () => {
+    expect(files.map((f) => f.path).sort()).toEqual(
+      moods.map((m) => `lazygit/hue-${m.id}.yml`).sort(),
+    );
+  });
+
+  test("maps borders, selection, and status onto gui.theme", () => {
+    for (const mood of moods) {
+      const content = files.find((f) => f.path === `lazygit/hue-${mood.id}.yml`)?.content ?? "";
+      expect(content).toContain("gui:\n  theme:");
+      expect(content).toMatch(
+        new RegExp(`activeBorderColor:\\n\\s+- "${mood.semantic["accent.primary"]}"\\n\\s+- bold`),
+      );
+      expect(content).toContain(`- "${mood.semantic["surface.selected"]}"`);
+      expect(content).toContain(`- "${mood.semantic["status.error"]}"`);
+      expect(content).toContain(`- "${mood.semantic["text.primary"]}"`);
+    }
+  });
+
+  test("marked/cherry-picked rows keep readable canvas text", () => {
+    for (const mood of moods) {
+      const s = mood.semantic;
+      expect(contrastRatio(s["surface.canvas"], s["accent.secondary"])).toBeGreaterThanOrEqual(3);
+      expect(contrastRatio(s["surface.canvas"], s["status.warning"])).toBeGreaterThanOrEqual(3);
     }
   });
 });

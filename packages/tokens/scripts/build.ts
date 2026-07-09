@@ -4,6 +4,7 @@ import { batManifest, renderBatFiles } from "../src/adapters/bat";
 import { ghosttyManifest, renderGhosttyFiles } from "../src/adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "../src/adapters/herdr";
 import { inkdropManifest, renderInkdropPackages } from "../src/adapters/inkdrop";
+import { lazygitManifest, renderLazygitFiles } from "../src/adapters/lazygit";
 import { neovimManifest, renderNeovimFiles } from "../src/adapters/neovim";
 import { renderTideFiles, tideManifest } from "../src/adapters/tide";
 import { renderTmuxFiles, tmuxManifest } from "../src/adapters/tmux";
@@ -141,6 +142,7 @@ validateManifest("yaak", yaakManifest);
 validateManifest("neovim", neovimManifest);
 validateManifest("ghostty", ghosttyManifest);
 validateManifest("bat", batManifest);
+validateManifest("lazygit", lazygitManifest);
 validateManifest("herdr", herdrManifest);
 validateManifest("tmux", tmuxManifest);
 validateManifest("tide", tideManifest);
@@ -228,6 +230,9 @@ const outputs: Array<[string, string]> = [
     (file) => [resolve(root, "../terminal-themes", file.path), file.content] as [string, string],
   ),
   ...renderBatFiles(themes).map(
+    (file) => [resolve(root, "../terminal-themes", file.path), file.content] as [string, string],
+  ),
+  ...renderLazygitFiles(themes).map(
     (file) => [resolve(root, "../terminal-themes", file.path), file.content] as [string, string],
   ),
   ...renderHerdrFiles(themes).map(
