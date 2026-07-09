@@ -46,7 +46,10 @@ const RULES: Rule[] = [
     fg: "syntax.keyword",
     fontStyle: "bold",
   },
-  { name: "Operator", scope: "keyword.operator", fg: "syntax.operator" },
+  // The empty fontStyle is deliberate: keyword.operator also matches the bold
+  // "keyword, storage" rule, and syntect inherits undefined properties from
+  // less-specific matches — an explicit empty value resets to regular.
+  { name: "Operator", scope: "keyword.operator", fg: "syntax.operator", fontStyle: "" },
   { name: "Function", scope: "entity.name.function, support.function", fg: "syntax.function" },
   {
     name: "Type",
@@ -64,15 +67,64 @@ const RULES: Rule[] = [
   { name: "Tag", scope: "entity.name.tag", fg: "syntax.keyword" },
   { name: "Attribute", scope: "entity.other.attribute-name", fg: "syntax.property" },
   { name: "Punctuation", scope: "punctuation", fg: "syntax.punctuation" },
+  { name: "Regex", scope: "string.regexp", fg: "syntax.operator" },
+  {
+    name: "Object key",
+    scope: "meta.mapping.key string, meta.object-literal.key",
+    fg: "syntax.property",
+  },
+  // Markup (markdown, textile, …) — mirrors the Neovim adapter's @markup.*
+  // groups so prose renders the same across bat and the editor.
   {
     name: "Heading",
     scope: "markup.heading, entity.name.section",
     fg: "accent.primary",
     fontStyle: "bold",
   },
+  {
+    name: "Heading marker",
+    scope: "punctuation.definition.heading",
+    fg: "accent.primary",
+    fontStyle: "bold",
+  },
   { name: "Bold", scope: "markup.bold", fontStyle: "bold" },
   { name: "Italic", scope: "markup.italic", fontStyle: "italic" },
-  { name: "Link", scope: "markup.underline.link", fg: "status.info", fontStyle: "underline" },
+  { name: "Raw", scope: "markup.raw", fg: "syntax.string" },
+  {
+    name: "Markup marker",
+    scope:
+      "punctuation.definition.bold, punctuation.definition.italic, punctuation.definition.raw, punctuation.definition.strikethrough",
+    fg: "syntax.comment",
+  },
+  { name: "Fence info", scope: "constant.other.language-name", fg: "syntax.comment" },
+  {
+    name: "List bullet",
+    scope: "punctuation.definition.list_item, markup.list.numbered.bullet",
+    fg: "syntax.operator",
+  },
+  {
+    name: "Quote",
+    scope: "markup.quote, punctuation.definition.blockquote",
+    fg: "text.secondary",
+    fontStyle: "italic",
+  },
+  { name: "Strikethrough", scope: "markup.strikethrough", fg: "text.secondary" },
+  {
+    name: "Thematic break",
+    scope: "meta.separator.thematic-break, punctuation.definition.thematic-break",
+    fg: "syntax.comment",
+  },
+  {
+    name: "Link",
+    scope: "markup.underline.link",
+    fg: "accent.secondary",
+    fontStyle: "underline",
+  },
+  {
+    name: "Link text",
+    scope: "string.other.link, constant.other.reference.link",
+    fg: "status.info",
+  },
   { name: "Inserted", scope: "markup.inserted, meta.diff.header.to-file", fg: "status.success" },
   { name: "Deleted", scope: "markup.deleted, meta.diff.header.from-file", fg: "status.error" },
   { name: "Changed", scope: "markup.changed", fg: "status.warning" },
@@ -96,7 +148,7 @@ function renderRule(mood: ResolvedMood, rule: Rule): string {
   if (rule.fg) {
     settings.push(`        <key>foreground</key>\n        <string>${role(mood, rule.fg)}</string>`);
   }
-  if (rule.fontStyle) {
+  if (rule.fontStyle !== undefined) {
     settings.push(`        <key>fontStyle</key>\n        <string>${rule.fontStyle}</string>`);
   }
   return `    <dict>

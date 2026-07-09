@@ -99,6 +99,9 @@ describe("Hue → bat adapter", () => {
       expect(content).toMatch(/<string>comment, punctuation\.definition\.comment<\/string>/);
       expect(content).toContain("<string>italic</string>");
       expect(content).toContain("<string>bold</string>");
+      // markdown needs markup.* rules or prose renders as plain foreground
+      expect(content).toContain("<string>markup.raw</string>");
+      expect(content).toContain("markup.quote");
     }
   });
 });
