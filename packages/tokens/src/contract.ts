@@ -12,7 +12,9 @@ export type FamilySpec = { readonly closed: boolean; readonly roles: readonly st
 export const CONTRACT = {
   surface: { closed: true, roles: ["canvas", "raised", "selected"] },
   text: { closed: true, roles: ["primary", "secondary", "accent"] },
-  border: { closed: true, roles: ["subtle"] },
+  // faint: decorative lines (indent guides, tree markers) that must recede
+  // below border.subtle — pre-blended for hosts without alpha support.
+  border: { closed: true, roles: ["subtle", "faint"] },
   accent: { closed: true, roles: ["primary", "secondary"] },
   status: { closed: true, roles: ["success", "info", "notice", "warning", "error"] },
   syntax: {

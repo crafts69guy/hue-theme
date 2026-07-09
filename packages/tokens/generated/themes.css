@@ -6,6 +6,7 @@
   --hue-text-secondary: #66604F;
   --hue-text-accent: #3A6E5F;
   --hue-border-subtle: #8C846F;
+  --hue-border-faint: #CAC2AF;
   --hue-accent-primary: #3A6E5F;
   --hue-accent-secondary: #6A5384;
   --hue-status-success: #3A6E5F;
@@ -34,6 +35,7 @@
   --hue-text-secondary: #98A59C;
   --hue-text-accent: #6FD0A8;
   --hue-border-subtle: #587168;
+  --hue-border-faint: #2C3F39;
   --hue-accent-primary: #6FD0A8;
   --hue-accent-secondary: #A9A0C8;
   --hue-status-success: #6FD0A8;
@@ -62,6 +64,7 @@
   --hue-text-secondary: #9DA39E;
   --hue-text-accent: #7FB89C;
   --hue-border-subtle: #5B6F69;
+  --hue-border-faint: #313B3A;
   --hue-accent-primary: #7FB89C;
   --hue-accent-secondary: #AFA3CE;
   --hue-status-success: #7FB89C;

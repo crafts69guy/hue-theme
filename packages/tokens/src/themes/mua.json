@@ -16,6 +16,9 @@
     "rain": {
       "$value": { "colorSpace": "srgb", "components": [0.357, 0.435, 0.412], "hex": "#5B6F69" }
     },
+    "drizzle": {
+      "$value": { "colorSpace": "srgb", "components": [0.192, 0.231, 0.227], "hex": "#313B3A" }
+    },
     "paper": {
       "$value": { "colorSpace": "srgb", "components": [0.812, 0.8, 0.761], "hex": "#CFCCC2" }
     },
@@ -56,7 +59,10 @@
       "secondary": { "$value": "{primitive.ash}" },
       "accent": { "$value": "{primitive.jade}" }
     },
-    "border": { "subtle": { "$value": "{primitive.rain}" } },
+    "border": {
+      "subtle": { "$value": "{primitive.rain}" },
+      "faint": { "$value": "{primitive.drizzle}" }
+    },
     "accent": {
       "primary": { "$value": "{primitive.jade}" },
       "secondary": { "$value": "{primitive.violet}" }

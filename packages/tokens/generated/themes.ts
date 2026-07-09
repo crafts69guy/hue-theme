@@ -12,6 +12,7 @@ export const themeBundle = {
         "stone": "#E8DDC5",
         "pool": "#CBDDD2",
         "rain": "#8C846F",
+        "drizzle": "#CAC2AF",
         "paper": "#3C372C",
         "ash": "#66604F",
         "fog": "#8A8473",
@@ -30,6 +31,7 @@ export const themeBundle = {
         "text.secondary": "#66604F",
         "text.accent": "#3A6E5F",
         "border.subtle": "#8C846F",
+        "border.faint": "#CAC2AF",
         "accent.primary": "#3A6E5F",
         "accent.secondary": "#6A5384",
         "status.success": "#3A6E5F",
@@ -60,6 +62,7 @@ export const themeBundle = {
         "stone": "#182A24",
         "pool": "#244E42",
         "rain": "#587168",
+        "drizzle": "#2C3F39",
         "paper": "#D6DAD0",
         "ash": "#98A59C",
         "fog": "#6C7E76",
@@ -78,6 +81,7 @@ export const themeBundle = {
         "text.secondary": "#98A59C",
         "text.accent": "#6FD0A8",
         "border.subtle": "#587168",
+        "border.faint": "#2C3F39",
         "accent.primary": "#6FD0A8",
         "accent.secondary": "#A9A0C8",
         "status.success": "#6FD0A8",
@@ -108,6 +112,7 @@ export const themeBundle = {
         "stone": "#23282A",
         "pool": "#2D4640",
         "rain": "#5B6F69",
+        "drizzle": "#313B3A",
         "paper": "#CFCCC2",
         "ash": "#9DA39E",
         "fog": "#6E7F7A",
@@ -126,6 +131,7 @@ export const themeBundle = {
         "text.secondary": "#9DA39E",
         "text.accent": "#7FB89C",
         "border.subtle": "#5B6F69",
+        "border.faint": "#313B3A",
         "accent.primary": "#7FB89C",
         "accent.secondary": "#AFA3CE",
         "status.success": "#7FB89C",
@@ -165,6 +171,7 @@ export type SemanticToken =
   | "text.secondary"
   | "text.accent"
   | "border.subtle"
+  | "border.faint"
   | "accent.primary"
   | "accent.secondary"
   | "status.success"
@@ -200,6 +207,7 @@ export type TextToken = (typeof TEXT_TOKENS)[number];
 
 export const BORDER_TOKENS = [
   "border.subtle",
+  "border.faint",
 ] as const;
 export type BorderToken = (typeof BORDER_TOKENS)[number];
 

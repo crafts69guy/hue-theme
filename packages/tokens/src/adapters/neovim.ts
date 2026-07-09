@@ -296,16 +296,16 @@ const GROUPS: readonly HlSpec[] = [
   { group: "SnacksPickerMatch", fg: "status.warning", style: ["bold"] },
   { group: "SnacksDashboardNormal", fg: "text.primary", bg: "surface.raised" },
   // Indent guides (snacks.indent, indent-blankline, mini.indentscope).
-  // Regular guides sit on surface.selected — the closest palette step to
-  // Inkdrop's 40%-alpha rain borders — so they recede into the canvas;
-  // only the current scope keeps the border color.
-  { group: "SnacksIndent", fg: "surface.selected" },
-  { group: "SnacksIndentChunk", fg: "surface.selected" },
+  // Regular guides use border.faint (rain pre-blended into the canvas at
+  // 40%, matching Inkdrop's alpha borders) so they recede; only the current
+  // scope keeps border.subtle.
+  { group: "SnacksIndent", fg: "border.faint" },
+  { group: "SnacksIndentChunk", fg: "border.faint" },
   { group: "SnacksIndentScope", fg: "border.subtle" },
-  { group: "IblIndent", fg: "surface.selected" },
-  { group: "IblWhitespace", fg: "surface.selected" },
+  { group: "IblIndent", fg: "border.faint" },
+  { group: "IblWhitespace", fg: "border.faint" },
   { group: "IblScope", fg: "border.subtle" },
-  { group: "IndentBlanklineChar", fg: "surface.selected" },
+  { group: "IndentBlanklineChar", fg: "border.faint" },
   { group: "IndentBlanklineContextChar", fg: "border.subtle" },
   { group: "MiniIndentscopeSymbol", fg: "border.subtle" },
   // which-key
@@ -325,7 +325,7 @@ const GROUPS: readonly HlSpec[] = [
   { group: "NeoTreeGitModified", fg: "status.info" },
   { group: "NeoTreeGitAdded", fg: "status.success" },
   { group: "NeoTreeGitDeleted", fg: "status.error" },
-  { group: "NeoTreeIndentMarker", fg: "surface.selected" },
+  { group: "NeoTreeIndentMarker", fg: "border.faint" },
   // nvim-cmp + blink.cmp
   { group: "CmpItemAbbr", fg: "text.primary" },
   { group: "CmpItemAbbrDeprecated", fg: "text.secondary", style: ["strikethrough"] },
