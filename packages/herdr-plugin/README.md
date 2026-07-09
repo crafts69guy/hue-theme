@@ -22,6 +22,13 @@ This plugin packages that splice-and-reload step as one `apply-mood` action so
 it isn't duplicated between a keybinding, a startup hook, and any external
 shell script that wants to trigger it.
 
+Since 0.2.0 the fragments cover herdr's full `CustomThemeColors` slot set
+(`panel_bg`, `surface0/1`, `surface_dim`, `overlay0/1`, `text`, `subtext0`,
+`accent`, and the status colors), so the sidebar, tab bar, dividers, and
+agent-state indicators are all Hue-colored — not just the handful of tokens
+herdr's docs mention. herdr silently ignores unknown `[theme.custom]` keys;
+the slot roles were verified empirically against herdr 0.7.3.
+
 ## Installation
 
 ```sh

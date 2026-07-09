@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { themeBundle } from "../packages/tokens/generated/themes";
-import { renderHerdrFiles, herdrManifest } from "../packages/tokens/src/adapters/herdr";
 import { ghosttyManifest, renderGhosttyFiles } from "../packages/tokens/src/adapters/ghostty";
+import { herdrManifest, renderHerdrFiles } from "../packages/tokens/src/adapters/herdr";
 import { terminalColors } from "../packages/tokens/src/adapters/terminal";
 import { renderTideFiles, tideManifest } from "../packages/tokens/src/adapters/tide";
 import { renderTmuxFiles, tmuxManifest } from "../packages/tokens/src/adapters/tmux";
@@ -70,15 +70,49 @@ describe("Hue → herdr adapter", () => {
     );
   });
 
-  test("uses accent selection with readable canvas text", () => {
+  test("fills every CustomThemeColors slot with valid hex", () => {
+    const slots = [
+      "accent",
+      "panel_bg",
+      "surface0",
+      "surface1",
+      "surface_dim",
+      "overlay0",
+      "overlay1",
+      "text",
+      "subtext0",
+      "mauve",
+      "green",
+      "yellow",
+      "red",
+      "blue",
+      "teal",
+      "peach",
+    ];
+    for (const { content } of files) {
+      for (const slot of slots) {
+        expect(content).toMatch(new RegExp(`^${slot} = "#[0-9A-F]{6}"$`, "m"));
+      }
+    }
+  });
+
+  test("keeps an accent line for apply.sh's [ui].accent sync", () => {
     for (const mood of moods) {
       const content = files.find((f) => f.path === `themes/hue-${mood.id}.toml`)?.content ?? "";
-      const selectionBackground = mood.semantic["accent.primary"];
-      const selectionForeground = mood.semantic["surface.canvas"];
+      expect(content).toContain(`accent = "${mood.semantic["accent.primary"]}"`);
+    }
+  });
 
-      expect(content).toContain(`selection_background = "${selectionBackground}"`);
-      expect(content).toContain(`selection_foreground = "${selectionForeground}"`);
-      expect(contrastRatio(selectionForeground, selectionBackground)).toBeGreaterThanOrEqual(4.5);
+  test("sidebar and tab text stay readable on their surfaces", () => {
+    for (const mood of moods) {
+      const s = mood.semantic;
+      // text on the selected sidebar row (surface_dim), subtext0 on the
+      // unpainted canvas behind the sidebar, active tab label (panel_bg
+      // value) on the accent tab background.
+      expect(contrastRatio(s["text.primary"], s["surface.selected"])).toBeGreaterThanOrEqual(4.5);
+      expect(contrastRatio(s["text.secondary"], s["surface.canvas"])).toBeGreaterThanOrEqual(3);
+      expect(contrastRatio(s["surface.raised"], s["accent.primary"])).toBeGreaterThanOrEqual(3);
+      expect(contrastRatio(mood.primitive.fog, s["surface.canvas"])).toBeGreaterThanOrEqual(2.5);
     }
   });
 });

@@ -1,6 +1,6 @@
 id = "hue-theme"
 name = "Hue Theme"
-version = "0.1.0"
+version = "0.2.0"
 min_herdr_version = "0.7.1"
 description = "Apply the Hue Tide theme (mua/huong/cung) to herdr's [theme.custom], synced with hue-theme.fish."
 
