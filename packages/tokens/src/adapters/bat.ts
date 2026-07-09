@@ -75,21 +75,69 @@ const RULES: Rule[] = [
   },
   // Markup (markdown, textile, …) — mirrors the Neovim adapter's @markup.*
   // groups so prose renders the same across bat and the editor.
+  // Headings cascade through the palette per level (h1 stays the accent).
+  // bat 0.26's bundled Markdown grammar only emits numbered scopes for
+  // levels 1–2 (probed empirically); deeper levels fall through to this
+  // general rule's secondary accent. The 3–6 rules below are inert today
+  // but activate once bat ships the current upstream grammar, which
+  // numbers all six.
   {
     name: "Heading",
     scope: "markup.heading, entity.name.section",
+    fg: "accent.secondary",
+    fontStyle: "bold",
+  },
+  {
+    name: "Heading 1",
+    scope: "markup.heading.1, markup.heading.1 entity.name.section",
     fg: "accent.primary",
+    fontStyle: "bold",
+  },
+  // Heading text is entity.name.section nested inside markup.heading.N, and
+  // syntect scores by deepest matched element — so each level needs a
+  // descendant selector to outrank the general rule's entity.name.section.
+  {
+    name: "Heading 2",
+    scope: "markup.heading.2, markup.heading.2 entity.name.section",
+    fg: "status.info",
+    fontStyle: "bold",
+  },
+  {
+    name: "Heading 3",
+    scope: "markup.heading.3, markup.heading.3 entity.name.section",
+    fg: "accent.secondary",
+    fontStyle: "bold",
+  },
+  {
+    name: "Heading 4",
+    scope: "markup.heading.4, markup.heading.4 entity.name.section",
+    fg: "status.warning",
+    fontStyle: "bold",
+  },
+  {
+    name: "Heading 5",
+    scope: "markup.heading.5, markup.heading.5 entity.name.section",
+    fg: "status.error",
+    fontStyle: "bold",
+  },
+  {
+    name: "Heading 6",
+    scope: "markup.heading.6, markup.heading.6 entity.name.section",
+    fg: "text.secondary",
     fontStyle: "bold",
   },
   {
     name: "Heading marker",
     scope: "punctuation.definition.heading",
-    fg: "accent.primary",
+    fg: "syntax.comment",
     fontStyle: "bold",
   },
   { name: "Bold", scope: "markup.bold", fontStyle: "bold" },
   { name: "Italic", scope: "markup.italic", fontStyle: "italic" },
-  { name: "Raw", scope: "markup.raw", fg: "syntax.string" },
+  // Inline only: a blanket markup.raw would flood whole fenced blocks jade,
+  // overriding the fallback foreground for anything the embedded language's
+  // grammar leaves unscoped (or entire blocks for unknown languages).
+  { name: "Raw inline", scope: "markup.raw.inline", fg: "syntax.string" },
   {
     name: "Markup marker",
     scope:
