@@ -128,6 +128,29 @@ describe("Hue → Neovim adapter", () => {
     expect(groups).toContain('["BlinkCmpMenuBorder"] = { link = "FloatBorder" }');
   });
 
+  test("emits blink.cmp completion highlight groups", () => {
+    const groups = file("lua/hue/groups.lua");
+    for (const group of [
+      "BlinkCmpMenu",
+      "BlinkCmpMenuBorder",
+      "BlinkCmpMenuSelection",
+      "BlinkCmpLabel",
+      "BlinkCmpLabelDescription",
+      "BlinkCmpSource",
+      "BlinkCmpKind",
+      "BlinkCmpKindWindsurf",
+      "BlinkCmpDoc",
+      "BlinkCmpDocBorder",
+      "BlinkCmpSignatureHelp",
+      "BlinkCmpSignatureHelpBorder",
+    ]) {
+      expect(groups).toContain(`["${group}"]`);
+    }
+    expect(groups).toContain('["BlinkCmpMenuSelection"] = { link = "PmenuSel" }');
+    expect(groups).toContain('["BlinkCmpDocBorder"] = { link = "FloatBorder" }');
+    expect(groups).toContain('["BlinkCmpKindWindsurf"] = { fg = c["status.info"] }');
+  });
+
   test("colors entrypoints load their mood", () => {
     for (const mood of moods) {
       expect(file(`colors/hue-${mood.id}.lua`)).toContain(`require("hue").load("${mood.id}")`);
