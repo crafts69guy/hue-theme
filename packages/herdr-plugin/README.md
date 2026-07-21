@@ -29,6 +29,15 @@ agent-state indicators are all Hue-colored — not just the handful of tokens
 herdr's docs mention. herdr silently ignores unknown `[theme.custom]` keys;
 the slot roles were verified empirically against herdr 0.7.3.
 
+Since 0.3.0 `apply-mood` also themes **[`hunk`](https://github.com/modem-dev/hunk)**,
+the review-first diff viewer the [`herdr-ghq`](https://github.com/crafts69guy/herdr-ghq)
+plugin opens for git reviews. hunk has no external named-theme switch, so the active
+mood's full config (chrome, diff content area, and syntax scopes — all from the Hue
+tokens, translucent to match) is written to `~/.config/hunk/config.toml`. It is only
+written when that file is absent or already Hue/herdr-ghq-generated, so a hand-edited
+hunk config is never clobbered; the bundled `hunk/hue-<mood>.toml` fragments are build
+output like `themes/`.
+
 ## Installation
 
 ```sh

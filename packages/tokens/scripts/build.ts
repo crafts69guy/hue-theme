@@ -3,6 +3,7 @@ import { basename, dirname, resolve } from "node:path";
 import { batManifest, renderBatFiles } from "../src/adapters/bat";
 import { ghosttyManifest, renderGhosttyFiles } from "../src/adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "../src/adapters/herdr";
+import { hunkManifest, renderHunkFiles } from "../src/adapters/hunk";
 import { inkdropManifest, renderInkdropPackages } from "../src/adapters/inkdrop";
 import { lazygitManifest, renderLazygitFiles } from "../src/adapters/lazygit";
 import { neovimManifest, renderNeovimFiles } from "../src/adapters/neovim";
@@ -144,6 +145,7 @@ validateManifest("ghostty", ghosttyManifest);
 validateManifest("bat", batManifest);
 validateManifest("lazygit", lazygitManifest);
 validateManifest("herdr", herdrManifest);
+validateManifest("hunk", hunkManifest);
 validateManifest("tmux", tmuxManifest);
 validateManifest("tide", tideManifest);
 validateManifest("inkdrop", inkdropManifest);
@@ -236,6 +238,9 @@ const outputs: Array<[string, string]> = [
     (file) => [resolve(root, "../terminal-themes", file.path), file.content] as [string, string],
   ),
   ...renderHerdrFiles(themes).map(
+    (file) => [resolve(root, "../herdr-plugin", file.path), file.content] as [string, string],
+  ),
+  ...renderHunkFiles(themes).map(
     (file) => [resolve(root, "../herdr-plugin", file.path), file.content] as [string, string],
   ),
   ...renderTmuxFiles(themes).map(

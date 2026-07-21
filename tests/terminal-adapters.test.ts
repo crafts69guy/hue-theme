@@ -3,6 +3,7 @@ import { themeBundle } from "../packages/tokens/generated/themes";
 import { batManifest, renderBatFiles } from "../packages/tokens/src/adapters/bat";
 import { ghosttyManifest, renderGhosttyFiles } from "../packages/tokens/src/adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "../packages/tokens/src/adapters/herdr";
+import { hunkManifest, renderHunkFiles } from "../packages/tokens/src/adapters/hunk";
 import { lazygitManifest, renderLazygitFiles } from "../packages/tokens/src/adapters/lazygit";
 import { terminalColors } from "../packages/tokens/src/adapters/terminal";
 import { renderTideFiles, tideManifest } from "../packages/tokens/src/adapters/tide";
@@ -201,6 +202,63 @@ describe("Hue → herdr adapter", () => {
       expect(contrastRatio(s["text.secondary"], s["surface.canvas"])).toBeGreaterThanOrEqual(3);
       expect(contrastRatio(s["surface.raised"], s["accent.primary"])).toBeGreaterThanOrEqual(3);
       expect(contrastRatio(mood.primitive.fog, s["surface.canvas"])).toBeGreaterThanOrEqual(2.5);
+    }
+  });
+});
+
+describe("Hue → hunk adapter", () => {
+  const files = renderHunkFiles(moods);
+
+  test("accounts for every contract family", () => {
+    expect(() => validateManifest("hunk", hunkManifest)).not.toThrow();
+  });
+
+  test("emits one config.toml per mood", () => {
+    expect(files.map((f) => f.path).sort()).toEqual(
+      moods.map((m) => `hunk/hue-${m.id}.toml`).sort(),
+    );
+  });
+
+  test("selects an inline custom theme, translucent, with an ownership marker", () => {
+    for (const { content } of files) {
+      // apply.sh (and herdr-ghq) key off this first line to decide ownership.
+      expect(content.startsWith("# hue-theme managed")).toBe(true);
+      expect(content).toContain('theme = "custom"');
+      expect(content).toContain("transparent_background = true");
+      expect(content).toContain("[custom_theme]");
+      expect(content).toContain("[custom_theme.syntax_scopes]");
+    }
+  });
+
+  test("themes chrome, the diff content area, and syntax from the mood", () => {
+    for (const mood of moods) {
+      const content = files.find((f) => f.path === `hunk/hue-${mood.id}.toml`)?.content ?? "";
+      const s = mood.semantic;
+      expect(content).toContain(`background = "${s["surface.canvas"]}"`);
+      expect(content).toContain(`accent = "${s["accent.primary"]}"`);
+      expect(content).toContain(`badgeAdded = "${s["status.success"]}"`);
+      // the diff content area sits on the canvas, not the base theme's near-black
+      expect(content).toContain(`contextBg = "${s["surface.canvas"]}"`);
+      // syntax scopes carry the mood's syntax roles
+      expect(content).toContain(`"keyword" = "${s["syntax.keyword"]}"`);
+      expect(content).toContain(`"string" = "${s["syntax.string"]}"`);
+      expect(content).toContain(`"comment" = "${s["syntax.comment"]}"`);
+    }
+  });
+
+  test("picks a base matching the mood's appearance", () => {
+    for (const mood of moods) {
+      const content = files.find((f) => f.path === `hunk/hue-${mood.id}.toml`)?.content ?? "";
+      const base = mood.appearance === "light" ? "github-light-default" : "github-dark-default";
+      expect(content).toContain(`base = "${base}"`);
+    }
+  });
+
+  test("every value is a valid hex colour", () => {
+    for (const { content } of files) {
+      for (const [, value] of content.matchAll(/= "(#[^"]*)"/g)) {
+        expect(value).toMatch(HEX);
+      }
     }
   });
 });
