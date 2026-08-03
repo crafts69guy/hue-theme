@@ -40,6 +40,7 @@ identical across hosts.
 | **Fish / Tide**      | [`packages/fish-themes`](packages/fish-themes)         | sourceable Fish theme files                                                   |
 | **Yaak**             | [`packages/yaak-plugin`](packages/yaak-plugin)         | sideload / plugin registry                                                    |
 | **Inkdrop**          | `packages/hue-*-theme`                                 | 3 unified Inkdrop v6 packages with Mermaid colors                             |
+| **herdr + tuicr**    | [`packages/herdr-plugin`](packages/herdr-plugin)       | `herdr plugin install` — themes herdr and the tuicr review TUI                |
 
 ## How it works
 

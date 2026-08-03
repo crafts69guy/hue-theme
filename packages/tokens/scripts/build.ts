@@ -3,12 +3,12 @@ import { basename, dirname, resolve } from "node:path";
 import { batManifest, renderBatFiles } from "../src/adapters/bat";
 import { ghosttyManifest, renderGhosttyFiles } from "../src/adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "../src/adapters/herdr";
-import { hunkManifest, renderHunkFiles } from "../src/adapters/hunk";
 import { inkdropManifest, renderInkdropPackages } from "../src/adapters/inkdrop";
 import { lazygitManifest, renderLazygitFiles } from "../src/adapters/lazygit";
 import { neovimManifest, renderNeovimFiles } from "../src/adapters/neovim";
 import { renderTideFiles, tideManifest } from "../src/adapters/tide";
 import { renderTmuxFiles, tmuxManifest } from "../src/adapters/tmux";
+import { renderTuicrFiles, tuicrManifest } from "../src/adapters/tuicr";
 import { renderYaakPluginSource, yaakManifest } from "../src/adapters/yaak";
 import { contrastRatio } from "../src/color";
 import { CONTRACT, validateManifest } from "../src/contract";
@@ -145,7 +145,7 @@ validateManifest("ghostty", ghosttyManifest);
 validateManifest("bat", batManifest);
 validateManifest("lazygit", lazygitManifest);
 validateManifest("herdr", herdrManifest);
-validateManifest("hunk", hunkManifest);
+validateManifest("tuicr", tuicrManifest);
 validateManifest("tmux", tmuxManifest);
 validateManifest("tide", tideManifest);
 validateManifest("inkdrop", inkdropManifest);
@@ -240,8 +240,18 @@ const outputs: Array<[string, string]> = [
   ...renderHerdrFiles(themes).map(
     (file) => [resolve(root, "../herdr-plugin", file.path), file.content] as [string, string],
   ),
-  ...renderHunkFiles(themes).map(
+  ...renderTuicrFiles(themes).map(
     (file) => [resolve(root, "../herdr-plugin", file.path), file.content] as [string, string],
+  ),
+  // The bat .tmTheme, copied in beside the tuicr theme that names it: tuicr
+  // resolves `syntax_theme` relative to the theme file, so the pair has to
+  // install together and the herdr-plugin package has to carry both.
+  ...renderBatFiles(themes).map(
+    (file) =>
+      [resolve(root, "../herdr-plugin/tuicr", basename(file.path)), file.content] as [
+        string,
+        string,
+      ],
   ),
   ...renderTmuxFiles(themes).map(
     (file) => [resolve(root, "../tmux-plugin", file.path), file.content] as [string, string],

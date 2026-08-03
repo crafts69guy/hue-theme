@@ -29,14 +29,26 @@ agent-state indicators are all Hue-colored — not just the handful of tokens
 herdr's docs mention. herdr silently ignores unknown `[theme.custom]` keys;
 the slot roles were verified empirically against herdr 0.7.3.
 
-Since 0.3.0 `apply-mood` also themes **[`hunk`](https://github.com/modem-dev/hunk)**,
-the review-first diff viewer the [`herdr-ghq`](https://github.com/crafts69guy/herdr-ghq)
-plugin opens for git reviews. hunk has no external named-theme switch, so the active
-mood's full config (chrome, diff content area, and syntax scopes — all from the Hue
-tokens, translucent to match) is written to `~/.config/hunk/config.toml`. It is only
-written when that file is absent or already Hue/herdr-ghq-generated, so a hand-edited
-hunk config is never clobbered; the bundled `hunk/hue-<mood>.toml` fragments are build
-output like `themes/`.
+`apply-mood` also themes **[`tuicr`](https://github.com/agavra/tuicr)**, the review
+TUI the [`herdr-ghq`](https://github.com/crafts69guy/herdr-ghq) plugin opens for git
+reviews. (It replaces the `hunk` theming that shipped in 0.3.0–0.4.x; herdr-ghq moved
+to tuicr, and nothing here writes a hunk config any more.)
+
+tuicr takes named local themes, so — unlike hunk — **your `~/.config/tuicr/config.toml`
+is never overwritten**. `apply-mood` copies two files of its own into
+`~/.config/tuicr/themes/`:
+
+- `hue-<mood>.toml` — the theme. All 41 of tuicr's required colour keys, from the Hue
+  tokens: chrome, the diff area (add/remove rows tinted onto the Hue canvas), file and
+  review status, comment badges, and messages.
+- `hue-<mood>.tmTheme` — the same bat theme this repo generates, which the theme's
+  `syntax_theme` points at. tuicr resolves that path relative to the theme file, which
+  is why the pair installs together.
+
+It then splices one line, `theme = "hue-<mood>"`, into tuicr's config, rewriting an
+existing `theme =` in place and leaving every other setting alone.
+
+Both bundled `tuicr/hue-<mood>.*` files are build output, like `themes/`.
 
 ## Installation
 

@@ -3,11 +3,15 @@ import { themeBundle } from "../packages/tokens/generated/themes";
 import { batManifest, renderBatFiles } from "../packages/tokens/src/adapters/bat";
 import { ghosttyManifest, renderGhosttyFiles } from "../packages/tokens/src/adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "../packages/tokens/src/adapters/herdr";
-import { hunkManifest, renderHunkFiles } from "../packages/tokens/src/adapters/hunk";
 import { lazygitManifest, renderLazygitFiles } from "../packages/tokens/src/adapters/lazygit";
 import { terminalColors } from "../packages/tokens/src/adapters/terminal";
 import { renderTideFiles, tideManifest } from "../packages/tokens/src/adapters/tide";
 import { renderTmuxFiles, tmuxManifest } from "../packages/tokens/src/adapters/tmux";
+import {
+  renderTuicrFiles,
+  TUICR_REQUIRED_KEYS,
+  tuicrManifest,
+} from "../packages/tokens/src/adapters/tuicr";
 import { contrastRatio } from "../packages/tokens/src/color";
 import { validateManifest } from "../packages/tokens/src/contract";
 
@@ -206,58 +210,98 @@ describe("Hue → herdr adapter", () => {
   });
 });
 
-describe("Hue → hunk adapter", () => {
-  const files = renderHunkFiles(moods);
+describe("Hue → tuicr adapter", () => {
+  const files = renderTuicrFiles(moods);
+  const colorKeys = (content: string) =>
+    [...content.matchAll(/^([a-z_]+) = "/gm)].map((m) => m[1]).filter((k) => k !== "syntax_theme");
 
   test("accounts for every contract family", () => {
-    expect(() => validateManifest("hunk", hunkManifest)).not.toThrow();
+    expect(() => validateManifest("tuicr", tuicrManifest)).not.toThrow();
   });
 
-  test("emits one config.toml per mood", () => {
+  test("emits one theme file per mood", () => {
     expect(files.map((f) => f.path).sort()).toEqual(
-      moods.map((m) => `hunk/hue-${m.id}.toml`).sort(),
+      moods.map((m) => `tuicr/hue-${m.id}.toml`).sort(),
     );
   });
 
-  test("selects an inline custom theme, translucent, with an ownership marker", () => {
-    for (const { content } of files) {
-      // apply.sh (and herdr-ghq) key off this first line to decide ownership.
-      expect(content.startsWith("# hue-theme managed")).toBe(true);
-      expect(content).toContain('theme = "custom"');
-      expect(content).toContain("transparent_background = true");
-      expect(content).toContain("[custom_theme]");
-      expect(content).toContain("[custom_theme.syntax_scopes]");
+  // The one that matters most. tuicr has no defaults: `require_local_theme_color`
+  // errors on a missing key and tuicr exits 2 — so an incomplete theme is not a
+  // colour bug, it is every review failing to open.
+  test("carries all 41 required colour keys, with no duplicates", () => {
+    for (const { path, content } of files) {
+      const keys = colorKeys(content);
+      expect(`${path}: ${keys.length}`).toBe(`${path}: ${TUICR_REQUIRED_KEYS}`);
+      expect(new Set(keys).size).toBe(TUICR_REQUIRED_KEYS);
     }
   });
 
-  test("themes chrome, the diff content area, and syntax from the mood", () => {
+  test("every mood declares the same key set", () => {
+    const [first, ...rest] = files.map(({ content }) => colorKeys(content).sort().join("\n"));
+    for (const keys of rest) expect(keys).toBe(first);
+  });
+
+  test("points syntax highlighting at the bat theme beside it", () => {
     for (const mood of moods) {
-      const content = files.find((f) => f.path === `hunk/hue-${mood.id}.toml`)?.content ?? "";
+      const content = files.find((f) => f.path === `tuicr/hue-${mood.id}.toml`)?.content ?? "";
+      expect(content).toContain(`syntax_theme = "hue-${mood.id}.tmTheme"`);
+    }
+  });
+
+  test("themes chrome and the diff area from the mood", () => {
+    for (const mood of moods) {
+      const content = files.find((f) => f.path === `tuicr/hue-${mood.id}.toml`)?.content ?? "";
       const s = mood.semantic;
-      expect(content).toContain(`background = "${s["surface.canvas"]}"`);
-      expect(content).toContain(`accent = "${s["accent.primary"]}"`);
-      expect(content).toContain(`badgeAdded = "${s["status.success"]}"`);
-      // the diff content area sits on the canvas, not the base theme's near-black
-      expect(content).toContain(`contextBg = "${s["surface.canvas"]}"`);
-      // syntax scopes carry the mood's syntax roles
-      expect(content).toContain(`"keyword" = "${s["syntax.keyword"]}"`);
-      expect(content).toContain(`"string" = "${s["syntax.string"]}"`);
-      expect(content).toContain(`"comment" = "${s["syntax.comment"]}"`);
+      expect(content).toContain(`panel_bg = "${s["surface.canvas"]}"`);
+      expect(content).toContain(`fg_primary = "${s["text.primary"]}"`);
+      expect(content).toContain(`border_focused = "${s["accent.primary"]}"`);
+      expect(content).toContain(`diff_add = "${s["status.success"]}"`);
+      expect(content).toContain(`diff_del = "${s["status.error"]}"`);
+      // The diff rows sit on the Hue canvas, tinted — never a stock near-black.
+      expect(content).not.toContain(`diff_add_bg = "${s["status.success"]}"`);
     }
   });
 
-  test("picks a base matching the mood's appearance", () => {
-    for (const mood of moods) {
-      const content = files.find((f) => f.path === `hunk/hue-${mood.id}.toml`)?.content ?? "";
-      const base = mood.appearance === "light" ? "github-light-default" : "github-dark-default";
-      expect(content).toContain(`base = "${base}"`);
-    }
-  });
-
+  // tuicr accepts only #RRGGBB or a terminal colour name — no 256-indices, no
+  // modifiers, no `none`. Everything we emit is a hex.
   test("every value is a valid hex colour", () => {
     for (const { content } of files) {
-      for (const [, value] of content.matchAll(/= "(#[^"]*)"/g)) {
+      for (const [, value] of content.matchAll(/^[a-z_]+ = "(#[^"]*)"$/gm)) {
         expect(value).toMatch(HEX);
+      }
+    }
+  });
+
+  // The two values derived at the adapter rather than added to the closed `text`
+  // family. Both are only defensible if they measure up, so measure them.
+  test("the derived text.muted stays legible on the canvas", () => {
+    for (const mood of moods) {
+      const content = files.find((f) => f.path === `tuicr/hue-${mood.id}.toml`)?.content ?? "";
+      const dim = content.match(/^fg_dim = "(#[0-9A-F]{6})"$/m)?.[1] ?? "";
+      expect(dim).toMatch(HEX);
+      expect(contrastRatio(dim, mood.semantic["surface.canvas"])).toBeGreaterThanOrEqual(3);
+      // …and it is genuinely dimmer than text.secondary, not a copy of it.
+      expect(dim).not.toBe(mood.semantic["text.secondary"]);
+    }
+  });
+
+  test("the derived text.on-accent is legible on every fill it lands on", () => {
+    const fills: Array<[string, string]> = [
+      ["message_info", "status.info"],
+      ["message_warning", "status.warning"],
+      ["message_error", "status.error"],
+      ["update_badge", "status.notice"],
+      ["mode", "accent.primary"],
+    ];
+    for (const mood of moods) {
+      const content = files.find((f) => f.path === `tuicr/hue-${mood.id}.toml`)?.content ?? "";
+      for (const [prefix, role] of fills) {
+        const fg = content.match(new RegExp(`^${prefix}_fg = "(#[0-9A-F]{6})"$`, "m"))?.[1] ?? "";
+        expect(fg).toMatch(HEX);
+        const ratio = contrastRatio(fg, mood.semantic[role]);
+        expect(`${mood.id}:${prefix} ${ratio.toFixed(2)}`).toBe(
+          `${mood.id}:${prefix} ${Math.max(ratio, 4.5).toFixed(2)}`,
+        );
       }
     }
   });

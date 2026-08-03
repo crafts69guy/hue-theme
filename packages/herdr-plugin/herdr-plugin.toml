@@ -1,13 +1,13 @@
 id = "hue-theme"
 name = "Hue Theme"
-version = "0.3.0"
+version = "0.4.0"
 min_herdr_version = "0.7.1"
-description = "Apply the Hue Tide theme (mua/huong/cung) to herdr's [theme.custom] and to hunk's review config, synced with hue-theme.fish."
+description = "Apply the Hue Tide theme (mua/huong/cung) to herdr's [theme.custom] and to tuicr's review theme, synced with hue-theme.fish."
 
 [[actions]]
 id = "apply-mood"
 title = "Apply Hue Theme"
-description = "Splice the current Hue mood into herdr's config.toml and write hunk's review theme, then reload."
+description = "Splice the current Hue mood into herdr's config.toml and install tuicr's review theme, then reload."
 contexts = ["global"]
 command = ["bash", "apply.sh"]
 
