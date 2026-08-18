@@ -127,6 +127,26 @@ describe("Hue -> Inkdrop adapter", () => {
     }
   });
 
+  // The README is the registry listing, so it has to work for someone installing
+  // from the registry — the old copy told them to install a path that only exists
+  // in this checkout, and `ipm install ./path` 404s anyway.
+  test("writes a README that works for a registry install", () => {
+    for (const pack of packages) {
+      const readme = fileContent(pack, "README.md");
+      const mood = themeBundle.themes.find((candidate) => candidate.id === pack.moodId);
+
+      expect(readme).toContain(`ipm install ${pack.packageName}`);
+      expect(readme).not.toContain("ipm install ./");
+      expect(readme).toContain(`# ${mood?.label}`);
+      // Relative paths do not resolve on the plugin site.
+      expect(readme).toContain(
+        `https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/inkdrop-${pack.moodId}.png`,
+      );
+      // Cross-links point at the siblings, never at itself.
+      expect(readme).not.toContain(`/plugins/${pack.packageName})`);
+    }
+  });
+
   // Inkdrop scopes its own scrollbar rules to Windows and Linux, so on macOS the
   // theme's scrollbar variables are inert and the native grey shows. These rules
   // are unscoped on purpose; losing them puts the grey back with no error.

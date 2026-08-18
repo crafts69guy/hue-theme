@@ -110,7 +110,7 @@ function renderPackageJson(mood: ResolvedMood): string {
   return `${JSON.stringify(
     {
       name: packageName(mood),
-      version: "0.6.0",
+      version: "0.6.1",
       theme: true,
       themeAppearance: mood.appearance,
       description: themeDescription(mood),
@@ -143,22 +143,86 @@ function renderPackageJson(mood: ResolvedMood): string {
   )}\n`;
 }
 
-function renderReadme(mood: ResolvedMood): string {
-  return `# ${packageName(mood)}
+const RAW_BASE = "https://raw.githubusercontent.com/crafts69guy/hue-theme/main";
 
-${themeDescription(mood)}.
+/** The mood's own sentence, minus the "Mưa — " label the token file prefixes. */
+function moodTagline(mood: ResolvedMood): string {
+  const body = mood.description.replace(/^[^—]*—\s*/, "");
+  return body.charAt(0).toUpperCase() + body.slice(1);
+}
 
-This unified Inkdrop v6 package styles the app UI, editor syntax, rendered
-Markdown preview, and Mermaid diagrams.
+// The README is what the registry listing shows, so it is a shopfront, not a
+// build note. Images have to be absolute: relative paths do not resolve on the
+// plugin site, and the screenshots deliberately are not shipped inside the
+// package so installs stay small.
+function renderReadme(mood: ResolvedMood, siblings: ResolvedMood[]): string {
+  const swatch = (label: string, token: SemanticToken) =>
+    `| ${label} | \`${role(mood, token).toLowerCase()}\` |`;
 
-This package is generated from the Hue Theme token contract. Do not edit the
-CSS by hand; update the source tokens or Inkdrop adapter and run the token build.
+  const family = siblings
+    .map((other) =>
+      other.id === mood.id
+        ? `- **${other.label}** — ${other.appearance}, this one`
+        : `- [${other.label}](https://my.inkdrop.app/plugins/${packageName(other)}) — ${other.appearance}`,
+    )
+    .join("\n");
 
-## Install locally
+  return `<div align="center">
 
-\`\`\`fish
-ipm install ./packages/${packageName(mood)}
+<img src="${RAW_BASE}/design/hue-mark.svg" alt="" width="64" />
+
+# ${mood.label}
+
+${moodTagline(mood)}
+
+<img src="${RAW_BASE}/design/inkdrop-${mood.id}.png" alt="${mood.label} in Inkdrop" width="900" />
+
+</div>
+
+## Install
+
 \`\`\`
+ipm install ${packageName(mood)}
+\`\`\`
+
+Or open **Preferences → Plugins**, search for \`${packageName(mood)}\`, and install
+it there. Pick the theme under **Preferences → Themes**.
+
+## What it covers
+
+One package for the whole app: sidebar and note list chrome, the editor and its
+syntax, the rendered Markdown preview, GitHub alerts, Mermaid diagrams, and the
+scrollbars. Every colour resolves from a single token contract, so the four
+surfaces cannot drift apart.
+
+Translucency is supported: turn on **Enable acrylic translucent background** in
+Preferences and the chrome thins out over the desktop while text keeps its
+ground.
+
+## Palette
+
+| Role | Colour |
+| --- | --- |
+${swatch("Canvas", "surface.canvas")}
+${swatch("Raised", "surface.raised")}
+${swatch("Text", "text.primary")}
+${swatch("Accent", "accent.primary")}
+${swatch("Secondary", "accent.secondary")}
+
+## The family
+
+Three moods, one token contract:
+
+${family}
+
+## Notes
+
+Generated from the Hue Theme token contract — the CSS in this package is build
+output, so file an issue or send a patch against
+[crafts69guy/hue-theme](https://github.com/crafts69guy/hue-theme) rather than
+editing it in place.
+
+MIT licensed.
 `;
 }
 
@@ -791,7 +855,7 @@ ${cssVars(vars, "    ")}
 `;
 }
 
-function renderInkdropPackage(mood: ResolvedMood): InkdropPackage {
+function renderInkdropPackage(mood: ResolvedMood, allMoods: ResolvedMood[]): InkdropPackage {
   const name = packageName(mood);
   return {
     packageName: name,
@@ -799,7 +863,7 @@ function renderInkdropPackage(mood: ResolvedMood): InkdropPackage {
     moodId: mood.id,
     files: [
       { path: "package.json", content: renderPackageJson(mood) },
-      { path: "README.md", content: renderReadme(mood) },
+      { path: "README.md", content: renderReadme(mood, allMoods) },
       { path: "LICENSE", content: renderLicense() },
       { path: "styles/palette.css", content: renderPaletteCss(mood) },
       { path: "styles/ui.css", content: renderUiCss(mood) },
@@ -810,5 +874,5 @@ function renderInkdropPackage(mood: ResolvedMood): InkdropPackage {
 }
 
 export function renderInkdropPackages(moods: ResolvedMood[]): InkdropPackage[] {
-  return moods.map(renderInkdropPackage);
+  return moods.map((mood) => renderInkdropPackage(mood, moods));
 }
