@@ -245,8 +245,8 @@
 
   :root:has(body.acrylic-window) {
     --page-background: transparent;
-    --sidebar-background: rgb(24 42 36 / 35%);
-    --note-list-bar-background: rgb(24 42 36 / 60%);
-    --editor-background: rgb(15 29 25 / 60%);
+    --sidebar-background: rgb(24 42 36 / 72%);
+    --note-list-bar-background: rgb(24 42 36 / 72%);
+    --editor-background: rgb(15 29 25 / 72%);
   }
 }

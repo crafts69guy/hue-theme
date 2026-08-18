@@ -40,6 +40,12 @@ function translucent(hex: string, percent: number): string {
   return `rgb(${r} ${g} ${b} / ${percent}%)`;
 }
 
+// The share of its own colour each surface keeps once the acrylic window is on.
+// One value for every surface and every mood, because the point of comparison is
+// a terminal set to a single `background-opacity` — a theme that varies the
+// figure per panel reads as uneven rather than translucent.
+const ACRYLIC_OPACITY = 72;
+
 // When the user turns on the acrylic/vibrancy window, Inkdrop paints a blurred
 // desktop behind the window and marks the document `body.acrylic-window`. A
 // theme only reveals that layer if it stops painting opaque surfaces over it, so
@@ -47,19 +53,19 @@ function translucent(hex: string, percent: number): string {
 // — exactly what the built-in themes do. Without this block the setting is
 // enabled but has no visible effect on a Hue theme.
 //
-// The page drops out entirely; the chrome keeps a light tint so it still reads as
-// the mood; the reading surfaces stay mostly opaque so text never sits directly
-// on the desktop. Dark moods go a step further than light ones, since a dark
-// tint hides a busy wallpaper less well. Floating panels (drawers, dropdowns,
-// menus) are deliberately left opaque — they overlap arbitrary content.
+// The sidebar, note list, and editor tile the whole window, so they carry the
+// opacity. The page behind them drops out entirely rather than taking the same
+// figure: two stacked 72% layers would leave only 8% of the desktop showing,
+// which reads as opaque. One alpha layer per region is the whole trick, and it
+// is why the built-in themes zero the page too. Floating panels (drawers,
+// dropdowns, menus) stay opaque — they overlap arbitrary content.
 function acrylicVars(mood: ResolvedMood): Record<string, string> {
-  const dark = mood.appearance === "dark";
   const raised = role(mood, "surface.raised");
   return {
     "--page-background": "transparent",
-    "--sidebar-background": translucent(raised, dark ? 35 : 45),
-    "--note-list-bar-background": translucent(raised, dark ? 60 : 75),
-    "--editor-background": translucent(role(mood, "surface.canvas"), dark ? 60 : 70),
+    "--sidebar-background": translucent(raised, ACRYLIC_OPACITY),
+    "--note-list-bar-background": translucent(raised, ACRYLIC_OPACITY),
+    "--editor-background": translucent(role(mood, "surface.canvas"), ACRYLIC_OPACITY),
   };
 }
 
@@ -79,7 +85,7 @@ function renderPackageJson(mood: ResolvedMood): string {
   return `${JSON.stringify(
     {
       name: packageName(mood),
-      version: "0.5.0",
+      version: "0.5.1",
       theme: true,
       themeAppearance: mood.appearance,
       description: themeDescription(mood),
