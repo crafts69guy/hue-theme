@@ -15,6 +15,6 @@ describe("Hue Theme token contract", () => {
   test("pins each mood's appearance", () => {
     expect(
       Object.fromEntries(themeBundle.themes.map((theme) => [theme.id, theme.appearance])),
-    ).toEqual({ cung: "light", huong: "dark", mua: "light" });
+    ).toEqual({ cung: "light", huong: "dark", mua: "dark" });
   });
 });
