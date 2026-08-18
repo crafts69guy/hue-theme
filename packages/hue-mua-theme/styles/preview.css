@@ -4,121 +4,121 @@
 @layer theme.preview {
   :root {
     color-scheme: dark;
-    --page-background: #15191b;
-    --text-color: #cfccc2;
-    --link-color: #7fb89c;
-    --link-hover-color: #7fb89c;
-    --table-background: #15191b;
-    --table-header-background: #23282a;
-    --table-header-color: #cfccc2;
-    --md-inline-code-background-color: #23282a;
-    --md-codeblock-color: #cfccc2;
-    --md-codeblock-background-color: #23282a;
-    --md-inline-mark-text-color: #cfccc2;
-    --md-inline-mark-background-color: #afa3ce;
-    --md-inline-mark-underline-color: #d9bc8a;
-    --md-table-background-color: #23282a;
-    --md-blockquote-border-color: #afa3ce;
-    --md-list-mark-color: #7fb89c;
-    --syntax-comment-color: #6e7f7a;
-    --syntax-keyword-color: #afa3ce;
-    --syntax-string-color: #7fb89c;
-    --syntax-number-color: #d9bc8a;
-    --syntax-name-function-color: #84aec0;
-    --syntax-operator-color: #cc8079;
-    --syntax-punctuation-color: #8b948f;
-    --mde-preview-heading-color: #d9bc8a;
-    --mde-preview-link-color: #7fb89c;
-    --mde-preview-em-color: #cfccc2;
-    --mde-preview-strong-color: #cfccc2;
-    --mde-preview-blockquote-text-color: #9da39e;
-    --mde-preview-blockquote-border-color: #afa3ce;
-    --mde-preview-inline-code-text-color: #7fb89c;
-    --mde-preview-inline-code-background-color: #23282a;
-    --mde-preview-inline-code-border-color: #5b6f69;
+    --page-background: #001523;
+    --text-color: #e5f4ff;
+    --link-color: #00cf6a;
+    --link-hover-color: #00cf6a;
+    --table-background: #001523;
+    --table-header-background: #001f3e;
+    --table-header-color: #e5f4ff;
+    --md-inline-code-background-color: #001f3e;
+    --md-codeblock-color: #e5f4ff;
+    --md-codeblock-background-color: #001f3e;
+    --md-inline-mark-text-color: #e5f4ff;
+    --md-inline-mark-background-color: #8a7bff;
+    --md-inline-mark-underline-color: #ff8d00;
+    --md-table-background-color: #001f3e;
+    --md-blockquote-border-color: #8a7bff;
+    --md-list-mark-color: #00cf6a;
+    --syntax-comment-color: #5c7186;
+    --syntax-keyword-color: #8a7bff;
+    --syntax-string-color: #00cf6a;
+    --syntax-number-color: #ff8d00;
+    --syntax-name-function-color: #10b6f8;
+    --syntax-operator-color: #ff5a63;
+    --syntax-punctuation-color: #8ca3bd;
+    --mde-preview-heading-color: #ff8d00;
+    --mde-preview-link-color: #00cf6a;
+    --mde-preview-em-color: #e5f4ff;
+    --mde-preview-strong-color: #e5f4ff;
+    --mde-preview-blockquote-text-color: #9db4d4;
+    --mde-preview-blockquote-border-color: #8a7bff;
+    --mde-preview-inline-code-text-color: #00cf6a;
+    --mde-preview-inline-code-background-color: #001f3e;
+    --mde-preview-inline-code-border-color: #456c94;
     --mde-preview-inline-code-border-width: 1px;
-    --mde-preview-codeblock-background-color: #23282a;
-    --mde-preview-codeblock-meta-background-color: #2d4640;
-    --mde-preview-image-background-color: #23282a;
-    --mde-preview-inline-mark-background-color: #afa3ce;
-    --mde-preview-inline-mark-text-color: #cfccc2;
-    --mde-preview-inline-mark-underline-color: #d9bc8a;
-    --mde-preview-table-head-background-color: #23282a;
-    --mde-preview-table-head-text-color: #cfccc2;
-    --mde-preview-table-row-background-color: #15191b;
-    --mde-preview-table-row-stripe-background-color: #23282a;
-    --mermaid-background-color: #15191b;
-    --mermaid-node-background-color: #23282a;
-    --mermaid-node-border-color: #7fb89c;
-    --mermaid-node-text-color: #cfccc2;
-    --mermaid-line-color: #5b6f69;
-    --mermaid-label-text-color: #cfccc2;
-    --mermaid-edge-label-background-color: #15191b;
-    --mermaid-cluster-background-color: color-mix(in srgb, #23282a 72%, transparent);
-    --mermaid-cluster-border-color: #5b6f69;
-    --mermaid-title-text-color: #cfccc2;
-    --mermaid-primary-color: #7fb89c;
-    --mermaid-primary-text-color: #15191b;
-    --mermaid-primary-border-color: #7fb89c;
-    --mermaid-secondary-color: #afa3ce;
-    --mermaid-secondary-text-color: #15191b;
-    --mermaid-secondary-border-color: #afa3ce;
-    --mermaid-tertiary-color: #d9bc8a;
-    --mermaid-tertiary-text-color: #15191b;
-    --mermaid-tertiary-border-color: #d9bc8a;
-    --mermaid-note-background-color: #afa3ce;
-    --mermaid-note-border-color: #d9bc8a;
-    --mermaid-note-text-color: #cfccc2;
-    --mermaid-actor-background-color: #23282a;
-    --mermaid-actor-border-color: #7fb89c;
-    --mermaid-actor-text-color: #cfccc2;
-    --mermaid-activation-background-color: #2d4640;
-    --mermaid-activation-border-color: #7fb89c;
-    --mermaid-sequence-number-color: #9da39e;
-    --mermaid-loop-text-color: #cfccc2;
-    --mermaid-loop-line-color: #5b6f69;
-    --mermaid-state-background-color: #23282a;
-    --mermaid-state-border-color: #7fb89c;
-    --mermaid-state-text-color: #cfccc2;
-    --mermaid-class-background-color: #23282a;
-    --mermaid-class-border-color: #afa3ce;
-    --mermaid-class-text-color: #cfccc2;
-    --mermaid-er-entity-background-color: #23282a;
-    --mermaid-er-entity-border-color: #7fb89c;
-    --mermaid-er-entity-text-color: #cfccc2;
-    --mermaid-gantt-active-task-color: #7fb89c;
-    --mermaid-gantt-done-task-color: #7fb89c;
-    --mermaid-gantt-critical-task-color: #cc8079;
-    --mermaid-git-branch-label-color: #15191b;
-    --border-color: #5b6f6966;
-    --md-codeblock-border-color: color-mix(in srgb, #5b6f69 30%, #23282a);
-    --md-table-border-color: color-mix(in srgb, #5b6f69 30%, #23282a);
-    --md-inline-code-border-color: #5b6f6966;
+    --mde-preview-codeblock-background-color: #001f3e;
+    --mde-preview-codeblock-meta-background-color: #0a3566;
+    --mde-preview-image-background-color: #001f3e;
+    --mde-preview-inline-mark-background-color: #8a7bff;
+    --mde-preview-inline-mark-text-color: #e5f4ff;
+    --mde-preview-inline-mark-underline-color: #ff8d00;
+    --mde-preview-table-head-background-color: #001f3e;
+    --mde-preview-table-head-text-color: #e5f4ff;
+    --mde-preview-table-row-background-color: #001523;
+    --mde-preview-table-row-stripe-background-color: #001f3e;
+    --mermaid-background-color: #001523;
+    --mermaid-node-background-color: #001f3e;
+    --mermaid-node-border-color: #00cf6a;
+    --mermaid-node-text-color: #e5f4ff;
+    --mermaid-line-color: #456c94;
+    --mermaid-label-text-color: #e5f4ff;
+    --mermaid-edge-label-background-color: #001523;
+    --mermaid-cluster-background-color: color-mix(in srgb, #001f3e 72%, transparent);
+    --mermaid-cluster-border-color: #456c94;
+    --mermaid-title-text-color: #e5f4ff;
+    --mermaid-primary-color: #00cf6a;
+    --mermaid-primary-text-color: #001523;
+    --mermaid-primary-border-color: #00cf6a;
+    --mermaid-secondary-color: #8a7bff;
+    --mermaid-secondary-text-color: #001523;
+    --mermaid-secondary-border-color: #8a7bff;
+    --mermaid-tertiary-color: #ff8d00;
+    --mermaid-tertiary-text-color: #001523;
+    --mermaid-tertiary-border-color: #ff8d00;
+    --mermaid-note-background-color: #8a7bff;
+    --mermaid-note-border-color: #ff8d00;
+    --mermaid-note-text-color: #e5f4ff;
+    --mermaid-actor-background-color: #001f3e;
+    --mermaid-actor-border-color: #00cf6a;
+    --mermaid-actor-text-color: #e5f4ff;
+    --mermaid-activation-background-color: #0a3566;
+    --mermaid-activation-border-color: #00cf6a;
+    --mermaid-sequence-number-color: #9db4d4;
+    --mermaid-loop-text-color: #e5f4ff;
+    --mermaid-loop-line-color: #456c94;
+    --mermaid-state-background-color: #001f3e;
+    --mermaid-state-border-color: #00cf6a;
+    --mermaid-state-text-color: #e5f4ff;
+    --mermaid-class-background-color: #001f3e;
+    --mermaid-class-border-color: #8a7bff;
+    --mermaid-class-text-color: #e5f4ff;
+    --mermaid-er-entity-background-color: #001f3e;
+    --mermaid-er-entity-border-color: #00cf6a;
+    --mermaid-er-entity-text-color: #e5f4ff;
+    --mermaid-gantt-active-task-color: #00cf6a;
+    --mermaid-gantt-done-task-color: #00cf6a;
+    --mermaid-gantt-critical-task-color: #ff5a63;
+    --mermaid-git-branch-label-color: #001523;
+    --border-color: #456c9466;
+    --md-codeblock-border-color: color-mix(in srgb, #456c94 30%, #001f3e);
+    --md-table-border-color: color-mix(in srgb, #456c94 30%, #001f3e);
+    --md-inline-code-border-color: #456c9466;
   }
 
   .mde-preview,
   .mde-preview .markdown-body {
-    background: #15191b;
-    color: #cfccc2;
+    background: #001523;
+    color: #e5f4ff;
   }
 
   .mde-preview a {
-    color: #7fb89c;
+    color: #00cf6a;
   }
 
   .mde-preview blockquote {
-    color: #9da39e;
-    border-left-color: #afa3ce;
+    color: #9db4d4;
+    border-left-color: #8a7bff;
   }
 
   .mde-preview code,
   .mde-preview pre {
-    background: #23282a;
-    border-color: color-mix(in srgb, #5b6f69 30%, #23282a);
+    background: #001f3e;
+    border-color: color-mix(in srgb, #456c94 30%, #001f3e);
   }
 
   .mde-preview table th,
   .mde-preview table td {
-    border-color: color-mix(in srgb, #5b6f69 30%, #23282a);
+    border-color: color-mix(in srgb, #456c94 30%, #001f3e);
   }
 }
