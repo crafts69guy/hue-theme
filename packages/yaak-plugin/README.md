@@ -13,7 +13,7 @@ Three moods drawn from the atmosphere and visual culture of Huế, Việt Nam:
 | --- | --- | --- | --- |
 | **Huế Mưa** | `mua` | dark | midnight navy, rain-blue chrome, vivid signals |
 | **Huế Hương** | `huong` | dark | river green, dusk blue, incense gold |
-| **Huế Cung** | `cung` | light | ivory paper, imperial lacquer, royal purple |
+| **Huế Cung** | `cung` | light | pale blue wash, white panels, deep blue accents |
 
 Each mood styles Yaak's base UI palette: surfaces, text, borders, selection,
 primary actions, and status colors. It does not change fonts, request data, or

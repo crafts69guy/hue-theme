@@ -8,8 +8,8 @@ symbols.
 - **Mưa** uses midnight-navy surfaces, rain-blue boundaries, and high-chroma
   signals that cut through the dark.
 - **Hương** uses jade river greens, dusk blues, and small incense-gold accents.
-- **Cung** uses ivory paper, aged lacquer, restrained royal purple, and dark
-  jade text accents.
+- **Cung** uses a pale blue wash for ground, white panels raised above it, and
+  a deep blue carrying the accents.
 - The traditional five-colour cosmology—yellow, white, blue, black, and
   red—informs functional status families without forcing literal saturation.
 - The Perfume River becomes horizontal rhythm and flow; rain becomes fine

@@ -13,7 +13,7 @@ Three moods drawn from the atmosphere and visual culture of Huế, Việt Nam:
 | --- | --- | --- | --- |
 | **Huế Mưa** | `mua` | dark | midnight navy, rain-blue chrome, vivid signals |
 | **Huế Hương** | `huong` | dark | softer dark, river green and incense |
-| **Huế Cung** | `cung` | light | ivory light, lacquer and royal purple |
+| **Huế Cung** | `cung` | light | pale blue wash, white panels, deep blue accents |
 
 Each mood styles the status bar (powerline), window list, pane borders,
 messages, copy mode, and clock. It never sets your font.

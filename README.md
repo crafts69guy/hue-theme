@@ -19,11 +19,11 @@ are all generated from the same source of truth.
 
 ## Moods
 
-| Mood          | Appearance | Feel                                           |
-| ------------- | ---------- | ---------------------------------------------- |
-| **Huế Mưa**   | dark       | midnight navy, rain-blue chrome, vivid signals |
-| **Huế Hương** | dark       | river green, dusk blue, incense gold           |
-| **Huế Cung**  | light      | ivory paper, imperial lacquer, royal purple    |
+| Mood          | Appearance | Feel                                            |
+| ------------- | ---------- | ----------------------------------------------- |
+| **Huế Mưa**   | dark       | midnight navy, rain-blue chrome, vivid signals  |
+| **Huế Hương** | dark       | river green, dusk blue, incense gold            |
+| **Huế Cung**  | light      | pale blue wash, white panels, deep blue accents |
 
 Explore them in the interactive gallery: `bun run dev` (Vite + React, in `apps/gallery`).
 

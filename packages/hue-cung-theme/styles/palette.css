@@ -4,31 +4,31 @@
 @layer theme {
   :root {
     color-scheme: light;
-    --hue-surface-canvas: #f3ecd9;
-    --hue-surface-raised: #e8ddc5;
-    --hue-surface-selected: #cbddd2;
-    --hue-text-primary: #3c372c;
-    --hue-text-secondary: #66604f;
-    --hue-text-accent: #3a6e5f;
-    --hue-border-subtle: #8c846f;
-    --hue-border-faint: #cac2af;
-    --hue-accent-primary: #3a6e5f;
-    --hue-accent-secondary: #6a5384;
-    --hue-status-success: #3a6e5f;
-    --hue-status-info: #3d6480;
-    --hue-status-notice: #6a5384;
-    --hue-status-warning: #8b5c1a;
-    --hue-status-error: #a6403a;
-    --hue-syntax-keyword: #6a5384;
-    --hue-syntax-string: #3a6e5f;
-    --hue-syntax-number: #8b5c1a;
-    --hue-syntax-function: #3d6480;
-    --hue-syntax-comment: #8a8473;
-    --hue-syntax-operator: #a6403a;
-    --hue-syntax-type: #3d6480;
-    --hue-syntax-constant: #8b5c1a;
-    --hue-syntax-property: #3c372c;
-    --hue-syntax-variable: #3c372c;
-    --hue-syntax-punctuation: #7c7565;
+    --hue-surface-canvas: #edf3fe;
+    --hue-surface-raised: #ffffff;
+    --hue-surface-selected: #b0ddff;
+    --hue-text-primary: #001f3e;
+    --hue-text-secondary: #384b63;
+    --hue-text-accent: #00753c;
+    --hue-border-subtle: #5c7ba8;
+    --hue-border-faint: #c9dcf2;
+    --hue-accent-primary: #00753c;
+    --hue-accent-secondary: #6b2fd0;
+    --hue-status-success: #00753c;
+    --hue-status-info: #0033c9;
+    --hue-status-notice: #6b2fd0;
+    --hue-status-warning: #a15a00;
+    --hue-status-error: #c20a19;
+    --hue-syntax-keyword: #6b2fd0;
+    --hue-syntax-string: #00753c;
+    --hue-syntax-number: #a15a00;
+    --hue-syntax-function: #0033c9;
+    --hue-syntax-comment: #7d96c1;
+    --hue-syntax-operator: #c20a19;
+    --hue-syntax-type: #0033c9;
+    --hue-syntax-constant: #a15a00;
+    --hue-syntax-property: #001f3e;
+    --hue-syntax-variable: #001f3e;
+    --hue-syntax-punctuation: #66798b;
   }
 }
