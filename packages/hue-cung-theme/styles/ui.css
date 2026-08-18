@@ -242,4 +242,11 @@
   .note-list-item-view.active {
     box-shadow: inset 2px 0 0 #00753c;
   }
+
+  :root:has(body.acrylic-window) {
+    --page-background: transparent;
+    --sidebar-background: rgb(255 255 255 / 45%);
+    --note-list-bar-background: rgb(255 255 255 / 75%);
+    --editor-background: rgb(237 243 254 / 70%);
+  }
 }

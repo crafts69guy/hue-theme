@@ -168,4 +168,9 @@
     --md-table-border-color: color-mix(in srgb, #4e7aa6 30%, #0a2e52);
     --md-inline-code-border-color: #4e7aa666;
   }
+
+  :root:has(body.acrylic-window) {
+    --editor-background-color: transparent;
+    --editor-gutter-background-solid-color: transparent;
+  }
 }

@@ -3,6 +3,7 @@
 // Mermaid diagram variables through layered CSS stylesheets.
 
 import type { SemanticToken } from "../../generated/themes";
+import { hexToRgb } from "../color";
 import type { AdapterManifest } from "../contract";
 import type { ResolvedMood } from "./terminal";
 
@@ -34,6 +35,34 @@ function cssValue(value: string): string {
   return value.replace(/#[0-9A-F]{6}/gi, (hex) => hex.toLowerCase());
 }
 
+function translucent(hex: string, percent: number): string {
+  const [r, g, b] = hexToRgb(hex);
+  return `rgb(${r} ${g} ${b} / ${percent}%)`;
+}
+
+// When the user turns on the acrylic/vibrancy window, Inkdrop paints a blurred
+// desktop behind the window and marks the document `body.acrylic-window`. A
+// theme only reveals that layer if it stops painting opaque surfaces over it, so
+// the surfaces are re-declared translucent under `:root:has(body.acrylic-window)`
+// — exactly what the built-in themes do. Without this block the setting is
+// enabled but has no visible effect on a Hue theme.
+//
+// The page drops out entirely; the chrome keeps a light tint so it still reads as
+// the mood; the reading surfaces stay mostly opaque so text never sits directly
+// on the desktop. Dark moods go a step further than light ones, since a dark
+// tint hides a busy wallpaper less well. Floating panels (drawers, dropdowns,
+// menus) are deliberately left opaque — they overlap arbitrary content.
+function acrylicVars(mood: ResolvedMood): Record<string, string> {
+  const dark = mood.appearance === "dark";
+  const raised = role(mood, "surface.raised");
+  return {
+    "--page-background": "transparent",
+    "--sidebar-background": translucent(raised, dark ? 35 : 45),
+    "--note-list-bar-background": translucent(raised, dark ? 60 : 75),
+    "--editor-background": translucent(role(mood, "surface.canvas"), dark ? 60 : 70),
+  };
+}
+
 function packageName(mood: ResolvedMood): string {
   return `hue-${mood.id}-theme`;
 }
@@ -50,7 +79,7 @@ function renderPackageJson(mood: ResolvedMood): string {
   return `${JSON.stringify(
     {
       name: packageName(mood),
-      version: "0.4.2",
+      version: "0.5.0",
       theme: true,
       themeAppearance: mood.appearance,
       description: themeDescription(mood),
@@ -338,6 +367,10 @@ ${cssVars(vars, "    ")}
   .note-list-item-view.active {
     box-shadow: inset 2px 0 0 ${cssValue(role(mood, "accent.primary"))};
   }
+
+  :root:has(body.acrylic-window) {
+${cssVars(acrylicVars(mood), "    ")}
+  }
 }
 `;
 }
@@ -527,6 +560,11 @@ function renderSyntaxCss(mood: ResolvedMood): string {
   :root {
     color-scheme: ${mood.appearance};
 ${cssVars(vars, "    ")}
+  }
+
+  :root:has(body.acrylic-window) {
+    --editor-background-color: transparent;
+    --editor-gutter-background-solid-color: transparent;
   }
 }
 `;

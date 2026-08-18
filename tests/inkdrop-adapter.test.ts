@@ -95,6 +95,34 @@ describe("Hue -> Inkdrop adapter", () => {
 
   // Regression: Inkdrop v6 only recognizes unified themes with `theme: true`.
   // The old string values (`ui`, `syntax`, `preview`) fall back to defaults.
+  // Inkdrop's acrylic/vibrancy window only shows through if the theme stops
+  // painting opaque surfaces over it. Without these blocks the setting is on and
+  // nothing happens, which is silent — hence a test rather than a comment.
+  test("lets the acrylic window show through", () => {
+    for (const pack of packages) {
+      const ui = fileContent(pack, "styles/ui.css");
+      const syntax = fileContent(pack, "styles/syntax.css");
+
+      expect(ui).toContain(":root:has(body.acrylic-window)");
+      expect(ui).toMatch(
+        /:root:has\(body\.acrylic-window\) \{[^}]*--page-background: transparent;/,
+      );
+      expect(syntax).toMatch(
+        /:root:has\(body\.acrylic-window\) \{[^}]*--editor-background-color: transparent;/,
+      );
+
+      // The chrome keeps a tint rather than dropping out, so the mood survives.
+      const acrylic = ui.match(/:root:has\(body\.acrylic-window\) \{([^}]*)\}/)?.[1] ?? "";
+      for (const key of [
+        "--sidebar-background",
+        "--note-list-bar-background",
+        "--editor-background",
+      ]) {
+        expect(acrylic).toMatch(new RegExp(`${key}: rgb\\(\\d+ \\d+ \\d+ / \\d+%\\);`));
+      }
+    }
+  });
+
   test("declares the metadata Inkdrop needs to load the theme", () => {
     for (const pack of packages) {
       const metadata = packageJson(pack);
