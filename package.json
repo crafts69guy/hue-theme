@@ -5,15 +5,12 @@
   "license": "MIT",
   "packageManager": "bun@1.2.20",
   "workspaces": [
-    "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "build": "bun run --cwd packages/tokens build && bun run --cwd apps/gallery build",
-    "dev": "bun run --cwd packages/tokens build && bun run --cwd apps/gallery dev",
+    "build": "bun run --cwd packages/tokens build",
     "test": "bun test",
-    "check": "bun run --cwd packages/tokens check && bun run --cwd apps/gallery check",
-    "qa:visual": "node scripts/visual-qa.mjs",
+    "check": "bun run --cwd packages/tokens check",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint .",
@@ -26,7 +23,6 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.1",
     "@types/node": "^24.0.0",
-    "playwright": "^1.61.1",
     "typescript": "^5.8.3"
   }
 }

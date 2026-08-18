@@ -25,8 +25,6 @@ are all generated from the same source of truth.
 | **Huế Hương** | dark       | river green, dusk blue, incense gold            |
 | **Huế Cung**  | light      | pale blue wash, white panels, deep blue accents |
 
-Explore them in the interactive gallery: `bun run dev` (Vite + React, in `apps/gallery`).
-
 ## Themes
 
 Every theme below is generated from the token contract, so the three moods stay
@@ -84,23 +82,21 @@ packages/
   yaak-plugin/      # generated Yaak theme plugin
   herdr-plugin/     # generated herdr + tuicr theme fragments
   hue-*-theme/      # generated unified Inkdrop v6 packages
-apps/
-  gallery/          # interactive mood gallery (Vite + React)
 ```
 
 ## Development
 
 ```fish
 bun install
-bun run dev        # build tokens + run the gallery
+bun run build      # resolve tokens, validate, write every adapter's output
 ```
 
-Quality gates (Biome is the single formatter/linter for TS, React, JS, JSON, CSS, HTML):
+Quality gates (Biome is the single formatter/linter for TS, JS, JSON, CSS):
 
 ```fish
 bun run format     # apply Biome formatting/import-order fixes before CI
 bun run format:check
-bun run quality    # biome check + token/gallery check + tests
+bun run quality    # biome check + token check + tests
 bun run ci         # the full non-mutating gate, incl. build
 ```
 
@@ -124,13 +120,6 @@ Source tokens follow the
 [Design Tokens Community Group format](https://www.designtokens.org/tr/2025.10/format/).
 **Generated artifacts must not be edited by hand** — change the tokens or adapters
 and rebuild.
-
-## Bundled font
-
-The gallery bundles
-[PlemolJP Console NF v3.0.0](https://github.com/yuru7/PlemolJP/releases/tag/v3.0.0)
-in Light (300) through Bold (700), under the SIL Open Font License 1.1. Its full
-license sits beside the fonts in `apps/gallery/public/fonts/PlemolJP-LICENSE.txt`.
 
 ## License
 
