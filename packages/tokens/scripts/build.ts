@@ -1,6 +1,7 @@
 import { chmod, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
 import { batManifest, renderBatFiles } from "../src/adapters/bat";
+import { deltaManifest, renderDeltaFiles } from "../src/adapters/delta";
 import { ghosttyManifest, renderGhosttyFiles } from "../src/adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "../src/adapters/herdr";
 import { inkdropManifest, renderInkdropPackages } from "../src/adapters/inkdrop";
@@ -144,6 +145,7 @@ validateManifest("neovim", neovimManifest);
 validateManifest("ghostty", ghosttyManifest);
 validateManifest("bat", batManifest);
 validateManifest("lazygit", lazygitManifest);
+validateManifest("delta", deltaManifest);
 validateManifest("herdr", herdrManifest);
 validateManifest("tuicr", tuicrManifest);
 validateManifest("tmux", tmuxManifest);
@@ -235,6 +237,9 @@ const outputs: Array<[string, string]> = [
     (file) => [resolve(root, "../terminal-themes", file.path), file.content] as [string, string],
   ),
   ...renderLazygitFiles(themes).map(
+    (file) => [resolve(root, "../terminal-themes", file.path), file.content] as [string, string],
+  ),
+  ...renderDeltaFiles(themes).map(
     (file) => [resolve(root, "../terminal-themes", file.path), file.content] as [string, string],
   ),
   ...renderHerdrFiles(themes).map(

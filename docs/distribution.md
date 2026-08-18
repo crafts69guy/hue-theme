@@ -1,6 +1,6 @@
 # How themes reach users
 
-Ten hosts, four channels. The channel is not obvious from the package layout, and
+Eleven hosts, four channels. The channel is not obvious from the package layout, and
 guessing it wrong is how the Yaak theme sat three months stale — a script named
 `release-yaak.sh` pushes source to GitHub, but Yaak installs from its own
 registry, so "releasing" it reached nobody.
@@ -11,7 +11,7 @@ registry, so "releasing" it reached nobody.
 | tmux | git subtree → `crafts69guy/hue-tmux` | `scripts/release-tmux.sh --tag vX.Y.Z` | same |
 | Yaak | **Yaak plugin registry** | `bun run publish:yaak` | the `plugins` row in Yaak's `db.sqlite` |
 | Inkdrop | **ipm registry** | `bun run publish:inkdrop` | `ipm search hue` |
-| Ghostty, bat, lazygit | local files fetched over HTTPS | `~/.scripts/sync-hue-*.sh --ref <SHA>` | grep a changed hex out of the written file |
+| Ghostty, bat, lazygit, delta | local files fetched over HTTPS | `~/.scripts/sync-hue-*.sh --ref <SHA>` | grep a changed hex out of the written file |
 | herdr, tuicr | local plugin path | nothing to publish | `~/.config/herdr/config.toml` |
 | Fish / Tide | sourced from a working copy | nothing to publish | `hue-theme <mood>` |
 
@@ -25,6 +25,13 @@ scripts/release-all.sh --tag vX.Y.Z   # subtrees + tags this repo
 bun run publish:inkdrop               # bump adapters/inkdrop.ts first
 bun run publish:yaak                  # bump packages/yaak-plugin/package.json first
 ```
+
+delta is the one file-synced host with a second step after the sync: its
+fragment is only read if `~/.gitconfig` includes it, so
+`sync-hue-delta.sh` writes `~/.config/git/hue-themes/` and the include plus
+`[delta] features = hue` are set once by hand. Confirm with `delta --show-config
+| grep plus-style`, not by reading the synced file — a syntax error anywhere in
+the fragment makes delta exit rather than fall back.
 
 ## Version numbers are independent
 

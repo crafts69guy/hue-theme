@@ -1,7 +1,7 @@
 # Hue Theme
 
 A theme design system: one versioned token contract, generated into themes for
-ten hosts. Not a dotfiles repo — without this file the nearest `CLAUDE.md` is
+eleven hosts. Not a dotfiles repo — without this file the nearest `CLAUDE.md` is
 `~/.dotfiles/CLAUDE.md`, which describes stow, `.config/`, and a `production`
 branch that do not exist here. The default branch is `main`.
 

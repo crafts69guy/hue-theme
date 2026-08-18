@@ -39,6 +39,7 @@ identical across hosts.
 | **Yaak**             | [`packages/yaak-plugin`](packages/yaak-plugin)         | sideload / plugin registry                                                    |
 | **bat**              | [`packages/terminal-themes`](packages/terminal-themes) | `.tmTheme` files — `bat cache --build`                                        |
 | **lazygit**          | [`packages/terminal-themes`](packages/terminal-themes) | `gui.theme` fragment merged via `LG_CONFIG_FILE`                              |
+| **delta**            | [`packages/terminal-themes`](packages/terminal-themes) | git-config fragment — colors every diff, lazygit's Patch panel included       |
 | **Inkdrop**          | `packages/hue-*-theme`                                 | 3 unified Inkdrop v6 packages, on the registry                                |
 | **herdr + tuicr**    | [`packages/herdr-plugin`](packages/herdr-plugin)       | `herdr plugin install` — themes herdr and the tuicr review TUI                |
 
@@ -52,7 +53,7 @@ flowchart LR
     S --> A["Adapters"]
     A --> N["Neovim"]
     A --> T["tmux"]
-    A --> G["Ghostty · bat · lazygit"]
+    A --> G["Ghostty · bat · lazygit · delta"]
     A --> F["Fish / Tide"]
     A --> H["herdr · tuicr"]
     A --> Y["Yaak"]

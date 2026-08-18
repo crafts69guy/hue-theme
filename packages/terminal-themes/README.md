@@ -8,6 +8,9 @@ Generated theme files for terminal tools, one per mood (Mưa, Hương, Cung):
   Sublime/syntect theme mapping Hue's syntax and status roles.
 - [lazygit](https://github.com/jesseduffield/lazygit): `lazygit/hue-<mood>.yml`
   — a gui.theme fragment merged in via `LG_CONFIG_FILE`.
+- [delta](https://github.com/dandavison/delta):
+  `delta/hue-<mood>.gitconfig` — a `[delta "hue"]` feature included from your
+  gitconfig. It colors every diff, including the one lazygit shows.
 
 > tmux is packaged separately as a TPM plugin in
 > [`packages/tmux-plugin`](../tmux-plugin) (Ghostty has no plugin/remote-theme
@@ -22,7 +25,8 @@ the bat mapping in
 [`packages/tokens/src/adapters/bat.ts`](../tokens/src/adapters/bat.ts); the
 lazygit mapping in
 [`packages/tokens/src/adapters/lazygit.ts`](../tokens/src/adapters/lazygit.ts);
-the
+the delta mapping in
+[`packages/tokens/src/adapters/delta.ts`](../tokens/src/adapters/delta.ts); the
 shared ANSI derivation lives in
 [`adapters/terminal.ts`](../tokens/src/adapters/terminal.ts).
 
@@ -71,6 +75,40 @@ ln -sf hue-mua.yml ~/.config/lazygit/themes/hue-current.yml
 export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/themes/hue-current.yml"
 ```
 
-Switch moods by re-pointing the `hue-current.yml` symlink. Diffs inside
-lazygit are colored by your pager — delta follows `BAT_THEME`, so pair this
-with the bat themes above.
+Switch moods by re-pointing the `hue-current.yml` symlink. This theme colors
+lazygit's panels only — the diff body is drawn by your pager, so install the
+delta theme below as well.
+
+## Install (delta)
+
+delta reads its options from git config, so the fragment is included rather than
+copied over anything. Point the include at a symlink and the mood switch stays a
+one-line change:
+
+```bash
+mkdir -p ~/.config/git/hue-themes
+cp delta/hue-*.gitconfig ~/.config/git/hue-themes/
+ln -sf hue-mua.gitconfig ~/.config/git/hue-themes/hue-current.gitconfig
+```
+
+```ini
+# in ~/.gitconfig — written once, never touched again when switching moods:
+[include]
+    path = ~/.config/git/hue-themes/hue-current.gitconfig
+
+[delta]
+    features = hue
+    line-numbers = true
+    navigate = true
+```
+
+Keep behavior options (`line-numbers`, `navigate`, `hyperlinks`, `tabs`) in your
+own `[delta]` section — the fragment carries colors only. Do not set
+`syntax-theme` or `dark`/`light` there: each mood declares its own, which is how
+Cung comes up light instead of being forced dark.
+
+The fragment names the bat theme of the same mood for syntax highlighting, so
+install the bat themes above and run `bat cache --build` first — delta falls
+back to its default theme silently when the name is missing. Verify with
+`delta --show-config | grep plus-style`, which is also how you catch a fragment
+delta refused to parse.

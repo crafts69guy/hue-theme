@@ -1,6 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { themeBundle } from "../packages/tokens/generated/themes";
 import { batManifest, renderBatFiles } from "../packages/tokens/src/adapters/bat";
+import {
+  DELTA_FEATURE,
+  deltaManifest,
+  renderDeltaFiles,
+} from "../packages/tokens/src/adapters/delta";
 import { ghosttyManifest, renderGhosttyFiles } from "../packages/tokens/src/adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "../packages/tokens/src/adapters/herdr";
 import { lazygitManifest, renderLazygitFiles } from "../packages/tokens/src/adapters/lazygit";
@@ -146,6 +151,119 @@ describe("Hue → lazygit adapter", () => {
       const s = mood.semantic;
       expect(contrastRatio(s["surface.canvas"], s["accent.secondary"])).toBeGreaterThanOrEqual(3);
       expect(contrastRatio(s["surface.canvas"], s["status.warning"])).toBeGreaterThanOrEqual(3);
+    }
+  });
+});
+
+describe("Hue → delta adapter", () => {
+  const files = renderDeltaFiles(moods);
+  const content = (id: string) =>
+    files.find((f) => f.path === `delta/hue-${id}.gitconfig`)?.content ?? "";
+
+  // The `= <value>` half of every non-comment line in the fragment.
+  const values = (id: string) =>
+    content(id)
+      .split("\n")
+      .filter((line) => line.includes(" = ") && !line.trimStart().startsWith("#"))
+      .map((line) => [
+        line.slice(0, line.indexOf(" = ")).trim(),
+        line.slice(line.indexOf(" = ") + 3),
+      ])
+      .reduce<Record<string, string>>((all, [key, value]) => {
+        all[key] = value;
+        return all;
+      }, {});
+
+  test("accounts for every contract family", () => {
+    expect(() => validateManifest("delta", deltaManifest)).not.toThrow();
+  });
+
+  test("emits one git-config fragment per mood", () => {
+    expect(files.map((f) => f.path).sort()).toEqual(
+      moods.map((m) => `delta/hue-${m.id}.gitconfig`).sort(),
+    );
+  });
+
+  // The mood switch is a symlink behind one `features = hue` line in the user's
+  // gitconfig. A per-mood feature name would make every switch a config edit.
+  test("every mood declares the same feature name", () => {
+    for (const mood of moods) {
+      expect(content(mood.id)).toContain(`[delta "${DELTA_FEATURE}"]`);
+    }
+  });
+
+  test("declares the mood's appearance so a light mood is not forced dark", () => {
+    for (const mood of moods) {
+      const key = mood.appearance === "dark" ? "dark" : "light";
+      expect(values(mood.id)[key]).toBe("true");
+    }
+  });
+
+  // delta resolves syntax highlighting through bat, not through colour keys.
+  test("names the bat theme this repo generates for the same mood", () => {
+    const themes = new Set(renderBatFiles(moods).map((f) => f.path));
+    for (const mood of moods) {
+      expect(values(mood.id)["syntax-theme"]).toBe(`hue-${mood.id}`);
+      expect(themes.has(`bat/hue-${mood.id}.tmTheme`)).toBe(true);
+    }
+  });
+
+  test("emits only uppercase 6-digit hex colours", () => {
+    for (const mood of moods) {
+      for (const hex of content(mood.id).match(/#[0-9a-fA-F]{3,8}/g) ?? []) {
+        expect(hex).toMatch(HEX);
+      }
+    }
+  });
+
+  // Context rows must stay background-free: one hex here paints over a
+  // translucent terminal and turns the whole diff opaque.
+  test("leaves context rows without a background", () => {
+    for (const mood of moods) {
+      expect(values(mood.id)["zero-style"]).toBe("syntax");
+    }
+  });
+
+  // git treats an unquoted `#` as a comment, so a bare hex list reaches delta
+  // empty and it exits with "Option 'blame-palette' must not be empty".
+  test("quotes the blame palette so git does not read it as a comment", () => {
+    for (const mood of moods) {
+      const palette = values(mood.id)["blame-palette"];
+      expect(palette.startsWith('"') && palette.endsWith('"')).toBe(true);
+      expect(palette.slice(1, -1).split(" ")).toHaveLength(4);
+    }
+  });
+
+  test("added and removed rows are told apart from each other and the canvas", () => {
+    for (const mood of moods) {
+      const row = values(mood.id);
+      const plus = row["plus-style"];
+      const minus = row["minus-style"];
+      expect(plus).not.toBe(minus);
+      expect(plus).not.toContain(mood.semantic["surface.canvas"]);
+      expect(minus).not.toContain(mood.semantic["surface.canvas"]);
+    }
+  });
+
+  // A diff row tints the background under highlighted code, so the test that
+  // matters is not an absolute floor but how much contrast the tint costs. The
+  // floor is relative because some roles start dim by design — Cung's comment
+  // is 2.69:1 on its own canvas.
+  test("row tints keep syntax legible", () => {
+    for (const mood of moods) {
+      const row = values(mood.id);
+      const tints = [row["plus-style"], row["minus-style"]].map(
+        (style) => style.match(/#[0-9A-F]{6}/)?.[0] ?? "",
+      );
+      for (const tint of tints) {
+        expect(tint).toMatch(HEX);
+        expect(contrastRatio(mood.semantic["text.primary"], tint)).toBeGreaterThanOrEqual(4.5);
+        for (const [token, value] of Object.entries(mood.semantic)) {
+          if (!token.startsWith("syntax.")) continue;
+          const canvas = contrastRatio(value, mood.semantic["surface.canvas"]);
+          expect(contrastRatio(value, tint) / canvas).toBeGreaterThanOrEqual(0.7);
+        }
+      }
     }
   });
 });

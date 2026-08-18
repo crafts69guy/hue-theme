@@ -28,6 +28,7 @@ declaration rather than only checking that the moods agree with each other.
 | Inkdrop         | shipped | Unified v6 CSS custom properties          | Respect user font settings by default |
 | bat             | shipped | `.tmTheme` syntax theme (Sublime XML)     | Theme carries colors only             |
 | lazygit         | shipped | `gui.theme` YAML fragment                 | Theme carries colors only             |
+| delta           | shipped | git-config `[delta "hue"]` fragment        | Theme carries colors only             |
 | herdr           | shipped | `[theme.custom]` TOML fragment            | Theme carries colors only             |
 | tuicr           | shipped | TOML colour keys + the bat `.tmTheme`     | Theme carries colors only             |
 
@@ -91,6 +92,20 @@ theme format bat reads. The lazygit adapter (`adapters/lazygit.ts`) writes
 `lazygit/hue-<mood>.yml` fragments alongside it, merged into lazygit's config
 through `LG_CONFIG_FILE` rather than replacing it. Neither host has a plugin
 mechanism, so both are consumed as local files kept in sync with this repo.
+
+The delta adapter (`adapters/delta.ts`) writes `delta/hue-<mood>.gitconfig`
+into the same package. It covers the gap lazygit's `gui.theme` leaves: the diff
+body is drawn by the pager, so before this adapter existed lazygit's Patch panel
+and `git diff` alike were colored by whatever feature the user's `~/.gitconfig`
+named. Every mood declares the same feature, `[delta "hue"]`, so the mood is
+switched by re-pointing an included symlink rather than by editing the user's
+config. Two derivations are specific to it: the added/removed row backgrounds
+shade the status color toward black or white before blending it back toward the
+canvas — a plain canvas/status mix reads teal and purple on Mưa's navy, losing
+the one distinction a diff cannot lose — and `zero-style` is deliberately left
+without a background so a translucent terminal still shows through context
+lines. Syntax highlighting is deferred to bat: `syntax-theme` names the
+`hue-<mood>` `.tmTheme` this repo already generates.
 
 The herdr adapter (`adapters/herdr.ts`) generates `themes/hue-<mood>.toml`
 fragments spliced into herdr's `[theme.custom]`, and the tuicr adapter
