@@ -110,7 +110,7 @@ function renderPackageJson(mood: ResolvedMood): string {
   return `${JSON.stringify(
     {
       name: packageName(mood),
-      version: "0.6.1",
+      version: "0.6.2",
       theme: true,
       themeAppearance: mood.appearance,
       description: themeDescription(mood),
@@ -151,10 +151,15 @@ function moodTagline(mood: ResolvedMood): string {
   return body.charAt(0).toUpperCase() + body.slice(1);
 }
 
-// The README is what the registry listing shows, so it is a shopfront, not a
-// build note. Images have to be absolute: relative paths do not resolve on the
-// plugin site, and the screenshots deliberately are not shipped inside the
-// package so installs stay small.
+// The README is what the registry listing and Inkdrop's own Preferences pane
+// show, so it is a shopfront, not a build note.
+//
+// Markdown only, no raw HTML. Inkdrop's reader strips tags and re-parses what was
+// inside them, so an `<img>` leaves nothing at all and a `<div align="center">`
+// silently loses its alignment — both were tried and neither survived. Image URLs
+// must also be absolute: a relative path renders as a broken image even when the
+// file ships inside the package, which is why the screenshots stay out of it and
+// installs stay small.
 function renderReadme(mood: ResolvedMood, siblings: ResolvedMood[]): string {
   const swatch = (label: string, token: SemanticToken) =>
     `| ${label} | \`${role(mood, token).toLowerCase()}\` |`;
@@ -167,17 +172,11 @@ function renderReadme(mood: ResolvedMood, siblings: ResolvedMood[]): string {
     )
     .join("\n");
 
-  return `<div align="center">
-
-<img src="${RAW_BASE}/design/hue-mark.svg" alt="" width="64" />
-
-# ${mood.label}
+  return `# ${mood.label}
 
 ${moodTagline(mood)}
 
-<img src="${RAW_BASE}/design/inkdrop-${mood.id}.png" alt="${mood.label} in Inkdrop" width="900" />
-
-</div>
+![${mood.label} in Inkdrop](${RAW_BASE}/design/inkdrop-${mood.id}.png)
 
 ## Install
 

@@ -1,14 +1,8 @@
-<div align="center">
-
-<img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/hue-mark.svg" alt="" width="64" />
-
 # Huế Hương
 
 The Perfume River's clear, fresh jade beauty.
 
-<img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/inkdrop-huong.png" alt="Huế Hương in Inkdrop" width="900" />
-
-</div>
+![Huế Hương in Inkdrop](https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/inkdrop-huong.png)
 
 ## Install
 

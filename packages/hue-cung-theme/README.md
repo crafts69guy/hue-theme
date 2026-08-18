@@ -1,14 +1,8 @@
-<div align="center">
-
-<img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/hue-mark.svg" alt="" width="64" />
-
 # Huế Cung
 
 A light mood on a pale blue wash, with white panels floating on it and a deep blue carrying the accents.
 
-<img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/inkdrop-cung.png" alt="Huế Cung in Inkdrop" width="900" />
-
-</div>
+![Huế Cung in Inkdrop](https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/inkdrop-cung.png)
 
 ## Install
 

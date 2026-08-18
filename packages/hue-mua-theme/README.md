@@ -1,14 +1,8 @@
-<div align="center">
-
-<img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/hue-mark.svg" alt="" width="64" />
-
 # Huế Mưa
 
 A deep dark mood shaped by Huế rain at night: midnight navy, rain-blue chrome, and signal colors that cut through the wet.
 
-<img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/inkdrop-mua.png" alt="Huế Mưa in Inkdrop" width="900" />
-
-</div>
+![Huế Mưa in Inkdrop](https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/inkdrop-mua.png)
 
 ## Install
 

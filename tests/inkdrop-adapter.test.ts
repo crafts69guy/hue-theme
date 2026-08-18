@@ -138,9 +138,13 @@ describe("Hue -> Inkdrop adapter", () => {
       expect(readme).toContain(`ipm install ${pack.packageName}`);
       expect(readme).not.toContain("ipm install ./");
       expect(readme).toContain(`# ${mood?.label}`);
-      // Relative paths do not resolve on the plugin site.
+      // Inkdrop's reader strips HTML tags, so an <img> renders as nothing at all.
+      // Markdown image syntax with an absolute URL is the only form that survives;
+      // a relative path breaks even when the file ships inside the package.
+      expect(readme).not.toContain("<img");
+      expect(readme).not.toContain("<div");
       expect(readme).toContain(
-        `https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/inkdrop-${pack.moodId}.png`,
+        `![${mood?.label} in Inkdrop](https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/inkdrop-${pack.moodId}.png)`,
       );
       // Cross-links point at the siblings, never at itself.
       expect(readme).not.toContain(`/plugins/${pack.packageName})`);
