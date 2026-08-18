@@ -127,6 +127,28 @@ describe("Hue -> Inkdrop adapter", () => {
     }
   });
 
+  // Inkdrop scopes its own scrollbar rules to Windows and Linux, so on macOS the
+  // theme's scrollbar variables are inert and the native grey shows. These rules
+  // are unscoped on purpose; losing them puts the grey back with no error.
+  test("styles scrollbars itself rather than relying on the platform rules", () => {
+    for (const pack of packages) {
+      const ui = fileContent(pack, "styles/ui.css");
+      const mood = themeBundle.themes.find((candidate) => candidate.id === pack.moodId);
+      const line = mood?.semantic["border.subtle"] ?? "";
+      const rgb = [1, 3, 5].map((i) => Number.parseInt(line.slice(i, i + 2), 16)).join(" ");
+
+      expect(ui).toContain("::-webkit-scrollbar {");
+      // Not scoped to a platform: the app already does that, and it is why macOS
+      // never sees a themed scrollbar.
+      expect(ui).not.toMatch(/platform-win32[^}]*::-webkit-scrollbar/);
+      // Hidden until the pointer is over the scrollable area.
+      expect(ui).toMatch(/::-webkit-scrollbar-thumb \{[^}]*background: transparent;/);
+      expect(ui).toContain(`*:hover::-webkit-scrollbar-thumb`);
+      expect(ui).toContain(`background: rgb(${rgb} / 55%);`);
+      expect(ui).toContain(`background: rgb(${rgb} / 90%);`);
+    }
+  });
+
   // GitHub alerts inherit tag-chip colours by default, so their meaning drifts
   // with an unrelated grouping decision. Pin them to the status family instead.
   test("colours GitHub alerts from the status family", () => {

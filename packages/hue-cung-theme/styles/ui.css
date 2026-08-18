@@ -97,8 +97,12 @@
     --sidebar-menu-active-item-color: #001f3e;
     --sidebar-sync-status-view-background: #edf3fe;
     --sidebar-sync-status-view-text-color: #384b63;
-    --scrollbar-track-background: #edf3fe;
-    --scrollbar-thumb-background: #5c7ba8;
+    --scrollbar-track-background: transparent;
+    --scrollbar-thumb-background: rgb(92 123 168 / 55%);
+    --scrollbar-width: 9px;
+    --sidebar-scrollbar-track-background: transparent;
+    --sidebar-scrollbar-thumb-background: rgb(92 123 168 / 55%);
+    --sidebar-scrollbar-width: 9px;
     --note-list-bar-background: #ffffff;
     --note-list-view-item-header-color: #001f3e;
     --note-list-view-item-color: #384b63;
@@ -248,5 +252,32 @@
     --sidebar-background: rgb(255 255 255 / 15%);
     --note-list-bar-background: rgb(255 255 255 / 50%);
     --editor-background: rgb(237 243 254 / 60%);
+  }
+
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+    border: 3px solid transparent;
+    border-radius: 9px;
+    background-clip: padding-box;
+  }
+
+  *:hover::-webkit-scrollbar-thumb {
+    background: rgb(92 123 168 / 55%);
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(92 123 168 / 90%);
+    background-clip: padding-box;
   }
 }

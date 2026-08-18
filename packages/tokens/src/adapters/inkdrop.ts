@@ -46,6 +46,23 @@ function translucent(hex: string, percent: number): string {
 // the surface carrying body text stays mostly solid so the text keeps its
 // ground. Matching that grade is what makes a theme look as translucent as the
 // stock ones — a single figure across all three reads as a tinted pane instead.
+// Scrollbars. Inkdrop styles `::-webkit-scrollbar` only under
+// `body.platform-win32, body.platform-linux`, so on macOS its scrollbar
+// variables are inert and the native grey overlay shows instead — measured on a
+// dark Hue window as a flat rgb(96,96,96) thumb with no theme colour in it. The
+// rules below are deliberately unscoped so every platform gets the same
+// treatment, and the variables above are kept in step for anything else reading
+// them.
+//
+// The trade is worth naming: taking over from the native overlay costs macOS's
+// reveal-while-scrolling, which no CSS can detect, and the track now occupies
+// layout width. What is bought is a thumb in the mood's own colour that stays
+// invisible until the pointer is over the scrollable area.
+const SCROLLBAR_TRACK = "9px";
+const SCROLLBAR_THUMB_INSET = "3px";
+const SCROLLBAR_IDLE = 55;
+const SCROLLBAR_ACTIVE = 90;
+
 const ACRYLIC_SIDEBAR = 15;
 const ACRYLIC_NOTE_LIST = 50;
 const ACRYLIC_EDITOR = 60;
@@ -93,7 +110,7 @@ function renderPackageJson(mood: ResolvedMood): string {
   return `${JSON.stringify(
     {
       name: packageName(mood),
-      version: "0.5.3",
+      version: "0.6.0",
       theme: true,
       themeAppearance: mood.appearance,
       description: themeDescription(mood),
@@ -175,6 +192,40 @@ function renderPaletteCss(mood: ResolvedMood): string {
 ${cssVars(vars, "    ")}
   }
 }
+`;
+}
+
+function renderScrollbarCss(mood: ResolvedMood): string {
+  const idle = translucent(role(mood, "border.subtle"), SCROLLBAR_IDLE);
+  const active = translucent(role(mood, "border.subtle"), SCROLLBAR_ACTIVE);
+  // The thumb is drawn inside a transparent border so it reads thin while the
+  // grab target stays the full track width.
+  return `  ::-webkit-scrollbar {
+    width: ${SCROLLBAR_TRACK};
+    height: ${SCROLLBAR_TRACK};
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+    border: ${SCROLLBAR_THUMB_INSET} solid transparent;
+    border-radius: ${SCROLLBAR_TRACK};
+    background-clip: padding-box;
+  }
+
+  *:hover::-webkit-scrollbar-thumb {
+    background: ${cssValue(idle)};
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${cssValue(active)};
+    background-clip: padding-box;
+  }
 `;
 }
 
@@ -273,8 +324,15 @@ function renderUiCss(mood: ResolvedMood): string {
     "--sidebar-menu-active-item-color": role(mood, "text.primary"),
     "--sidebar-sync-status-view-background": role(mood, "surface.canvas"),
     "--sidebar-sync-status-view-text-color": role(mood, "text.secondary"),
-    "--scrollbar-track-background": role(mood, "surface.canvas"),
-    "--scrollbar-thumb-background": role(mood, "border.subtle"),
+    "--scrollbar-track-background": "transparent",
+    "--scrollbar-thumb-background": translucent(role(mood, "border.subtle"), SCROLLBAR_IDLE),
+    "--scrollbar-width": SCROLLBAR_TRACK,
+    "--sidebar-scrollbar-track-background": "transparent",
+    "--sidebar-scrollbar-thumb-background": translucent(
+      role(mood, "border.subtle"),
+      SCROLLBAR_IDLE,
+    ),
+    "--sidebar-scrollbar-width": SCROLLBAR_TRACK,
     "--note-list-bar-background": role(mood, "surface.raised"),
     "--note-list-view-item-header-color": role(mood, "text.primary"),
     "--note-list-view-item-color": role(mood, "text.secondary"),
@@ -385,7 +443,8 @@ ${cssVars(vars, "    ")}
   :root:has(body.acrylic-window) {
 ${cssVars(acrylicVars(mood), "    ")}
   }
-}
+
+${renderScrollbarCss(mood)}}
 `;
 }
 
