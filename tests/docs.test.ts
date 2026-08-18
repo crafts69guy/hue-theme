@@ -39,6 +39,31 @@ describe("documentation", () => {
     }
   });
 
+  // Adapters were added faster than the docs describing them: bat and lazygit
+  // shipped theme files for months while appearing in neither the root README
+  // nor the architecture notes, and herdr/tuicr only ever got a table row.
+  test("every host adapter is described in the docs", () => {
+    const dir = resolve(root, "packages/tokens/src/adapters");
+    const hosts = readdirSync(dir)
+      .filter((file) => file.endsWith(".ts"))
+      .filter((file) => readFileSync(resolve(dir, file), "utf8").includes("Manifest = {"))
+      .map((file) => file.replace(/\.ts$/, ""));
+
+    // terminal.ts is shared derivation, not a host, and declares no manifest.
+    expect(hosts).not.toContain("terminal");
+    expect(hosts.length).toBeGreaterThanOrEqual(10);
+
+    for (const doc of ["README.md", "docs/architecture.md", "packages/tokens/README.md"]) {
+      const content = readFileSync(resolve(root, doc), "utf8");
+      for (const host of hosts) {
+        const mentioned = new RegExp(`\\b${host}\\b`, "i").test(content);
+        expect(`${doc}: ${host} ${mentioned ? "documented" : "undocumented"}`).toBe(
+          `${doc}: ${host} documented`,
+        );
+      }
+    }
+  });
+
   // The same three-row mood table is repeated across the plugin READMEs, so the
   // wording drifts one file at a time — Hương was described two different ways.
   test("the moods are described the same way everywhere", () => {

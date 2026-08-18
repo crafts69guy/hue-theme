@@ -26,6 +26,10 @@ declaration rather than only checking that the moods agree with each other.
 | tmux            | shipped | TPM plugin (status/pane/window theme)     | Never set the user's font             |
 | Fish/Tide       | shipped | sourceable Fish prompt theme              | Theme carries colors only             |
 | Inkdrop         | shipped | Unified v6 CSS custom properties          | Respect user font settings by default |
+| bat             | shipped | `.tmTheme` syntax theme (Sublime XML)     | Theme carries colors only             |
+| lazygit         | shipped | `gui.theme` YAML fragment                 | Theme carries colors only             |
+| herdr           | shipped | `[theme.custom]` TOML fragment            | Theme carries colors only             |
+| tuicr           | shipped | TOML colour keys + the bat `.tmTheme`     | Theme carries colors only             |
 
 Each adapter declares a capability manifest of which contract families it
 supports versus explicitly omits; the build asserts every family is accounted
@@ -80,6 +84,22 @@ variables; the syntax stylesheet maps `syntax.*` plus editor affordance
 variables; the preview stylesheet keeps rendered Markdown, code blocks, and
 Mermaid diagrams aligned with the same roles. Inkdrop stylesheets do not set
 fonts.
+
+The bat adapter (`adapters/bat.ts`) generates `bat/hue-<mood>.tmTheme` into
+`packages/terminal-themes/` — a Sublime-format plist, because that is the only
+theme format bat reads. The lazygit adapter (`adapters/lazygit.ts`) writes
+`lazygit/hue-<mood>.yml` fragments alongside it, merged into lazygit's config
+through `LG_CONFIG_FILE` rather than replacing it. Neither host has a plugin
+mechanism, so both are consumed as local files kept in sync with this repo.
+
+The herdr adapter (`adapters/herdr.ts`) generates `themes/hue-<mood>.toml`
+fragments spliced into herdr's `[theme.custom]`, and the tuicr adapter
+(`adapters/tuicr.ts`) generates the review TUI's own colour keys into the same
+package. tuicr resolves `syntax_theme` relative to its theme file, so the bat
+`.tmTheme` is copied in beside it and the two install together. Both derive two
+values the contract does not name — a dimmer text tier and a legible foreground
+for filled backgrounds — at the adapter rather than widening the closed `text`
+family for one host.
 
 ## Accessibility policy
 

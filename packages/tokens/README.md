@@ -21,11 +21,12 @@ bun run check   # build --check (no writes) + tsc --noEmit
 ```
 
 `bun run build` validates every mood against the contract and WCAG AA contrast,
-then writes `generated/themes.{json,ts,css}` and each adapter's output: the Yaak
+then writes `generated/themes.{json,ts,css}` and every adapter's output: the Yaak
 plugin (`packages/yaak-plugin`), the Neovim/LazyVim plugin
-(`packages/nvim-plugin`), the Ghostty theme files (`packages/terminal-themes`),
-the tmux TPM plugin (`packages/tmux-plugin`), the Fish/Tide theme files
-(`packages/fish-themes`), and the unified Inkdrop v6 packages
+(`packages/nvim-plugin`), the tmux TPM plugin (`packages/tmux-plugin`), the
+Ghostty, bat, and lazygit theme files (`packages/terminal-themes`), the Fish/Tide
+theme files (`packages/fish-themes`), the herdr and tuicr fragments
+(`packages/herdr-plugin`), and the unified Inkdrop v6 packages
 (`packages/hue-*-theme`). Generated artifacts must not be edited by hand.
 
 The root `bun run ci` starts with `biome ci .`; run `bun run format` from the

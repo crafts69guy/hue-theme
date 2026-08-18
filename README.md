@@ -39,7 +39,9 @@ identical across hosts.
 | **Ghostty**          | [`packages/terminal-themes`](packages/terminal-themes) | theme file (`theme = hue-mua`)                                                |
 | **Fish / Tide**      | [`packages/fish-themes`](packages/fish-themes)         | sourceable Fish theme files                                                   |
 | **Yaak**             | [`packages/yaak-plugin`](packages/yaak-plugin)         | sideload / plugin registry                                                    |
-| **Inkdrop**          | `packages/hue-*-theme`                                 | 3 unified Inkdrop v6 packages with Mermaid colors                             |
+| **bat**              | [`packages/terminal-themes`](packages/terminal-themes) | `.tmTheme` files — `bat cache --build`                                        |
+| **lazygit**          | [`packages/terminal-themes`](packages/terminal-themes) | `gui.theme` fragment merged via `LG_CONFIG_FILE`                              |
+| **Inkdrop**          | `packages/hue-*-theme`                                 | 3 unified Inkdrop v6 packages, on the registry                                |
 | **herdr + tuicr**    | [`packages/herdr-plugin`](packages/herdr-plugin)       | `herdr plugin install` — themes herdr and the tuicr review TUI                |
 
 ## How it works
@@ -52,9 +54,11 @@ flowchart LR
     S --> A["Adapters"]
     A --> N["Neovim"]
     A --> T["tmux"]
-    A --> G["Ghostty"]
+    A --> G["Ghostty · bat · lazygit"]
     A --> F["Fish / Tide"]
+    A --> H["herdr · tuicr"]
     A --> Y["Yaak"]
+    A --> I["Inkdrop"]
 ```
 
 1. **Primitive** — authored colors with cultural metadata, per mood, in DTCG format.
@@ -78,6 +82,7 @@ packages/
   terminal-themes/  # generated Ghostty theme files
   fish-themes/      # generated Fish/Tide theme files
   yaak-plugin/      # generated Yaak theme plugin
+  herdr-plugin/     # generated herdr + tuicr theme fragments
   hue-*-theme/      # generated unified Inkdrop v6 packages
 apps/
   gallery/          # interactive mood gallery (Vite + React)
@@ -112,7 +117,8 @@ bun run publish:inkdrop
 ```
 
 Inkdrop packages target the v6 unified theme model: one package per mood covers
-the app UI, editor syntax, rendered Markdown preview, and Mermaid diagram colors.
+the app UI, editor syntax, rendered Markdown preview, Mermaid diagrams, GitHub
+alerts, and scrollbars, and thins its surfaces out when the acrylic window is on.
 
 Source tokens follow the
 [Design Tokens Community Group format](https://www.designtokens.org/tr/2025.10/format/).
