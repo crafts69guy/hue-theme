@@ -105,11 +105,14 @@ before typechecks, tests, or builds run. After changing token adapters, run
 `bun run build` first so generated artifacts are refreshed, then `bun run format`
 and `bun run ci`.
 
-Publish the generated Inkdrop packages:
+Releasing touches four channels, only two of which `scripts/release-all.sh`
+covers — see [`docs/distribution.md`](docs/distribution.md) for which host is
+reached by what, and why a green build is not evidence that anything shipped.
 
 ```fish
-bun run publish:inkdrop:dry-run
-bun run publish:inkdrop
+scripts/release-all.sh --tag vX.Y.Z   # subtree repos + tag this one
+bun run publish:inkdrop               # ipm registry
+bun run publish:yaak                  # Yaak plugin registry
 ```
 
 Inkdrop packages target the v6 unified theme model: one package per mood covers

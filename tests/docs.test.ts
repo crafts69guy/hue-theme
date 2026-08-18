@@ -42,6 +42,8 @@ describe("documentation", () => {
   // Adapters were added faster than the docs describing them: bat and lazygit
   // shipped theme files for months while appearing in neither the root README
   // nor the architecture notes, and herdr/tuicr only ever got a table row.
+  // distribution.md is in the list because a host whose delivery channel is
+  // undocumented is the specific way the Yaak theme went three months stale.
   test("every host adapter is described in the docs", () => {
     const dir = resolve(root, "packages/tokens/src/adapters");
     const hosts = readdirSync(dir)
@@ -53,7 +55,12 @@ describe("documentation", () => {
     expect(hosts).not.toContain("terminal");
     expect(hosts.length).toBeGreaterThanOrEqual(10);
 
-    for (const doc of ["README.md", "docs/architecture.md", "packages/tokens/README.md"]) {
+    for (const doc of [
+      "README.md",
+      "docs/architecture.md",
+      "docs/distribution.md",
+      "packages/tokens/README.md",
+    ]) {
       const content = readFileSync(resolve(root, doc), "utf8");
       for (const host of hosts) {
         const mentioned = new RegExp(`\\b${host}\\b`, "i").test(content);
