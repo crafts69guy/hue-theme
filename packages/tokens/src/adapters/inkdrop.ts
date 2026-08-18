@@ -40,32 +40,40 @@ function translucent(hex: string, percent: number): string {
   return `rgb(${r} ${g} ${b} / ${percent}%)`;
 }
 
-// The share of its own colour each surface keeps once the acrylic window is on.
-// One value for every surface and every mood, because the point of comparison is
-// a terminal set to a single `background-opacity` — a theme that varies the
-// figure per panel reads as uneven rather than translucent.
-const ACRYLIC_OPACITY = 72;
+// How much of its own colour each surface keeps once the acrylic window is on.
+// Not one figure for all three: Inkdrop's base stylesheet grades them, and the
+// grade is the point. Chrome is nearly clear so the window reads as glass, while
+// the surface carrying body text stays mostly solid so the text keeps its
+// ground. Matching that grade is what makes a theme look as translucent as the
+// stock ones — a single figure across all three reads as a tinted pane instead.
+const ACRYLIC_SIDEBAR = 15;
+const ACRYLIC_NOTE_LIST = 50;
+const ACRYLIC_EDITOR = 60;
 
-// When the user turns on the acrylic/vibrancy window, Inkdrop paints a blurred
-// desktop behind the window and marks the document `body.acrylic-window`. A
-// theme only reveals that layer if it stops painting opaque surfaces over it, so
-// the surfaces are re-declared translucent under `:root:has(body.acrylic-window)`
-// — exactly what the built-in themes do. Without this block the setting is
-// enabled but has no visible effect on a Hue theme.
+// When the user turns on the acrylic/vibrancy window, Inkdrop paints a macOS
+// vibrancy layer behind the window and marks the document `body.acrylic-window`.
+// The base stylesheet already re-declares its surfaces translucent for that
+// case, but a theme's own `@layer theme.ui` outranks the base layer, so an
+// opaque surface here silently paints over the effect. Hue therefore has to
+// re-declare them itself; without this block the setting is on and nothing
+// happens.
 //
-// The sidebar, note list, and editor tile the whole window, so they carry the
-// opacity. The page behind them drops out entirely rather than taking the same
-// figure: two stacked 72% layers would leave only 8% of the desktop showing,
-// which reads as opaque. One alpha layer per region is the whole trick, and it
-// is why the built-in themes zero the page too. Floating panels (drawers,
-// dropdowns, menus) stay opaque — they overlap arbitrary content.
+// What shows through is a flat tint, not a blurred desktop, so none of this
+// reproduces a terminal's `background-opacity` over a wallpaper. Lower numbers
+// reveal more of the macOS material, which is what reads as glass here.
+//
+// The page behind the three panels stays fully transparent rather than taking a
+// figure of its own: they tile the window, and two stacked alpha layers multiply
+// into something close to opaque. One alpha layer per region is the mechanism.
+// Floating panels (drawers, dropdowns, menus) stay opaque — they overlap
+// arbitrary content.
 function acrylicVars(mood: ResolvedMood): Record<string, string> {
   const raised = role(mood, "surface.raised");
   return {
     "--page-background": "transparent",
-    "--sidebar-background": translucent(raised, ACRYLIC_OPACITY),
-    "--note-list-bar-background": translucent(raised, ACRYLIC_OPACITY),
-    "--editor-background": translucent(role(mood, "surface.canvas"), ACRYLIC_OPACITY),
+    "--sidebar-background": translucent(raised, ACRYLIC_SIDEBAR),
+    "--note-list-bar-background": translucent(raised, ACRYLIC_NOTE_LIST),
+    "--editor-background": translucent(role(mood, "surface.canvas"), ACRYLIC_EDITOR),
   };
 }
 
@@ -85,7 +93,7 @@ function renderPackageJson(mood: ResolvedMood): string {
   return `${JSON.stringify(
     {
       name: packageName(mood),
-      version: "0.5.1",
+      version: "0.5.2",
       theme: true,
       themeAppearance: mood.appearance,
       description: themeDescription(mood),

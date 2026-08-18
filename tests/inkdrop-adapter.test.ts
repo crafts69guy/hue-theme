@@ -109,19 +109,21 @@ describe("Hue -> Inkdrop adapter", () => {
         /:root:has\(body\.acrylic-window\) \{[^}]*--editor-background-color: transparent;/,
       );
 
-      // One opacity for every panel: the comparison point is a terminal with a
-      // single background-opacity, and a per-panel figure reads as uneven.
+      // The panels are graded, not uniform: chrome nearly clear so the window
+      // reads as glass, the surface under body text mostly solid. A flat figure
+      // across all three is the regression worth catching.
       const acrylic = ui.match(/:root:has\(body\.acrylic-window\) \{([^}]*)\}/)?.[1] ?? "";
-      const opacities = [
-        "--sidebar-background",
-        "--note-list-bar-background",
-        "--editor-background",
-      ].map((key) => {
+      const opacity = (key: string) => {
         const match = acrylic.match(new RegExp(`${key}: rgb\\(\\d+ \\d+ \\d+ / (\\d+)%\\);`));
         expect(match).not.toBeNull();
-        return match?.[1];
-      });
-      expect(new Set(opacities).size).toBe(1);
+        return Number(match?.[1]);
+      };
+      const sidebar = opacity("--sidebar-background");
+      const noteList = opacity("--note-list-bar-background");
+      const editor = opacity("--editor-background");
+      expect(sidebar).toBeLessThan(noteList);
+      expect(noteList).toBeLessThan(editor);
+      expect(editor).toBeLessThan(100);
     }
   });
 
