@@ -20,6 +20,11 @@
     --md-table-background-color: #182a24;
     --md-blockquote-border-color: #a9a0c8;
     --md-list-mark-color: #6fd0a8;
+    --gfm-alert-note: #7fbac8;
+    --gfm-alert-tip: #6fd0a8;
+    --gfm-alert-important: #a9a0c8;
+    --gfm-alert-warning: #dcbb80;
+    --gfm-alert-caution: #d38478;
     --syntax-comment-color: #6c7e76;
     --syntax-keyword-color: #a9a0c8;
     --syntax-string-color: #6fd0a8;

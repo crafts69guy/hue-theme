@@ -127,6 +127,26 @@ describe("Hue -> Inkdrop adapter", () => {
     }
   });
 
+  // GitHub alerts inherit tag-chip colours by default, so their meaning drifts
+  // with an unrelated grouping decision. Pin them to the status family instead.
+  test("colours GitHub alerts from the status family", () => {
+    const expected: Record<string, string> = {
+      note: "status.info",
+      tip: "status.success",
+      important: "status.notice",
+      warning: "status.warning",
+      caution: "status.error",
+    };
+    for (const pack of packages) {
+      const preview = fileContent(pack, "styles/preview.css");
+      const mood = themeBundle.themes.find((candidate) => candidate.id === pack.moodId);
+      for (const [level, token] of Object.entries(expected)) {
+        const value = mood?.semantic[token as keyof typeof mood.semantic];
+        expect(preview).toContain(`--gfm-alert-${level}: ${value?.toLowerCase()};`);
+      }
+    }
+  });
+
   // Regression: Inkdrop v6 only recognizes unified themes with `theme: true`.
   // The old string values (`ui`, `syntax`, `preview`) fall back to defaults.
   test("declares the metadata Inkdrop needs to load the theme", () => {

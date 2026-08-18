@@ -93,7 +93,7 @@ function renderPackageJson(mood: ResolvedMood): string {
   return `${JSON.stringify(
     {
       name: packageName(mood),
-      version: "0.5.2",
+      version: "0.5.3",
       theme: true,
       themeAppearance: mood.appearance,
       description: themeDescription(mood),
@@ -602,6 +602,17 @@ function renderPreviewCss(mood: ResolvedMood): string {
     "--md-table-background-color": role(mood, "surface.raised"),
     "--md-blockquote-border-color": role(mood, "accent.secondary"),
     "--md-list-mark-color": role(mood, "accent.primary"),
+    // GitHub alerts (`> [!NOTE]` …). Inkdrop's base declares these as
+    // `var(--blue, …)`, `var(--purple, …)` and so on, which are the tag-chip
+    // colours — so an alert's colour was a side effect of how the 11 chip
+    // families get grouped onto Hue's 5 chromatic roles, not a decision. GitHub's
+    // own five levels map cleanly onto the `status` family, so state that
+    // directly and stop the two from drifting into each other.
+    "--gfm-alert-note": role(mood, "status.info"),
+    "--gfm-alert-tip": role(mood, "status.success"),
+    "--gfm-alert-important": role(mood, "status.notice"),
+    "--gfm-alert-warning": role(mood, "status.warning"),
+    "--gfm-alert-caution": role(mood, "status.error"),
     "--syntax-comment-color": role(mood, "syntax.comment"),
     "--syntax-keyword-color": role(mood, "syntax.keyword"),
     "--syntax-string-color": role(mood, "syntax.string"),
