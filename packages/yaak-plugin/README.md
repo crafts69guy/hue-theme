@@ -21,11 +21,11 @@ workspace behavior.
 
 ## Installation
 
-Install the plugin from Yaak's plugin settings with this repository:
+Open **Settings → Plugins** in Yaak, search the registry for `hue-theme`, and
+install it. Yaak tracks the registry version from then on, so updates arrive on
+its own schedule.
 
-```text
-crafts69guy/hue-yaak
-```
+This repository holds the plugin source; it is not the install path.
 
 Then choose **Huế Mưa**, **Huế Hương**, or **Huế Cung** from Yaak's theme
 selector.

@@ -18,7 +18,9 @@
     "publish:inkdrop": "scripts/publish-inkdrop.sh",
     "publish:inkdrop:dry-run": "scripts/publish-inkdrop.sh --dry-run",
     "quality": "biome check . && bun run check && bun test",
-    "ci": "biome ci . && bun run check && bun test && bun run build"
+    "ci": "biome ci . && bun run check && bun test && bun run build",
+    "publish:yaak": "scripts/publish-yaak.sh",
+    "publish:yaak:dry-run": "scripts/publish-yaak.sh --dry-run"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.1",
