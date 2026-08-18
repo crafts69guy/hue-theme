@@ -70,6 +70,16 @@ the Yaak adapter instead. Only Yaak's supported `base` UI tokens are exported.
 Hue's `syntax.*` roles are omitted because Yaak's theme API has no
 syntax-highlighting slots.
 
+## Also for
+
+The same three moods, from the same token contract:
+
+- [Neovim / LazyVim](https://github.com/crafts69guy/hue-nvim)
+- [tmux](https://github.com/crafts69guy/hue-tmux)
+- **Yaak** — this one
+- [Inkdrop](https://my.inkdrop.app/plugins/hue-mua-theme)
+- Ghostty, bat, lazygit, Fish/Tide — in the [main repo](https://github.com/crafts69guy/hue-theme)
+
 ## Credits
 
 Generated from the

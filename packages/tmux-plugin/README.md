@@ -12,7 +12,7 @@ Three moods drawn from the atmosphere and visual culture of Huế, Việt Nam:
 | Mood | `@hue_flavour` | Appearance | Feel |
 | --- | --- | --- | --- |
 | **Huế Mưa** | `mua` | dark | midnight navy, rain-blue chrome, vivid signals |
-| **Huế Hương** | `huong` | dark | softer dark, river green and incense |
+| **Huế Hương** | `huong` | dark | river green, dusk blue, incense gold |
 | **Huế Cung** | `cung` | light | pale blue wash, white panels, deep blue accents |
 
 Each mood styles the status bar (powerline), window list, pane borders,
@@ -56,6 +56,16 @@ source-file "/path/to/hue-tmux/themes/hue-mua.conf"
 | Option | Default | Description |
 | --- | --- | --- |
 | `@hue_flavour` | `mua` | Mood to load: `mua`, `huong`, or `cung`. |
+
+## Also for
+
+The same three moods, from the same token contract:
+
+- [Neovim / LazyVim](https://github.com/crafts69guy/hue-nvim)
+- **tmux** — this one
+- [Yaak](https://github.com/crafts69guy/hue-yaak)
+- [Inkdrop](https://my.inkdrop.app/plugins/hue-mua-theme)
+- Ghostty, bat, lazygit, Fish/Tide — in the [main repo](https://github.com/crafts69guy/hue-theme)
 
 ## Credits
 
