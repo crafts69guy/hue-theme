@@ -5,7 +5,8 @@ symbols.
 
 ## Sources translated into design rules
 
-- **Mưa** uses low-chroma dark surfaces, silvered boundaries, and quiet depth.
+- **Mưa** uses midnight-navy surfaces, rain-blue boundaries, and high-chroma
+  signals that cut through the dark.
 - **Hương** uses jade river greens, dusk blues, and small incense-gold accents.
 - **Cung** uses ivory paper, aged lacquer, restrained royal purple, and dark
   jade text accents.
