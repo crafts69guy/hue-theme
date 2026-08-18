@@ -57,14 +57,14 @@
 }
 
 [data-hue-theme="mua"] {
-  --hue-surface-canvas: #001523;
-  --hue-surface-raised: #001F3E;
-  --hue-surface-selected: #0A3566;
+  --hue-surface-canvas: #001F3E;
+  --hue-surface-raised: #0A2E52;
+  --hue-surface-selected: #123F6E;
   --hue-text-primary: #E5F4FF;
   --hue-text-secondary: #9DB4D4;
   --hue-text-accent: #00CF6A;
-  --hue-border-subtle: #456C94;
-  --hue-border-faint: #16304C;
+  --hue-border-subtle: #4E7AA6;
+  --hue-border-faint: #1B3A5C;
   --hue-accent-primary: #00CF6A;
   --hue-accent-secondary: #8A7BFF;
   --hue-status-success: #00CF6A;
@@ -76,7 +76,7 @@
   --hue-syntax-string: #00CF6A;
   --hue-syntax-number: #FF8D00;
   --hue-syntax-function: #10B6F8;
-  --hue-syntax-comment: #5C7186;
+  --hue-syntax-comment: #6B819A;
   --hue-syntax-operator: #FF5A63;
   --hue-syntax-type: #10B6F8;
   --hue-syntax-constant: #FF8D00;

@@ -4,23 +4,23 @@
 @layer theme.preview {
   :root {
     color-scheme: dark;
-    --page-background: #001523;
+    --page-background: #001f3e;
     --text-color: #e5f4ff;
     --link-color: #00cf6a;
     --link-hover-color: #00cf6a;
-    --table-background: #001523;
-    --table-header-background: #001f3e;
+    --table-background: #001f3e;
+    --table-header-background: #0a2e52;
     --table-header-color: #e5f4ff;
-    --md-inline-code-background-color: #001f3e;
+    --md-inline-code-background-color: #0a2e52;
     --md-codeblock-color: #e5f4ff;
-    --md-codeblock-background-color: #001f3e;
+    --md-codeblock-background-color: #0a2e52;
     --md-inline-mark-text-color: #e5f4ff;
     --md-inline-mark-background-color: #8a7bff;
     --md-inline-mark-underline-color: #ff8d00;
-    --md-table-background-color: #001f3e;
+    --md-table-background-color: #0a2e52;
     --md-blockquote-border-color: #8a7bff;
     --md-list-mark-color: #00cf6a;
-    --syntax-comment-color: #5c7186;
+    --syntax-comment-color: #6b819a;
     --syntax-keyword-color: #8a7bff;
     --syntax-string-color: #00cf6a;
     --syntax-number-color: #ff8d00;
@@ -34,71 +34,71 @@
     --mde-preview-blockquote-text-color: #9db4d4;
     --mde-preview-blockquote-border-color: #8a7bff;
     --mde-preview-inline-code-text-color: #00cf6a;
-    --mde-preview-inline-code-background-color: #001f3e;
-    --mde-preview-inline-code-border-color: #456c94;
+    --mde-preview-inline-code-background-color: #0a2e52;
+    --mde-preview-inline-code-border-color: #4e7aa6;
     --mde-preview-inline-code-border-width: 1px;
-    --mde-preview-codeblock-background-color: #001f3e;
-    --mde-preview-codeblock-meta-background-color: #0a3566;
-    --mde-preview-image-background-color: #001f3e;
+    --mde-preview-codeblock-background-color: #0a2e52;
+    --mde-preview-codeblock-meta-background-color: #123f6e;
+    --mde-preview-image-background-color: #0a2e52;
     --mde-preview-inline-mark-background-color: #8a7bff;
     --mde-preview-inline-mark-text-color: #e5f4ff;
     --mde-preview-inline-mark-underline-color: #ff8d00;
-    --mde-preview-table-head-background-color: #001f3e;
+    --mde-preview-table-head-background-color: #0a2e52;
     --mde-preview-table-head-text-color: #e5f4ff;
-    --mde-preview-table-row-background-color: #001523;
-    --mde-preview-table-row-stripe-background-color: #001f3e;
-    --mermaid-background-color: #001523;
-    --mermaid-node-background-color: #001f3e;
+    --mde-preview-table-row-background-color: #001f3e;
+    --mde-preview-table-row-stripe-background-color: #0a2e52;
+    --mermaid-background-color: #001f3e;
+    --mermaid-node-background-color: #0a2e52;
     --mermaid-node-border-color: #00cf6a;
     --mermaid-node-text-color: #e5f4ff;
-    --mermaid-line-color: #456c94;
+    --mermaid-line-color: #4e7aa6;
     --mermaid-label-text-color: #e5f4ff;
-    --mermaid-edge-label-background-color: #001523;
-    --mermaid-cluster-background-color: color-mix(in srgb, #001f3e 72%, transparent);
-    --mermaid-cluster-border-color: #456c94;
+    --mermaid-edge-label-background-color: #001f3e;
+    --mermaid-cluster-background-color: color-mix(in srgb, #0a2e52 72%, transparent);
+    --mermaid-cluster-border-color: #4e7aa6;
     --mermaid-title-text-color: #e5f4ff;
     --mermaid-primary-color: #00cf6a;
-    --mermaid-primary-text-color: #001523;
+    --mermaid-primary-text-color: #001f3e;
     --mermaid-primary-border-color: #00cf6a;
     --mermaid-secondary-color: #8a7bff;
-    --mermaid-secondary-text-color: #001523;
+    --mermaid-secondary-text-color: #001f3e;
     --mermaid-secondary-border-color: #8a7bff;
     --mermaid-tertiary-color: #ff8d00;
-    --mermaid-tertiary-text-color: #001523;
+    --mermaid-tertiary-text-color: #001f3e;
     --mermaid-tertiary-border-color: #ff8d00;
     --mermaid-note-background-color: #8a7bff;
     --mermaid-note-border-color: #ff8d00;
     --mermaid-note-text-color: #e5f4ff;
-    --mermaid-actor-background-color: #001f3e;
+    --mermaid-actor-background-color: #0a2e52;
     --mermaid-actor-border-color: #00cf6a;
     --mermaid-actor-text-color: #e5f4ff;
-    --mermaid-activation-background-color: #0a3566;
+    --mermaid-activation-background-color: #123f6e;
     --mermaid-activation-border-color: #00cf6a;
     --mermaid-sequence-number-color: #9db4d4;
     --mermaid-loop-text-color: #e5f4ff;
-    --mermaid-loop-line-color: #456c94;
-    --mermaid-state-background-color: #001f3e;
+    --mermaid-loop-line-color: #4e7aa6;
+    --mermaid-state-background-color: #0a2e52;
     --mermaid-state-border-color: #00cf6a;
     --mermaid-state-text-color: #e5f4ff;
-    --mermaid-class-background-color: #001f3e;
+    --mermaid-class-background-color: #0a2e52;
     --mermaid-class-border-color: #8a7bff;
     --mermaid-class-text-color: #e5f4ff;
-    --mermaid-er-entity-background-color: #001f3e;
+    --mermaid-er-entity-background-color: #0a2e52;
     --mermaid-er-entity-border-color: #00cf6a;
     --mermaid-er-entity-text-color: #e5f4ff;
     --mermaid-gantt-active-task-color: #00cf6a;
     --mermaid-gantt-done-task-color: #00cf6a;
     --mermaid-gantt-critical-task-color: #ff5a63;
-    --mermaid-git-branch-label-color: #001523;
-    --border-color: #456c9466;
-    --md-codeblock-border-color: color-mix(in srgb, #456c94 30%, #001f3e);
-    --md-table-border-color: color-mix(in srgb, #456c94 30%, #001f3e);
-    --md-inline-code-border-color: #456c9466;
+    --mermaid-git-branch-label-color: #001f3e;
+    --border-color: #4e7aa666;
+    --md-codeblock-border-color: color-mix(in srgb, #4e7aa6 30%, #0a2e52);
+    --md-table-border-color: color-mix(in srgb, #4e7aa6 30%, #0a2e52);
+    --md-inline-code-border-color: #4e7aa666;
   }
 
   .mde-preview,
   .mde-preview .markdown-body {
-    background: #001523;
+    background: #001f3e;
     color: #e5f4ff;
   }
 
@@ -113,12 +113,12 @@
 
   .mde-preview code,
   .mde-preview pre {
-    background: #001f3e;
-    border-color: color-mix(in srgb, #456c94 30%, #001f3e);
+    background: #0a2e52;
+    border-color: color-mix(in srgb, #4e7aa6 30%, #0a2e52);
   }
 
   .mde-preview table th,
   .mde-preview table td {
-    border-color: color-mix(in srgb, #456c94 30%, #001f3e);
+    border-color: color-mix(in srgb, #4e7aa6 30%, #0a2e52);
   }
 }
