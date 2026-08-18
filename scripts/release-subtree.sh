@@ -68,9 +68,17 @@ echo "==> Pushing '$SPLIT_BRANCH' -> $REMOTE ($TARGET_BRANCH)"
 git push $FORCE "$REMOTE" "$SPLIT_BRANCH:$TARGET_BRANCH"
 
 if [[ -n "$TAG" ]]; then
+  # The tag has to sit on the split commit for the standalone repo to receive it,
+  # but that commit is not in this repository's history — it is a synthetic root
+  # whose tree is the package. Tagging it under the release name locally left the
+  # monorepo's own tags pointing at split commits, so `git tag` here described
+  # nothing you could check out. Stage it under a scoped name, push it to the
+  # remote under the real one, and drop it again.
+  SCOPED_TAG="release-split/$(basename "$PREFIX")/$TAG"
   echo "==> Tagging $TAG on the split and pushing it"
-  git tag -f "$TAG" "$SPLIT_BRANCH"
-  git push $FORCE "$REMOTE" "$TAG"
+  git tag -f "$SCOPED_TAG" "$SPLIT_BRANCH"
+  git push $FORCE "$REMOTE" "refs/tags/$SCOPED_TAG:refs/tags/$TAG"
+  git tag -d "$SCOPED_TAG" >/dev/null
 fi
 
 git branch -D "$SPLIT_BRANCH" >/dev/null 2>&1 || true

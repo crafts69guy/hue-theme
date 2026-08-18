@@ -22,9 +22,35 @@ WRAPPERS=(
   release-yaak.sh
 )
 
+# Parse only what this script itself needs; everything is still forwarded on.
+TAG=""
+for ((i = 1; i <= $#; i++)); do
+  if [[ "${!i}" == "--tag" ]]; then
+    j=$((i + 1))
+    TAG="${!j:-}"
+  fi
+done
+
+# Fail before anything is pushed rather than after three repositories already
+# took the release and only the monorepo tag was left to write.
+if [[ -n "$TAG" ]] && git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+  echo "ERROR: tag $TAG already exists in this repository." >&2
+  echo "       Pick the next version, or delete the tag if it was a mistake." >&2
+  exit 1
+fi
+
 for wrapper in "${WRAPPERS[@]}"; do
   echo "===== ${wrapper} ====="
   "$DIR/${wrapper}" "$@"
 done
+
+# Each standalone repo now carries the tag on its own split. Mark the commit in
+# this repository too, otherwise a released version cannot be traced back to the
+# source it was built from.
+if [[ -n "$TAG" ]]; then
+  echo "===== tagging the monorepo ====="
+  git tag -a "$TAG" -m "$TAG — $(git log -1 --format=%s)" HEAD
+  git push origin "$TAG"
+fi
 
 echo "===== all plugin packages released ====="
