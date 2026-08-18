@@ -1,8 +1,8 @@
 {
   "name": "hue-mua-theme",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "theme": true,
-  "themeAppearance": "dark",
+  "themeAppearance": "light",
   "description": "Huế Mưa unified theme for Inkdrop v6",
   "styleSheets": [
     "palette.css",

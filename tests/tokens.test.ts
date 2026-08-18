@@ -12,9 +12,9 @@ describe("Hue Theme token contract", () => {
     expect(contracts[2]).toEqual(contracts[0]);
   });
 
-  test("uses light appearance only for Cung", () => {
+  test("pins each mood's appearance", () => {
     expect(
       Object.fromEntries(themeBundle.themes.map((theme) => [theme.id, theme.appearance])),
-    ).toEqual({ cung: "light", huong: "dark", mua: "dark" });
+    ).toEqual({ cung: "light", huong: "dark", mua: "light" });
   });
 });

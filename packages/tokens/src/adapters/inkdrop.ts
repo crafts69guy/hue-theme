@@ -50,7 +50,7 @@ function renderPackageJson(mood: ResolvedMood): string {
   return `${JSON.stringify(
     {
       name: packageName(mood),
-      version: "0.2.1",
+      version: "0.3.0",
       theme: true,
       themeAppearance: mood.appearance,
       description: themeDescription(mood),

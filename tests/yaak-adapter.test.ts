@@ -39,12 +39,12 @@ describe("Hue → Yaak adapter", () => {
     }
   });
 
-  test("marks dark for Mưa and Hương, light for Cung", () => {
-    expect(Object.fromEntries(mapped.map((theme) => [theme.id, theme.dark]))).toEqual({
-      cung: false,
-      huong: true,
-      mua: true,
-    });
+  test("mirrors each mood's appearance onto Yaak's dark flag", () => {
+    expect(Object.fromEntries(mapped.map((theme) => [theme.id, theme.dark]))).toEqual(
+      Object.fromEntries(
+        themeBundle.themes.map((theme) => [theme.id, theme.appearance === "dark"]),
+      ),
+    );
   });
 
   test("uses the Huế mood label directly", () => {

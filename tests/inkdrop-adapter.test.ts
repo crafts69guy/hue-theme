@@ -26,6 +26,12 @@ function packageJson(pack: ReturnType<typeof renderInkdropPackages>[number]) {
 describe("Hue -> Inkdrop adapter", () => {
   const packages = renderInkdropPackages(themeBundle.themes);
 
+  const appearanceOf = (moodId: string) => {
+    const mood = themeBundle.themes.find((candidate) => candidate.id === moodId);
+    if (!mood) throw new Error(`Unknown mood: ${moodId}`);
+    return mood.appearance;
+  };
+
   test("renders one unified package for every mood", () => {
     expect(packages).toHaveLength(3);
     expect(packages.map((pack) => pack.packageName)).toEqual([
@@ -57,7 +63,7 @@ describe("Hue -> Inkdrop adapter", () => {
 
       expect(palette).toContain("@layer theme");
       expect(palette).toContain("--hue-surface-canvas:");
-      expect(palette).toContain(`color-scheme: ${pack.moodId === "cung" ? "light" : "dark"};`);
+      expect(palette).toContain(`color-scheme: ${appearanceOf(pack.moodId)};`);
 
       expect(ui).toContain("@layer theme.ui");
       expect(ui).toContain("--page-background:");
@@ -97,7 +103,7 @@ describe("Hue -> Inkdrop adapter", () => {
       expect(metadata.theme).not.toBe("syntax");
       expect(metadata.theme).not.toBe("preview");
       expect(metadata.styleSheets).toEqual(STYLE_SHEETS);
-      expect(metadata.themeAppearance).toBe(pack.moodId === "cung" ? "light" : "dark");
+      expect(metadata.themeAppearance).toBe(appearanceOf(pack.moodId));
     }
   });
 
