@@ -43,6 +43,14 @@ identical across hosts.
 | **Inkdrop**          | `packages/hue-*-theme`                                 | 3 unified Inkdrop v6 packages, on the registry                                |
 | **herdr + tuicr**    | [`packages/herdr-plugin`](packages/herdr-plugin)       | `herdr plugin install` — themes herdr and the tuicr review TUI                |
 
+### [Yaak](packages/yaak-plugin)
+
+The complete Huế palette for requests, responses, settings, and application chrome.
+
+| Huế Mưa | Huế Hương | Huế Cung |
+| --- | --- | --- |
+| ![Huế Mưa dark theme in Yaak](packages/yaak-plugin/assets/yaak-mua.png) | ![Huế Hương dark theme in Yaak](packages/yaak-plugin/assets/yaak-huong.png) | ![Huế Cung light theme in Yaak](packages/yaak-plugin/assets/yaak-cung.png) |
+
 ## How it works
 
 Three layers, each with a single responsibility:
