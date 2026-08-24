@@ -23,6 +23,7 @@ declaration rather than only checking that the moods agree with each other.
 | Yaak            | shipped | TypeScript plugin theme API               | Export only supported properties      |
 | LazyVim/Neovim  | shipped | highlight groups and terminal ANSI colors | Never set the user's font             |
 | Ghostty         | shipped | theme file (ANSI palette + bg/fg/cursor)  | Theme carries colors only             |
+| ChatGPT/Codex   | shipped | `codex-theme-v1` share string             | Use system-default fonts              |
 | tmux            | shipped | TPM plugin (status/pane/window theme)     | Never set the user's font             |
 | Fish/Tide       | shipped | sourceable Fish prompt theme              | Theme carries colors only             |
 | Inkdrop         | shipped | Unified v6 CSS custom properties          | Respect user font settings by default |
@@ -69,6 +70,15 @@ live in `adapters/terminal.ts` so the terminal palette is derived in exactly one
 place. Like Neovim, the tmux plugin is released to a standalone repo
 (`scripts/release-tmux.sh`); Ghostty has no plugin mechanism, so its theme file
 is consumed directly.
+
+The ChatGPT/Codex adapter (`adapters/codex.ts`) generates one
+`codex-theme-v1` share string per mood into `packages/codex-themes/`. It maps
+the canvas, primary text, primary/secondary accents, and added/removed diff
+colors onto the app's exposed theme seed. The app derives borders and secondary
+surfaces from its contrast value, and its import format accepts only a built-in
+code-theme id, so Hue leaves `border.*` and `syntax.*` under host control. Mưa
+and Hương target the dark slot, Cung targets the light slot, and all three use
+the built-in Codex code theme and system-default fonts.
 
 The Tide adapter (`adapters/tide.ts`) generates sourceable Fish files into
 `packages/fish-themes/tide/`. It maps prompt segments to semantic roles directly

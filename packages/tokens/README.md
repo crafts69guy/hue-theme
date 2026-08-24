@@ -27,7 +27,8 @@ plugin (`packages/yaak-plugin`), the Neovim/LazyVim plugin
 Ghostty, bat, lazygit, and delta theme files (`packages/terminal-themes`), the
 Fish/Tide theme files (`packages/fish-themes`), the herdr and tuicr fragments
 (`packages/herdr-plugin`), and the unified Inkdrop v6 packages
-(`packages/hue-*-theme`). Generated artifacts must not be edited by hand.
+(`packages/hue-*-theme`), plus ChatGPT/Codex share strings
+(`packages/codex-themes`). Generated artifacts must not be edited by hand.
 
 The root `bun run ci` starts with `biome ci .`; run `bun run format` from the
 repo root after rebuilding generated artifacts so formatter and import-order

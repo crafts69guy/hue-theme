@@ -10,6 +10,10 @@
         "typescript": "^5.8.3",
       },
     },
+    "packages/codex-themes": {
+      "name": "@crafts69guy/hue-codex-themes",
+      "version": "0.1.0",
+    },
     "packages/fish-themes": {
       "name": "@crafts69guy/hue-fish-themes",
       "version": "0.1.0",

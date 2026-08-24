@@ -35,6 +35,7 @@ identical across hosts.
 | **Neovim / LazyVim** | [`packages/nvim-plugin`](packages/nvim-plugin)         | [`crafts69guy/hue-nvim`](https://github.com/crafts69guy/hue-nvim) · lazy.nvim |
 | **tmux**             | [`packages/tmux-plugin`](packages/tmux-plugin)         | [`crafts69guy/hue-tmux`](https://github.com/crafts69guy/hue-tmux) · TPM       |
 | **Ghostty**          | [`packages/terminal-themes`](packages/terminal-themes) | theme file (`theme = hue-mua`)                                                |
+| **ChatGPT / Codex**  | [`packages/codex-themes`](packages/codex-themes)       | Appearance import string (`hue-<mood>.txt`)                                   |
 | **Fish / Tide**      | [`packages/fish-themes`](packages/fish-themes)         | sourceable Fish theme files                                                   |
 | **Yaak**             | [`packages/yaak-plugin`](packages/yaak-plugin)         | sideload / plugin registry                                                    |
 | **bat**              | [`packages/terminal-themes`](packages/terminal-themes) | `.tmTheme` files — `bat cache --build`                                        |
@@ -62,6 +63,7 @@ flowchart LR
     A --> N["Neovim"]
     A --> T["tmux"]
     A --> G["Ghostty · bat · lazygit · delta"]
+    A --> C["ChatGPT · Codex"]
     A --> F["Fish / Tide"]
     A --> H["herdr · tuicr"]
     A --> Y["Yaak"]
@@ -87,6 +89,7 @@ packages/
   nvim-plugin/      # generated Neovim colorscheme   → hue-nvim
   tmux-plugin/      # generated tmux TPM plugin       → hue-tmux
   terminal-themes/  # generated Ghostty theme files
+  codex-themes/     # generated ChatGPT/Codex import strings
   fish-themes/      # generated Fish/Tide theme files
   yaak-plugin/      # generated Yaak theme plugin
   herdr-plugin/     # generated herdr + tuicr theme fragments

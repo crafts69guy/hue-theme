@@ -1,6 +1,7 @@
 import { chmod, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
 import { batManifest, renderBatFiles } from "../src/adapters/bat";
+import { codexManifest, renderCodexThemeFiles } from "../src/adapters/codex";
 import { deltaManifest, renderDeltaFiles } from "../src/adapters/delta";
 import { ghosttyManifest, renderGhosttyFiles } from "../src/adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "../src/adapters/herdr";
@@ -151,6 +152,7 @@ validateManifest("tuicr", tuicrManifest);
 validateManifest("tmux", tmuxManifest);
 validateManifest("tide", tideManifest);
 validateManifest("inkdrop", inkdropManifest);
+validateManifest("codex", codexManifest);
 
 // Secondary check: moods agree with each other (catches open-family drift,
 // where a role is allowed but must still be present in every mood).
@@ -227,6 +229,9 @@ const outputs: Array<[string, string]> = [
   [resolve(outputDirectory, "themes.ts"), typescript],
   [resolve(outputDirectory, "themes.css"), css],
   [resolve(root, "../yaak-plugin/src/index.ts"), yaakPluginSource],
+  ...renderCodexThemeFiles(themes).map(
+    (file) => [resolve(root, "../codex-themes", file.path), file.content] as [string, string],
+  ),
   ...renderNeovimFiles(themes).map(
     (file) => [resolve(root, "../nvim-plugin", file.path), file.content] as [string, string],
   ),

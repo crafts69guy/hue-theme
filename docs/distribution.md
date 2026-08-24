@@ -1,6 +1,6 @@
 # How themes reach users
 
-Eleven hosts, four channels. The channel is not obvious from the package layout, and
+Twelve hosts, four channels. The channel is not obvious from the package layout, and
 guessing it wrong is how the Yaak theme sat three months stale — a script named
 `release-yaak.sh` pushes source to GitHub, but Yaak installs from its own
 registry, so "releasing" it reached nobody.
@@ -14,6 +14,7 @@ registry, so "releasing" it reached nobody.
 | Ghostty, bat, lazygit, delta | local files fetched over HTTPS | `~/.scripts/sync-hue-*.sh --ref <SHA>` | grep a changed hex out of the written file |
 | herdr, tuicr | local plugin path | nothing to publish | `~/.config/herdr/config.toml` |
 | Fish / Tide | sourced from a working copy | nothing to publish | `hue-theme <mood>` |
+| ChatGPT/Codex | local share string | nothing to publish | import `hue-<mood>.txt` in Appearance |
 
 `scripts/release-all.sh` covers only the first two rows plus the Yaak *source*
 mirror. It does not publish to either registry. A full release is:
@@ -64,3 +65,8 @@ For the file-synced hosts the trap is different: the sync scripts fetch from
 `raw.githubusercontent.com`, whose CDN serves a cached copy for a while after a
 push. Pass `--ref (git rev-parse HEAD)` and check a hex that changed in that
 commit.
+
+ChatGPT/Codex is copy/paste distribution rather than an installable plugin.
+Copy the complete generated share string, import it into the matching Dark or
+Light card, and verify the colors in the running app. The app has one custom
+slot per variant, so importing Hương after Mưa replaces the dark theme.
