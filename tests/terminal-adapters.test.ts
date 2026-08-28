@@ -224,6 +224,14 @@ describe("Hue → delta adapter", () => {
     }
   });
 
+  test("matches line-number dividers to lazygit's inactive panel border", () => {
+    for (const mood of moods) {
+      const border = `"${mood.semantic["border.subtle"]}"`;
+      expect(values(mood.id)["line-numbers-left-style"]).toBe(border);
+      expect(values(mood.id)["line-numbers-right-style"]).toBe(border);
+    }
+  });
+
   // git treats an unquoted `#` as a comment, so a bare hex list reaches delta
   // empty and it exits with "Option 'blame-palette' must not be empty".
   test("quotes the blame palette so git does not read it as a comment", () => {

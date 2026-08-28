@@ -3,3 +3,5 @@ dist
 .DS_Store
 coverage
 *.tsbuildinfo
+# CocoIndex Code (ccc)
+/.cocoindex_code/

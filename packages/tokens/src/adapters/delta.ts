@@ -113,8 +113,10 @@ const ENTRIES: Entry[] = [
   { key: "hunk-header-line-number-style", value: (m) => `"${role(m, "status.warning")}"` },
 
   // Line-number gutter (drawn only when the user sets line-numbers = true).
-  { key: "line-numbers-left-style", value: (m) => `"${role(m, "border.faint")}"` },
-  { key: "line-numbers-right-style", value: (m) => `"${role(m, "border.faint")}"` },
+  // The dividers share border.subtle with lazygit's inactive panel borders so
+  // the pager gutter belongs to the surrounding UI in every mood.
+  { key: "line-numbers-left-style", value: (m) => `"${role(m, "border.subtle")}"` },
+  { key: "line-numbers-right-style", value: (m) => `"${role(m, "border.subtle")}"` },
   { key: "line-numbers-minus-style", value: (m) => `"${role(m, "status.error")}"` },
   { key: "line-numbers-plus-style", value: (m) => `"${role(m, "status.success")}"` },
   { key: "line-numbers-zero-style", value: (m) => `"${role(m, "text.secondary")}"` },
