@@ -2,8 +2,23 @@
   "name": "@hue-theme/tokens",
   "version": "0.1.0",
   "type": "module",
+  "description": "Portable Huế-inspired semantic design tokens for web and application themes.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crafts69guy/hue-theme.git",
+    "directory": "packages/tokens"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "exports": {
-    ".": "./generated/themes.ts",
+    ".": {
+      "types": "./generated/themes.d.ts",
+      "import": "./generated/themes.js",
+      "default": "./generated/themes.js"
+    },
     "./themes.css": "./generated/themes.css",
     "./themes.json": "./generated/themes.json"
   },
@@ -14,6 +29,7 @@
   "scripts": {
     "build": "bun scripts/build.ts",
     "check": "bun scripts/build.ts --check && tsc --noEmit",
+    "prepack": "bun run build && bun run check",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

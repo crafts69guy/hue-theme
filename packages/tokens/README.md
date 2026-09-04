@@ -36,6 +36,7 @@ drift does not block CI before tests run.
 
 ## Exports
 
-- `.` → `generated/themes.ts` (`themeBundle`, `getTheme`, `SemanticToken` and
-  per-family token unions such as `STATUS_TOKENS` / `StatusToken`).
+- `.` → compiled `generated/themes.js` with `themes.d.ts` declarations
+  (`themeBundle`, `getTheme`, `SemanticToken` and per-family token unions such
+  as `STATUS_TOKENS` / `StatusToken`).
 - `./themes.css`, `./themes.json` → the generated CSS variables and flat data.
