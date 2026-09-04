@@ -1,4 +1,4 @@
-# @hue-theme/tokens
+# @crafts69guy/hue-theme-tokens
 
 The core of the Hue Theme system: source design tokens plus the build that
 resolves and validates them into portable artifacts.

@@ -1,5 +1,5 @@
 {
-  "name": "@hue-theme/tokens",
+  "name": "@crafts69guy/hue-theme-tokens",
   "version": "0.1.0",
   "type": "module",
   "description": "Portable Huế-inspired semantic design tokens for web and application themes.",
