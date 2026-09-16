@@ -86,8 +86,21 @@ describe("Hue → Neovim adapter", () => {
     expect(init).toContain("if M.options.transparent then");
     expect(init).toContain("hl.bg = nil");
     expect(init).toContain("TRANSPARENT_GROUPS");
-    // Core editor + popular plugin containers must be among the cleared groups.
-    for (const group of ["Normal", "NormalFloat", "SnacksPickerNormal", "NoicePopup"]) {
+    // Core editor, plugin containers, and passive diff/diagnostic regions must be transparent.
+    // Selection-like emphasis such as DiffText intentionally keeps its background.
+    for (const group of [
+      "Normal",
+      "NormalFloat",
+      "SnacksPickerNormal",
+      "NoicePopup",
+      "DiffAdd",
+      "DiffChange",
+      "DiffDelete",
+      "DiagnosticVirtualTextError",
+      "DiagnosticVirtualTextWarn",
+      "DiagnosticVirtualTextInfo",
+      "DiagnosticVirtualTextHint",
+    ]) {
       expect(init).toMatch(new RegExp(`TRANSPARENT_GROUPS = \\{[\\s\\S]*"${group}"[\\s\\S]*\\}`));
     }
   });

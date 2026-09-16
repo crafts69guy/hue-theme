@@ -467,6 +467,14 @@ const TRANSPARENT_GROUPS: readonly string[] = [
   "PmenuSbar",
   "PmenuExtra",
   "PmenuKind",
+  // Passive diff and diagnostic regions. DiffText keeps its selection-like bg.
+  "DiffAdd",
+  "DiffChange",
+  "DiffDelete",
+  "DiagnosticVirtualTextError",
+  "DiagnosticVirtualTextWarn",
+  "DiagnosticVirtualTextInfo",
+  "DiagnosticVirtualTextHint",
   // Telescope
   "TelescopeNormal",
   "TelescopeBorder",
