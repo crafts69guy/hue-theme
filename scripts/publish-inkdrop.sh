@@ -116,7 +116,10 @@ for package in "${REQUESTED_PACKAGES[@]}"; do
   fi
 
   echo "== Publishing ${package_path#$ROOT/}"
-  ipm publish "${PUBLISH_ARGS[@]}" "$package_path"
+  # ipm runs the package's prepublishOnly hook through /bin/sh without adding
+  # node_modules/.bin to PATH, so `generate-palette` (a devDependency) is not
+  # found and the publish aborts. Put the package's own bin dir on PATH.
+  PATH="$package_path/node_modules/.bin:$PATH" ipm publish "${PUBLISH_ARGS[@]}" "$package_path"
 done
 
 echo "== Inkdrop publish finished"
