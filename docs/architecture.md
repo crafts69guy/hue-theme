@@ -44,7 +44,9 @@ declaration rather than only checking that the moods agree with each other.
 
 Each adapter declares a capability manifest of which contract families it
 supports versus explicitly omits; the build asserts every family is accounted
-for exactly once. Unsupported families are omitted explicitly rather than
+for exactly once. Adapters are registered in `packages/tokens/src/registry.ts`
+— name, manifest, output package and render function — and the build validates
+and writes from that list, so a new host is one entry there. Unsupported families are omitted explicitly rather than
 approximated.
 
 The Yaak adapter is implemented in `packages/tokens/src/adapters/yaak.ts`. The
