@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { themeBundle } from "../packages/tokens/generated/themes";
 import { renderInkdropPackages } from "../packages/tokens/src/adapters/inkdrop";
+import { contrastRatio, hexToRgb } from "../packages/tokens/src/color";
 
 const HEX = /^#[0-9a-f]{6}$/;
 const STYLE_SHEETS = ["palette.css", "ui.css", "syntax.css", "preview.css"];
@@ -25,6 +26,12 @@ function packageJson(pack: ReturnType<typeof renderInkdropPackages>[number]) {
 
 describe("Hue -> Inkdrop adapter", () => {
   const packages = renderInkdropPackages(themeBundle.themes);
+
+  const moodOf = (moodId: string) => {
+    const mood = themeBundle.themes.find((candidate) => candidate.id === moodId);
+    if (!mood) throw new Error(`Unknown mood: ${moodId}`);
+    return mood;
+  };
 
   const appearanceOf = (moodId: string) => {
     const mood = themeBundle.themes.find((candidate) => candidate.id === moodId);
@@ -236,6 +243,83 @@ describe("Hue -> Inkdrop adapter", () => {
       expect(css).toContain("--mermaid-primary-color:");
       expect(css).toContain("--mermaid-secondary-color:");
       expect(css).toContain("--mermaid-tertiary-color:");
+    }
+  });
+
+  // Regression: CodeMirror 6 draws the selection layer behind the lines, so an
+  // opaque active line hid the selection on the cursor's own line.
+  test("keeps the editor selection visible through the active line", () => {
+    for (const pack of packages) {
+      const syntax = fileContent(pack, "styles/syntax.css");
+      const selected = moodOf(pack.moodId).semantic["surface.selected"];
+      const rgb = hexToRgb(selected).join(" ");
+      expect(syntax).toMatch(
+        new RegExp(`--editor-active-line-background-color: rgb\\(${rgb} / \\d{1,2}%\\);`),
+      );
+      expect(syntax).toMatch(
+        new RegExp(`--editor-active-line-gutter-background-color: rgb\\(${rgb} / \\d{1,2}%\\);`),
+      );
+    }
+  });
+
+  // Regression: the plugin "latest version" badge and the sidebar update banner
+  // paint --warning-text-color on a --warning-color fill; both were the same hue.
+  test("keeps text on the warning fill readable", () => {
+    for (const pack of packages) {
+      const ui = fileContent(pack, "styles/ui.css");
+      const varOf = (key: string) => ui.match(new RegExp(`\\s${key}: (#[0-9a-f]{6});`))?.[1] ?? "";
+      const fill = varOf("--warning-color");
+      for (const text of ["--warning-text-color", "--sidebar-notification-view-color"]) {
+        expect(contrastRatio(varOf(text), fill)).toBeGreaterThanOrEqual(4.5);
+      }
+      expect(varOf("--sidebar-notification-view-background")).toBe(fill);
+    }
+  });
+
+  // Regression: segments and tabs fell back to Inkdrop's neutral greys, which
+  // showed as grey cards and tabs on the plugin pages.
+  test("themes segments and tabs instead of inheriting neutral greys", () => {
+    for (const pack of packages) {
+      const ui = fileContent(pack, "styles/ui.css");
+      const raised = moodOf(pack.moodId).semantic["surface.raised"].toLowerCase();
+      expect(ui).toContain(`--segment-background: ${raised};`);
+      expect(ui).toContain(`--tabular-menu-active-background: ${raised};`);
+      for (const key of [
+        "--secondary-segment-background",
+        "--grouped-segment-hover-background",
+        "--grouped-segment-group-segment-box-shadow",
+      ]) {
+        expect(ui).toMatch(new RegExp(`${key}: [^;]*${raised}`));
+      }
+    }
+  });
+
+  // Inkdrop's base fills these with neutral greys that ignore the theme. Each one
+  // undeclared is a grey patch somewhere in the app, so Hue owns all of them.
+  test("declares every control Inkdrop would otherwise paint neutral grey", () => {
+    const owned = [
+      "--button-background",
+      "--button-hover-background-color",
+      "--button-down-background-color",
+      "--button-active-background-color",
+      "--button-text-color",
+      "--basic-button-hover-background",
+      "--basic-button-down-background",
+      "--secondary-color-down",
+      "--input-highlight-background",
+      "--input-placeholder-focus-color",
+      "--form-select-background",
+      "--form-prompt-background",
+      "--checkbox-focus-background",
+      "--checkbox-pressed-background",
+      "--message-background",
+      "--vertical-menu-background",
+      "--inline-dropdown-menu-background",
+      "--note-list-bar-section-header-background",
+    ];
+    for (const pack of packages) {
+      const ui = fileContent(pack, "styles/ui.css");
+      for (const key of owned) expect(ui).toContain(`  ${key}: `);
     }
   });
 

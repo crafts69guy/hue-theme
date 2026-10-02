@@ -9,14 +9,14 @@
     --editor-caret-color: #6fd0a8;
     --editor-selection-background: #244e42;
     --editor-focused-selection-background: #244e42;
-    --editor-active-line-background-color: #182a24;
+    --editor-active-line-background-color: rgb(36 78 66 / 35%);
     --editor-special-char-color: #587168;
     --editor-spelling-error-color: #d38478;
     --editor-gutter-border-right: 1px solid color-mix(in srgb, #587168 30%, #182a24);
     --editor-gutter-color: #98a59c;
     --editor-gutter-background-color: transparent;
     --editor-gutter-background-solid-color: #0f1d19;
-    --editor-active-line-gutter-background-color: #182a24;
+    --editor-active-line-gutter-background-color: rgb(36 78 66 / 35%);
     --editor-panel-background-color: #182a24;
     --editor-panel-color: #98a59c;
     --editor-tooltip-border-color: #587168;

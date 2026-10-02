@@ -63,6 +63,24 @@ const SCROLLBAR_THUMB_INSET = "3px";
 const SCROLLBAR_IDLE = 55;
 const SCROLLBAR_ACTIVE = 90;
 
+// The active line has to be translucent. CodeMirror 6 paints the selection in
+// `.cm-selectionLayer`, which sits *behind* the line elements, so an opaque
+// `.cm-activeLine` covers the selection on the very line the cursor is on — a
+// one-line selection vanishes entirely. Tinting with the selection's own colour
+// means the selection reads unchanged through it (selected over selected is
+// still selected), while on bare canvas it lands about as far from the canvas as
+// `surface.raised` does.
+const EDITOR_ACTIVE_LINE = 35;
+
+// Button fills, as a share of `border.subtle`. Hover lifts, press settles
+// between the two, mirroring the base's 70/70/80 neutral steps.
+const BUTTON_IDLE = 18;
+const BUTTON_HOVER = 30;
+const BUTTON_DOWN = 24;
+// Vertical and inline dropdown menus keep the base's 70% so whatever they sit
+// over still reads faintly through.
+const FLOATING_MENU = 70;
+
 const ACRYLIC_SIDEBAR = 15;
 const ACRYLIC_NOTE_LIST = 50;
 const ACRYLIC_EDITOR = 60;
@@ -330,7 +348,10 @@ function renderUiCss(mood: ResolvedMood): string {
     "--warning-background-color": role(mood, "surface.raised"),
     "--warning-border-color": role(mood, "status.warning"),
     "--warning-header-color": role(mood, "status.warning"),
-    "--warning-text-color": role(mood, "status.warning"),
+    // Unlike the other families, Inkdrop v6 only reads this one as text *on* a
+    // `--warning-color` fill — the plugin "latest version" badge and the sidebar
+    // update banners. Matching the fill made both unreadable.
+    "--warning-text-color": role(mood, "surface.canvas"),
     "--success-color": role(mood, "status.success"),
     "--success-background-color": role(mood, "surface.raised"),
     "--success-border-color": role(mood, "status.success"),
@@ -387,6 +408,10 @@ function renderUiCss(mood: ResolvedMood): string {
     "--sidebar-menu-active-item-color": role(mood, "text.primary"),
     "--sidebar-sync-status-view-background": role(mood, "surface.canvas"),
     "--sidebar-sync-status-view-text-color": role(mood, "text.secondary"),
+    // The base sets this per appearance and, for light themes, falls back to
+    // `--warning-text-color`; pinning it keeps every mood on the same rule.
+    "--sidebar-notification-view-background": role(mood, "status.warning"),
+    "--sidebar-notification-view-color": role(mood, "surface.canvas"),
     "--scrollbar-track-background": "transparent",
     "--scrollbar-thumb-background": translucent(role(mood, "border.subtle"), SCROLLBAR_IDLE),
     "--scrollbar-width": SCROLLBAR_TRACK,
@@ -491,6 +516,59 @@ function renderUiCss(mood: ResolvedMood): string {
     "--editor-drawer-border-left": `1px solid ${hairline}`,
   });
 
+  // Segments and tabs. The base fills them with neutral greys (neutral-900 cards,
+  // a neutral-700 footer, a neutral-800 active tab) that ignore the theme, so the
+  // plugin list showed grey slabs on a navy page. Cards sit one step up as
+  // `surface.raised`; the footer tray falls halfway back toward the canvas, and
+  // the active tab takes the card's surface so it reads as attached to the list.
+  const raised = role(mood, "surface.raised");
+  Object.assign(vars, {
+    "--segment-background": raised,
+    "--secondary-segment-background": `color-mix(in srgb, ${raised} 50%, ${canvas})`,
+    "--secondary-segment-color": role(mood, "text.secondary"),
+    "--grouped-segment-divider": `1px solid ${hairline}`,
+    "--grouped-segment-group-segment-box-shadow": `0 0 0 1px ${hairline}`,
+    "--grouped-segment-hover-background": `color-mix(in srgb, ${role(mood, "surface.selected")} 50%, ${raised})`,
+    "--piled-segments-background": raised,
+    "--tabular-menu-border-color": softLine,
+    "--tabular-menu-active-background": raised,
+    "--tabular-menu-active-color": role(mood, "text.primary"),
+  });
+
+  // The rest of the base's neutral greys: buttons, form controls, messages and
+  // the note-list section header. Button fills are a translucent wash of the
+  // boundary colour rather than a surface, because buttons sit on canvas, cards
+  // and drawers alike and an opaque fill would vanish on whichever matches it.
+  const line = role(mood, "border.subtle");
+  const secondary = role(mood, "accent.secondary");
+  const tray = `color-mix(in srgb, ${raised} 50%, ${canvas})`;
+  Object.assign(vars, {
+    "--button-background": translucent(line, BUTTON_IDLE),
+    "--button-hover-background-color": translucent(line, BUTTON_HOVER),
+    "--button-down-background-color": translucent(line, BUTTON_DOWN),
+    "--button-active-background-color": translucent(line, BUTTON_HOVER),
+    "--button-text-color": role(mood, "text.primary"),
+    "--button-box-shadow": `0 0 0 1px ${softLine} inset`,
+    "--basic-button-hover-background": translucent(line, BUTTON_IDLE),
+    "--basic-button-down-background": translucent(line, BUTTON_DOWN),
+    "--secondary-color-focus": secondary,
+    "--secondary-color-down": secondary,
+    "--secondary-color-active": secondary,
+    "--strong-selected-border-color": line,
+    "--disabled-border-color": softLine,
+    "--input-highlight-background": role(mood, "surface.selected"),
+    "--input-placeholder-focus-color": role(mood, "text.secondary"),
+    "--form-select-background": raised,
+    "--form-prompt-background": raised,
+    "--checkbox-focus-background": role(mood, "surface.selected"),
+    "--checkbox-pressed-background": raised,
+    "--message-background": raised,
+    "--vertical-menu-background": translucent(raised, FLOATING_MENU),
+    "--inline-dropdown-menu-background": translucent(raised, FLOATING_MENU),
+    "--note-list-bar-pinned-section-header-background": tray,
+    "--note-list-bar-section-header-background": tray,
+  });
+
   return `${renderHeader(mood, "ui")}@layer theme.ui {
   :root {
     color-scheme: ${mood.appearance};
@@ -518,14 +596,20 @@ function renderSyntaxCss(mood: ResolvedMood): string {
     "--editor-caret-color": role(mood, "accent.primary"),
     "--editor-selection-background": role(mood, "surface.selected"),
     "--editor-focused-selection-background": role(mood, "surface.selected"),
-    "--editor-active-line-background-color": role(mood, "surface.raised"),
+    "--editor-active-line-background-color": translucent(
+      role(mood, "surface.selected"),
+      EDITOR_ACTIVE_LINE,
+    ),
     "--editor-special-char-color": role(mood, "border.subtle"),
     "--editor-spelling-error-color": role(mood, "status.error"),
     "--editor-gutter-border-right": `1px solid ${role(mood, "border.subtle")}`,
     "--editor-gutter-color": role(mood, "text.secondary"),
     "--editor-gutter-background-color": "transparent",
     "--editor-gutter-background-solid-color": role(mood, "surface.canvas"),
-    "--editor-active-line-gutter-background-color": role(mood, "surface.raised"),
+    "--editor-active-line-gutter-background-color": translucent(
+      role(mood, "surface.selected"),
+      EDITOR_ACTIVE_LINE,
+    ),
     "--editor-panel-background-color": role(mood, "surface.raised"),
     "--editor-panel-color": role(mood, "text.secondary"),
     "--editor-tooltip-border-color": role(mood, "border.subtle"),

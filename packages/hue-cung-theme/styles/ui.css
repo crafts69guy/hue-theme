@@ -40,7 +40,7 @@
     --warning-background-color: #ffffff;
     --warning-border-color: #a15a00;
     --warning-header-color: #a15a00;
-    --warning-text-color: #a15a00;
+    --warning-text-color: #edf3fe;
     --success-color: #00753c;
     --success-background-color: #ffffff;
     --success-border-color: #00753c;
@@ -97,6 +97,8 @@
     --sidebar-menu-active-item-color: #001f3e;
     --sidebar-sync-status-view-background: #edf3fe;
     --sidebar-sync-status-view-text-color: #384b63;
+    --sidebar-notification-view-background: #a15a00;
+    --sidebar-notification-view-color: #edf3fe;
     --scrollbar-track-background: transparent;
     --scrollbar-thumb-background: rgb(92 123 168 / 55%);
     --scrollbar-width: 9px;
@@ -239,6 +241,40 @@
     --note-list-bar-border-right: 1px solid color-mix(in srgb, #5c7ba8 30%, #ffffff);
     --note-list-view-item-separator-border: 1px solid color-mix(in srgb, #5c7ba8 30%, #ffffff);
     --editor-drawer-border-left: 1px solid color-mix(in srgb, #5c7ba8 30%, #ffffff);
+    --segment-background: #ffffff;
+    --secondary-segment-background: color-mix(in srgb, #ffffff 50%, #edf3fe);
+    --secondary-segment-color: #384b63;
+    --grouped-segment-divider: 1px solid color-mix(in srgb, #5c7ba8 30%, #ffffff);
+    --grouped-segment-group-segment-box-shadow: 0 0 0 1px color-mix(in srgb, #5c7ba8 30%, #ffffff);
+    --grouped-segment-hover-background: color-mix(in srgb, #b0ddff 50%, #ffffff);
+    --piled-segments-background: #ffffff;
+    --tabular-menu-border-color: #5c7ba866;
+    --tabular-menu-active-background: #ffffff;
+    --tabular-menu-active-color: #001f3e;
+    --button-background: rgb(92 123 168 / 18%);
+    --button-hover-background-color: rgb(92 123 168 / 30%);
+    --button-down-background-color: rgb(92 123 168 / 24%);
+    --button-active-background-color: rgb(92 123 168 / 30%);
+    --button-text-color: #001f3e;
+    --button-box-shadow: 0 0 0 1px #5c7ba866 inset;
+    --basic-button-hover-background: rgb(92 123 168 / 18%);
+    --basic-button-down-background: rgb(92 123 168 / 24%);
+    --secondary-color-focus: #6b2fd0;
+    --secondary-color-down: #6b2fd0;
+    --secondary-color-active: #6b2fd0;
+    --strong-selected-border-color: #5c7ba8;
+    --disabled-border-color: #5c7ba866;
+    --input-highlight-background: #b0ddff;
+    --input-placeholder-focus-color: #384b63;
+    --form-select-background: #ffffff;
+    --form-prompt-background: #ffffff;
+    --checkbox-focus-background: #b0ddff;
+    --checkbox-pressed-background: #ffffff;
+    --message-background: #ffffff;
+    --vertical-menu-background: rgb(255 255 255 / 70%);
+    --inline-dropdown-menu-background: rgb(255 255 255 / 70%);
+    --note-list-bar-pinned-section-header-background: color-mix(in srgb, #ffffff 50%, #edf3fe);
+    --note-list-bar-section-header-background: color-mix(in srgb, #ffffff 50%, #edf3fe);
   }
 
   /* Accent bar on the active note-list row, so the (subtle) selection still reads
