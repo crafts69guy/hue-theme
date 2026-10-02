@@ -331,7 +331,7 @@ describe("Hue → herdr adapter", () => {
       expect(contrastRatio(s["text.primary"], s["surface.selected"])).toBeGreaterThanOrEqual(4.5);
       expect(contrastRatio(s["text.secondary"], s["surface.canvas"])).toBeGreaterThanOrEqual(3);
       expect(contrastRatio(s["surface.raised"], s["accent.primary"])).toBeGreaterThanOrEqual(3);
-      expect(contrastRatio(mood.primitive.fog, s["surface.canvas"])).toBeGreaterThanOrEqual(2.5);
+      expect(contrastRatio(s["syntax.comment"], s["surface.canvas"])).toBeGreaterThanOrEqual(3);
     }
   });
 });

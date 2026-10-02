@@ -14,6 +14,10 @@
 //   surface_dim  selected sidebar row bg + divider lines
 //   overlay0     section headers, branch names, menu chrome text
 //   overlay1     inactive tab label fg
+//
+// overlay0/overlay1 are receding chrome text, so they take the palette's two
+// receding roles, syntax.comment and syntax.punctuation, both gated at 3:1 —
+// rather than reaching past the contract for the `fog`/`mist` primitives.
 //   text         focused workspace / agent row titles
 //   subtext0     unfocused workspace names
 //   mauve        focused workspace's branch name
@@ -31,7 +35,7 @@
 // config.toml and reloads.
 
 import type { AdapterManifest } from "../contract";
-import { primitive, type ResolvedMood, role } from "../mood";
+import { type ResolvedMood, role } from "../mood";
 
 export const herdrManifest = {
   supports: ["surface", "text", "border", "accent", "status"],
@@ -51,8 +55,8 @@ panel_bg = "${role(mood, "surface.raised")}"
 surface0 = "${role(mood, "surface.selected")}"
 surface1 = "${role(mood, "border.subtle")}"
 surface_dim = "${role(mood, "surface.selected")}"
-overlay0 = "${primitive(mood, "fog")}"
-overlay1 = "${primitive(mood, "mist")}"
+overlay0 = "${role(mood, "syntax.comment")}"
+overlay1 = "${role(mood, "syntax.punctuation")}"
 text = "${role(mood, "text.primary")}"
 subtext0 = "${role(mood, "text.secondary")}"
 mauve = "${role(mood, "accent.secondary")}"
