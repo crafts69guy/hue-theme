@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/hue-mark.svg" width="64" alt="Hue Theme logo" />
+<img src="https://raw.githubusercontent.com/crafts69guy/hue-theme/main/design/hue-mark.png" width="64" alt="Hue Theme logo" />
 
 # Hue for Yaak
 
