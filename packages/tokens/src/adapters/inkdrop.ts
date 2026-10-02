@@ -104,12 +104,10 @@ const FLOATING_MENU = 70;
 // the surface carrying body text is nearly solid so the text keeps its ground.
 //
 // The grade is Solarized Dark's, not the base stylesheet's. The base runs the
-// sidebar at 10% because its colours *are* the neutral grey of the macOS
-// material, so revealing the material costs it nothing. A coloured mood loses
-// itself instead: over the measured dark material rgb(10,14,28), Mưa's sidebar
-// kept 15% of its navy at 15% alpha and read as grey glass, darker than its own
-// editor. At 50% it keeps half its colour and stays lighter than the editor, as
-// it is on an opaque window.
+// sidebar at 10% because its colours *are* the neutral grey it expects behind
+// the window, so revealing that costs it nothing. A coloured mood keeps only as
+// much of itself as its alpha: at 15% Mưa's sidebar was 85% whatever lay behind
+// it. At 50% it keeps half its colour whatever the backdrop turns out to be.
 const ACRYLIC_SIDEBAR = 50;
 const ACRYLIC_NOTE_LIST = 70;
 const ACRYLIC_EDITOR = 90;
