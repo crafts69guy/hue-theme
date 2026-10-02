@@ -2,7 +2,7 @@
   "name": "@crafts69guy/hue-theme",
   "displayName": "Hue Yaak Theme",
   "private": false,
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Hue for Yaak \u2014 three Hu\u1ebf-inspired moods (M\u01b0a, H\u01b0\u01a1ng, Cung) generated from the Hue design token system.",
   "repository": {
     "type": "git",
