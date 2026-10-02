@@ -8,8 +8,9 @@
 // Styling mirrors the Neovim adapter's conventions: italic comments and
 // types, bold keywords, accent-bold headings, status colors for diff markup.
 
+import type { SemanticToken } from "../../generated/themes";
 import type { AdapterManifest } from "../contract";
-import type { ResolvedMood } from "./terminal";
+import { type ResolvedMood, role } from "../mood";
 
 export const batManifest = {
   supports: ["surface", "text", "border", "accent", "status", "syntax"],
@@ -19,7 +20,7 @@ export const batManifest = {
 type Rule = {
   name: string;
   scope: string;
-  fg?: string;
+  fg?: SemanticToken;
   fontStyle?: string;
 };
 
@@ -181,12 +182,6 @@ const RULES: Rule[] = [
   { name: "Invalid", scope: "invalid, invalid.illegal, message.error", fg: "status.error" },
 ];
 
-function role(mood: ResolvedMood, key: string): string {
-  const value = mood.semantic[key];
-  if (!value) throw new Error(`Mood ${mood.id} is missing semantic role ${key}`);
-  return value;
-}
-
 function xmlEscape(value: string): string {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -257,7 +252,9 @@ ${RULES.map((rule) => renderRule(mood, rule)).join("\n")}
  * Render every mood's bat theme. Paths are relative to the
  * `packages/terminal-themes/` package root.
  */
-export function renderBatFiles(moods: ResolvedMood[]): Array<{ path: string; content: string }> {
+export function renderBatFiles(
+  moods: readonly ResolvedMood[],
+): Array<{ path: string; content: string }> {
   return moods.map((mood) => ({
     path: `bat/hue-${mood.id}.tmTheme`,
     content: renderBatTheme(mood),

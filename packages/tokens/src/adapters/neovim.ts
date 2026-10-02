@@ -9,7 +9,8 @@
 
 import type { SemanticToken } from "../../generated/themes";
 import type { AdapterManifest } from "../contract";
-import { type ResolvedMood, terminalColors } from "./terminal";
+import type { ResolvedMood } from "../mood";
+import { terminalColors } from "./terminal";
 
 // Neovim has a slot for every contract family, so nothing is omitted.
 export const neovimManifest = {
@@ -406,7 +407,7 @@ function renderHlSpec(spec: HlSpec): string {
 }
 
 /** `lua/hue/palette.lua` — every mood's resolved colors + terminal ANSI. */
-function renderPalette(moods: ResolvedMood[]): string {
+function renderPalette(moods: readonly ResolvedMood[]): string {
   const entries = moods
     .map((mood) => {
       const semantic = Object.entries(mood.semantic)
@@ -706,7 +707,9 @@ function renderLualine(mood: ResolvedMood): string {
  * Render the whole Neovim plugin tree. Returns paths relative to the
  * `packages/nvim-plugin/` package root, paired with their file contents.
  */
-export function renderNeovimFiles(moods: ResolvedMood[]): Array<{ path: string; content: string }> {
+export function renderNeovimFiles(
+  moods: readonly ResolvedMood[],
+): Array<{ path: string; content: string }> {
   const files: Array<{ path: string; content: string }> = [
     { path: "lua/hue/palette.lua", content: renderPalette(moods) },
     { path: "lua/hue/groups.lua", content: renderGroups() },

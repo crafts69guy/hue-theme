@@ -31,7 +31,7 @@
 // config.toml and reloads.
 
 import type { AdapterManifest } from "../contract";
-import type { ResolvedMood } from "./terminal";
+import { primitive, type ResolvedMood, role } from "../mood";
 
 export const herdrManifest = {
   supports: ["surface", "text", "border", "accent", "status"],
@@ -39,18 +39,6 @@ export const herdrManifest = {
     syntax: "herdr has no syntax-highlighting slots; pane content is colored by the terminal theme",
   },
 } satisfies AdapterManifest;
-
-function role(mood: ResolvedMood, key: string): string {
-  const value = mood.semantic[key];
-  if (!value) throw new Error(`Mood ${mood.id} is missing semantic role ${key}`);
-  return value;
-}
-
-function primitive(mood: ResolvedMood, key: string): string {
-  const value = mood.primitive[key];
-  if (!value) throw new Error(`Mood ${mood.id} is missing primitive ${key}`);
-  return value;
-}
 
 /** Render one herdr [theme.custom] fragment, spliced in by the plugin's apply.sh. */
 function renderHerdrTheme(mood: ResolvedMood): string {
@@ -81,7 +69,9 @@ peach = "${role(mood, "status.warning")}"
  * Render every mood's herdr fragment. Paths are relative to the
  * `packages/herdr-plugin/` package root.
  */
-export function renderHerdrFiles(moods: ResolvedMood[]): Array<{ path: string; content: string }> {
+export function renderHerdrFiles(
+  moods: readonly ResolvedMood[],
+): Array<{ path: string; content: string }> {
   return moods.map((mood) => ({
     path: `themes/hue-${mood.id}.toml`,
     content: renderHerdrTheme(mood),

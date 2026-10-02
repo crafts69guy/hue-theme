@@ -1,6 +1,6 @@
 import { mixHex } from "../color";
 import type { AdapterManifest } from "../contract";
-import type { ResolvedMood } from "./terminal";
+import { type ResolvedMood, role } from "../mood";
 
 export const tideManifest = {
   supports: ["surface", "text", "accent", "status"],
@@ -9,12 +9,6 @@ export const tideManifest = {
     syntax: "Tide themes have no syntax-highlighting slots",
   },
 } satisfies AdapterManifest;
-
-function role(mood: ResolvedMood, key: string): string {
-  const value = mood.semantic[key];
-  if (!value) throw new Error(`Mood ${mood.id} is missing semantic role ${key}`);
-  return value;
-}
 
 function fishSet(name: string, value: string): string {
   return `set -g ${name} '${value}'`;
@@ -163,7 +157,9 @@ end
 `;
 }
 
-export function renderTideFiles(moods: ResolvedMood[]): Array<{ path: string; content: string }> {
+export function renderTideFiles(
+  moods: readonly ResolvedMood[],
+): Array<{ path: string; content: string }> {
   const files = moods.map((mood) => ({
     path: `tide/hue-${mood.id}.fish`,
     content: renderTideTheme(mood),

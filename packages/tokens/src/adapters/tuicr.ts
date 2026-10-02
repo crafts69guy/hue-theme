@@ -27,18 +27,12 @@
 
 import { contrastRatio, mixHex } from "../color";
 import type { AdapterManifest } from "../contract";
-import type { ResolvedMood } from "./terminal";
+import { type ResolvedMood, role } from "../mood";
 
 export const tuicrManifest = {
   supports: ["surface", "text", "border", "accent", "status", "syntax"],
   omits: {},
 } satisfies AdapterManifest;
-
-function role(mood: ResolvedMood, key: string): string {
-  const value = mood.semantic[key];
-  if (!value) throw new Error(`Mood ${mood.id} is missing semantic role ${key}`);
-  return value;
-}
 
 // Two values tuicr needs that the Hue contract does not name. Both are derived
 // here rather than added to `CONTRACT`: `text` is a closed family, so a new role
@@ -169,7 +163,9 @@ ${colors}
  * Render every mood's tuicr theme. Paths are relative to the
  * `packages/herdr-plugin/` package root (apply.sh reads them from there).
  */
-export function renderTuicrFiles(moods: ResolvedMood[]): Array<{ path: string; content: string }> {
+export function renderTuicrFiles(
+  moods: readonly ResolvedMood[],
+): Array<{ path: string; content: string }> {
   return moods.map((mood) => ({
     path: `tuicr/hue-${mood.id}.toml`,
     content: renderTuicrTheme(mood),

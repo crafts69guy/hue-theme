@@ -1,15 +1,8 @@
 // Shared building blocks for terminal-oriented adapters (Neovim, Ghostty, tmux).
-// The resolved-mood shape and the 16-color ANSI derivation live here so every
-// terminal adapter agrees on them instead of re-deriving the palette.
+// The 16-color ANSI derivation lives here so every terminal adapter agrees on it
+// instead of re-deriving the palette.
 
-export type ResolvedMood = {
-  id: string;
-  label: string;
-  appearance: "dark" | "light";
-  description: string;
-  primitive: Record<string, string>;
-  semantic: Record<string, string>;
-};
+import type { ResolvedMood } from "../mood";
 
 /**
  * Derive the 16 ANSI terminal colors for a mood. Chromatic slots come straight

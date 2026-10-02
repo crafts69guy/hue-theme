@@ -7,7 +7,8 @@
 // font stays in their own config.
 
 import type { AdapterManifest } from "../contract";
-import { type ResolvedMood, terminalColors } from "./terminal";
+import { type ResolvedMood, role } from "../mood";
+import { terminalColors } from "./terminal";
 
 // Ghostty theme files map color/cursor/selection but have no slots for borders,
 // status roles, or syntax highlighting.
@@ -19,12 +20,6 @@ export const ghosttyManifest = {
     syntax: "Ghostty theme files have no syntax-highlighting slots",
   },
 } satisfies AdapterManifest;
-
-function role(mood: ResolvedMood, key: string): string {
-  const value = mood.semantic[key];
-  if (!value) throw new Error(`Mood ${mood.id} is missing semantic role ${key}`);
-  return value;
-}
 
 /** Render one Ghostty theme file. */
 function renderGhosttyTheme(mood: ResolvedMood): string {
@@ -51,7 +46,7 @@ selection-foreground = ${role(mood, "text.primary")}
  * `hue-<mood>` placed in its `themes/` directory via `theme = hue-<mood>`.
  */
 export function renderGhosttyFiles(
-  moods: ResolvedMood[],
+  moods: readonly ResolvedMood[],
 ): Array<{ path: string; content: string }> {
   return moods.map((mood) => ({
     path: `ghostty/hue-${mood.id}`,

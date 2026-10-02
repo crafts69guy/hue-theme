@@ -4,6 +4,7 @@
 // roles are either deliberately derived by the host or omitted explicitly.
 
 import type { AdapterManifest } from "../contract";
+import { type ResolvedMood, role } from "../mood";
 
 export const CODEX_THEME_PREFIX = "codex-theme-v1:";
 export const CODEX_CODE_THEME_ID = "codex";
@@ -15,13 +16,6 @@ export const codexManifest = {
     syntax: "ChatGPT/Codex share strings accept only a built-in code-theme id",
   },
 } satisfies AdapterManifest;
-
-export type ResolvedMood = {
-  id: string;
-  label: string;
-  appearance: "dark" | "light";
-  semantic: Record<string, string>;
-};
 
 export type CodexThemeSharePayload = {
   codeThemeId: typeof CODEX_CODE_THEME_ID;
@@ -40,12 +34,6 @@ export type CodexThemeSharePayload = {
   };
   variant: "dark" | "light";
 };
-
-function role(mood: ResolvedMood, key: string): string {
-  const value = mood.semantic[key];
-  if (!value) throw new Error(`Mood ${mood.id} is missing semantic role ${key}`);
-  return value;
-}
 
 /** Map one Hue mood onto the app's versioned theme-share payload. */
 export function mapMoodToCodex(mood: ResolvedMood): CodexThemeSharePayload {
@@ -77,7 +65,7 @@ export function renderCodexThemeShareString(mood: ResolvedMood): string {
 
 /** Render every mood as a plain copy/paste artifact. */
 export function renderCodexThemeFiles(
-  moods: ResolvedMood[],
+  moods: readonly ResolvedMood[],
 ): Array<{ path: string; content: string }> {
   return moods.map((mood) => ({
     path: `hue-${mood.id}.txt`,

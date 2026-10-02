@@ -5,7 +5,7 @@
 import type { SemanticToken } from "../../generated/themes";
 import { hexToRgb } from "../color";
 import type { AdapterManifest } from "../contract";
-import type { ResolvedMood } from "./terminal";
+import { type ResolvedMood, role } from "../mood";
 
 export const inkdropManifest = {
   supports: ["surface", "text", "border", "accent", "status", "syntax"],
@@ -18,12 +18,6 @@ export type InkdropPackage = {
   moodId: string;
   files: Array<{ path: string; content: string }>;
 };
-
-function role(mood: ResolvedMood, key: SemanticToken): string {
-  const value = mood.semantic[key];
-  if (!value) throw new Error(`Mood ${mood.id} is missing semantic role ${key}`);
-  return value;
-}
 
 function cssVars(vars: Record<string, string>, indent = "  "): string {
   return Object.entries(vars)
@@ -178,7 +172,7 @@ function moodTagline(mood: ResolvedMood): string {
 // must also be absolute: a relative path renders as a broken image even when the
 // file ships inside the package, which is why the screenshots stay out of it and
 // installs stay small.
-function renderReadme(mood: ResolvedMood, siblings: ResolvedMood[]): string {
+function renderReadme(mood: ResolvedMood, siblings: readonly ResolvedMood[]): string {
   const swatch = (label: string, token: SemanticToken) =>
     `| ${label} | \`${role(mood, token).toLowerCase()}\` |`;
 
@@ -938,7 +932,10 @@ ${cssVars(vars, "    ")}
 `;
 }
 
-function renderInkdropPackage(mood: ResolvedMood, allMoods: ResolvedMood[]): InkdropPackage {
+function renderInkdropPackage(
+  mood: ResolvedMood,
+  allMoods: readonly ResolvedMood[],
+): InkdropPackage {
   const name = packageName(mood);
   return {
     packageName: name,
@@ -956,6 +953,6 @@ function renderInkdropPackage(mood: ResolvedMood, allMoods: ResolvedMood[]): Ink
   };
 }
 
-export function renderInkdropPackages(moods: ResolvedMood[]): InkdropPackage[] {
+export function renderInkdropPackages(moods: readonly ResolvedMood[]): InkdropPackage[] {
   return moods.map((mood) => renderInkdropPackage(mood, moods));
 }

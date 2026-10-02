@@ -28,9 +28,10 @@
 // user's own `[delta]` section: this fragment carries colours only, the same
 // policy every other terminal adapter follows.
 
+import type { StatusToken } from "../../generated/themes";
 import { mixHex } from "../color";
 import type { AdapterManifest } from "../contract";
-import type { ResolvedMood } from "./terminal";
+import { type ResolvedMood, role } from "../mood";
 
 export const deltaManifest = {
   // syntax counts as supported for the same reason it does in tuicr.ts: the
@@ -42,12 +43,6 @@ export const deltaManifest = {
 
 /** The feature name every mood declares. The mood switch is a symlink, not an edit. */
 export const DELTA_FEATURE = "hue";
-
-function role(mood: ResolvedMood, key: string): string {
-  const value = mood.semantic[key];
-  if (!value) throw new Error(`Mood ${mood.id} is missing semantic role ${key}`);
-  return value;
-}
 
 /**
  * A diff row background carrying the status hue, not the canvas hue.
@@ -64,14 +59,14 @@ function role(mood: ResolvedMood, key: string): string {
  * every `syntax.*` role keeps at least 0.75x the contrast it has on the canvas,
  * and `text.primary` stays above 11:1 — asserted in tests/terminal-adapters.test.ts.
  */
-function tint(mood: ResolvedMood, status: string, shade: number, blend: number): string {
+function tint(mood: ResolvedMood, status: StatusToken, shade: number, blend: number): string {
   const pole = mood.appearance === "dark" ? "#000000" : "#FFFFFF";
   return mixHex(mixHex(role(mood, status), pole, shade), role(mood, "surface.canvas"), blend);
 }
 
-const base = (mood: ResolvedMood, status: string) => tint(mood, status, 0.72, 0.3);
-const emph = (mood: ResolvedMood, status: string) => tint(mood, status, 0.55, 0.2);
-const nonEmph = (mood: ResolvedMood, status: string) => tint(mood, status, 0.8, 0.45);
+const base = (mood: ResolvedMood, status: StatusToken) => tint(mood, status, 0.72, 0.3);
+const emph = (mood: ResolvedMood, status: StatusToken) => tint(mood, status, 0.55, 0.2);
+const nonEmph = (mood: ResolvedMood, status: StatusToken) => tint(mood, status, 0.8, 0.45);
 
 type Entry = { key: string; value: (mood: ResolvedMood) => string; comment?: string };
 
@@ -217,7 +212,9 @@ ${body}
  * Render every mood's delta fragment. Paths are relative to the
  * `packages/terminal-themes/` package root.
  */
-export function renderDeltaFiles(moods: ResolvedMood[]): Array<{ path: string; content: string }> {
+export function renderDeltaFiles(
+  moods: readonly ResolvedMood[],
+): Array<{ path: string; content: string }> {
   return moods.map((mood) => ({
     path: `delta/hue-${mood.id}.gitconfig`,
     content: renderDeltaTheme(mood),

@@ -10,8 +10,9 @@
 // Diff content inside lazygit is colored by the configured pager (delta,
 // which follows BAT_THEME), not by gui.theme — hence syntax is omitted.
 
+import type { SemanticToken } from "../../generated/themes";
 import type { AdapterManifest } from "../contract";
-import type { ResolvedMood } from "./terminal";
+import { type ResolvedMood, role } from "../mood";
 
 export const lazygitManifest = {
   supports: ["surface", "text", "border", "accent", "status"],
@@ -20,7 +21,7 @@ export const lazygitManifest = {
   },
 } satisfies AdapterManifest;
 
-type ThemeEntry = { key: string; roles: string[]; modifiers?: string[] };
+type ThemeEntry = { key: string; roles: SemanticToken[]; modifiers?: string[] };
 
 // lazygit gui.theme keys (v0.63). Roles are Hue semantic token names.
 const THEME: ThemeEntry[] = [
@@ -37,12 +38,6 @@ const THEME: ThemeEntry[] = [
   { key: "unstagedChangesColor", roles: ["status.error"] },
   { key: "defaultFgColor", roles: ["text.primary"] },
 ];
-
-function role(mood: ResolvedMood, key: string): string {
-  const value = mood.semantic[key];
-  if (!value) throw new Error(`Mood ${mood.id} is missing semantic role ${key}`);
-  return value;
-}
 
 /** Render one lazygit theme fragment for a mood. */
 function renderLazygitTheme(mood: ResolvedMood): string {
@@ -65,7 +60,7 @@ ${entries}
  * `packages/terminal-themes/` package root.
  */
 export function renderLazygitFiles(
-  moods: ResolvedMood[],
+  moods: readonly ResolvedMood[],
 ): Array<{ path: string; content: string }> {
   return moods.map((mood) => ({
     path: `lazygit/hue-${mood.id}.yml`,

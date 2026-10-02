@@ -4,7 +4,7 @@
 // families are omitted explicitly.
 
 import type { AdapterManifest } from "../contract";
-import type { ResolvedMood } from "./terminal";
+import { type ResolvedMood, role } from "../mood";
 
 // tmux theming maps surfaces, text, accents, and pane borders. There is no slot
 // for status (success/error/...) roles or syntax highlighting in a static theme.
@@ -15,12 +15,6 @@ export const tmuxManifest = {
     syntax: "tmux themes have no syntax-highlighting slots",
   },
 } satisfies AdapterManifest;
-
-function role(mood: ResolvedMood, key: string): string {
-  const value = mood.semantic[key];
-  if (!value) throw new Error(`Mood ${mood.id} is missing semantic role ${key}`);
-  return value;
-}
 
 /** Render one sourceable tmux theme file. */
 function renderTmuxTheme(mood: ResolvedMood): string {
@@ -99,7 +93,9 @@ fi
  * `packages/tmux-plugin/` package root: one theme per mood under `themes/`,
  * plus the `hue.tmux` entrypoint TPM executes.
  */
-export function renderTmuxFiles(moods: ResolvedMood[]): Array<{ path: string; content: string }> {
+export function renderTmuxFiles(
+  moods: readonly ResolvedMood[],
+): Array<{ path: string; content: string }> {
   const files = moods.map((mood) => ({
     path: `themes/hue-${mood.id}.conf`,
     content: renderTmuxTheme(mood),

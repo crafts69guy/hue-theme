@@ -65,11 +65,13 @@ The Ghostty adapter (`adapters/ghostty.ts`) generates `ghostty/hue-<mood>` theme
 files into `packages/terminal-themes/`. The tmux adapter (`adapters/tmux.ts`)
 generates a TPM plugin into `packages/tmux-plugin/` (`themes/hue-<mood>.conf` plus
 the executable `hue.tmux` entrypoint that sources the mood from `@hue_flavour`).
-The 16-color ANSI derivation and the `ResolvedMood` shape they share with Neovim
-live in `adapters/terminal.ts` so the terminal palette is derived in exactly one
-place. Like Neovim, the tmux plugin is released to a standalone repo
-(`scripts/release-tmux.sh`); Ghostty has no plugin mechanism, so its theme file
-is consumed directly.
+The 16-color ANSI derivation they share with Neovim lives in
+`adapters/terminal.ts` so the terminal palette is derived in exactly one place.
+Every adapter reads a mood through `src/mood.ts`: one `ResolvedMood` shape, and a
+`role()` accessor typed to the contract's `SemanticToken`, so a misspelt role is
+a type error rather than a build-time throw. Like Neovim, the tmux plugin is
+released to a standalone repo (`scripts/release-tmux.sh`); Ghostty has no plugin
+mechanism, so its theme file is consumed directly.
 
 The ChatGPT/Codex adapter (`adapters/codex.ts`) generates one
 `codex-theme-v1` share string per mood into `packages/codex-themes/`. It maps
