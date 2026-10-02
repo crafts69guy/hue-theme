@@ -3,9 +3,9 @@
 // Mermaid diagram variables through layered CSS stylesheets.
 
 import type { SemanticToken } from "../../generated/themes";
-import { hexToRgb } from "../color";
+import { hexToRgb, mixHex } from "../color";
 import type { AdapterManifest } from "../contract";
-import { textOn } from "../derive";
+import { textOn, tray, wash } from "../derive";
 import { type ResolvedMood, role } from "../mood";
 
 export const inkdropManifest = {
@@ -30,9 +30,35 @@ function cssValue(value: string): string {
   return value.replace(/#[0-9A-F]{6}/gi, (hex) => hex.toLowerCase());
 }
 
+// One rule for every colour this adapter writes. When both colours are known —
+// a line over a panel, a chip over the canvas — the blend is precomputed to a hex
+// in TypeScript, where the tests can measure its contrast. `translucent()` is
+// kept for colour that has to composite over a background the theme cannot
+// know: the active line over a selection, button washes on any surface, the
+// acrylic window. No `color-mix()` and no `#rrggbbaa` in the output.
 function translucent(hex: string, percent: number): string {
   const [r, g, b] = hexToRgb(hex);
   return `rgb(${r} ${g} ${b} / ${percent}%)`;
+}
+
+const SOFT_LINE = 40;
+// Tag chips: how much of the chip's hue lands on the canvas behind its text.
+const TAG_CHIP = 22;
+// ==mark== fill, kept translucent so highlighted text stays readable.
+const MARK_FILL = 22;
+// Mermaid subgraph fill, so the diagram background reads faintly through.
+const MERMAID_CLUSTER = 72;
+
+// Two border tiers, Kanagawa-style. A structural divider between filled panels
+// is a near-background hairline (the boundary colour 30% into the raised
+// surface), so panels read as filled areas rather than boxed outlines; a general
+// or floating border is a translucent boundary line.
+function hairline(mood: ResolvedMood): string {
+  return mixHex(role(mood, "surface.raised"), role(mood, "border.subtle"), 0.3);
+}
+
+function softLine(mood: ResolvedMood): string {
+  return translucent(role(mood, "border.subtle"), SOFT_LINE);
 }
 
 // How much of its own colour each surface keeps once the acrylic window is on.
@@ -455,8 +481,8 @@ function renderUiCss(mood: ResolvedMood): string {
     "--task-progress-view-foreground-color": role(mood, "accent.primary"),
     "--task-progress-view-completed-color": role(mood, "status.success"),
     // ==mark== highlight (kept translucent so highlighted text stays readable).
-    "--mark-background-color": `${role(mood, "status.warning")}39`,
-    "--mark-border-color": `${role(mood, "status.warning")}66`,
+    "--mark-background-color": translucent(role(mood, "status.warning"), MARK_FILL),
+    "--mark-border-color": translucent(role(mood, "status.warning"), SOFT_LINE),
     "--mark-color": role(mood, "text.primary"),
     "--kbd-background": role(mood, "surface.raised"),
   };
@@ -464,7 +490,7 @@ function renderUiCss(mood: ResolvedMood): string {
   // Tag/label chips. Inkdrop exposes 11 chromatic families; Hue has 5 chromatic
   // roles, so we group the families onto the nearest Hue hue (red↔pink, the warm
   // yellows/browns, the greens, the cyans, the violets). Each chip shows bright
-  // hue text on a dark hue-tinted background derived from canvas via color-mix,
+  // hue text on a dark hue-tinted background, a wash of the canvas toward the hue,
   // so the palette stays token-driven (no hardcoded chip colors).
   const tagHues: Record<string, SemanticToken> = {
     red: "status.error",
@@ -479,7 +505,6 @@ function renderUiCss(mood: ResolvedMood): string {
     violet: "accent.secondary",
     purple: "accent.secondary",
   };
-  const canvas = role(mood, "surface.canvas");
   for (const [name, hueRole] of Object.entries(tagHues)) {
     const hue = role(mood, hueRole);
     vars[`--${name}`] = hue;
@@ -489,28 +514,28 @@ function renderUiCss(mood: ResolvedMood): string {
     vars[`--${name}-focus`] = hue;
     vars[`--${name}-down`] = hue;
     vars[`--${name}-active`] = hue;
-    vars[`--${name}-background`] = `color-mix(in srgb, ${hue} 22%, ${canvas})`;
+    vars[`--${name}-background`] = wash(mood, hueRole, TAG_CHIP / 100);
   }
 
   // Border treatment, Kanagawa-style two tiers: structural dividers (sidebar,
   // note list, drawers) use a near-bg hairline = surface.raised so panels read as
   // filled areas, not boxed outlines; general/floating borders use a translucent
   // rain mid-line instead of the full-strength one.
-  const hairline = `color-mix(in srgb, ${role(mood, "border.subtle")} 30%, ${role(mood, "surface.raised")})`;
-  const softLine = `${role(mood, "border.subtle")}66`;
+  const hair = hairline(mood);
+  const soft = softLine(mood);
   Object.assign(vars, {
-    "--border-color": softLine,
-    "--internal-border-color": softLine,
-    "--solid-internal-border-color": softLine,
-    "--strong-border-color": softLine,
-    "--popup-border-color": softLine,
-    "--tooltip-border-color": softLine,
-    "--dropdown-menu-border-color": softLine,
-    "--sidebar-border-right": `1px solid ${hairline}`,
-    "--sidebar-menu-section-separator-color": hairline,
-    "--note-list-bar-border-right": `1px solid ${hairline}`,
-    "--note-list-view-item-separator-border": `1px solid ${hairline}`,
-    "--editor-drawer-border-left": `1px solid ${hairline}`,
+    "--border-color": soft,
+    "--internal-border-color": soft,
+    "--solid-internal-border-color": soft,
+    "--strong-border-color": soft,
+    "--popup-border-color": soft,
+    "--tooltip-border-color": soft,
+    "--dropdown-menu-border-color": soft,
+    "--sidebar-border-right": `1px solid ${hair}`,
+    "--sidebar-menu-section-separator-color": hair,
+    "--note-list-bar-border-right": `1px solid ${hair}`,
+    "--note-list-view-item-separator-border": `1px solid ${hair}`,
+    "--editor-drawer-border-left": `1px solid ${hair}`,
   });
 
   // Segments and tabs. The base fills them with neutral greys (neutral-900 cards,
@@ -521,13 +546,13 @@ function renderUiCss(mood: ResolvedMood): string {
   const raised = role(mood, "surface.raised");
   Object.assign(vars, {
     "--segment-background": raised,
-    "--secondary-segment-background": `color-mix(in srgb, ${raised} 50%, ${canvas})`,
+    "--secondary-segment-background": tray(mood),
     "--secondary-segment-color": role(mood, "text.secondary"),
-    "--grouped-segment-divider": `1px solid ${hairline}`,
-    "--grouped-segment-group-segment-box-shadow": `0 0 0 1px ${hairline}`,
-    "--grouped-segment-hover-background": `color-mix(in srgb, ${role(mood, "surface.selected")} 50%, ${raised})`,
+    "--grouped-segment-divider": `1px solid ${hair}`,
+    "--grouped-segment-group-segment-box-shadow": `0 0 0 1px ${hair}`,
+    "--grouped-segment-hover-background": mixHex(raised, role(mood, "surface.selected"), 0.5),
     "--piled-segments-background": raised,
-    "--tabular-menu-border-color": softLine,
+    "--tabular-menu-border-color": soft,
     "--tabular-menu-active-background": raised,
     "--tabular-menu-active-color": role(mood, "text.primary"),
   });
@@ -538,21 +563,21 @@ function renderUiCss(mood: ResolvedMood): string {
   // and drawers alike and an opaque fill would vanish on whichever matches it.
   const line = role(mood, "border.subtle");
   const secondary = role(mood, "accent.secondary");
-  const tray = `color-mix(in srgb, ${raised} 50%, ${canvas})`;
+  const recess = tray(mood);
   Object.assign(vars, {
     "--button-background": translucent(line, BUTTON_IDLE),
     "--button-hover-background-color": translucent(line, BUTTON_HOVER),
     "--button-down-background-color": translucent(line, BUTTON_DOWN),
     "--button-active-background-color": translucent(line, BUTTON_HOVER),
     "--button-text-color": role(mood, "text.primary"),
-    "--button-box-shadow": `0 0 0 1px ${softLine} inset`,
+    "--button-box-shadow": `0 0 0 1px ${soft} inset`,
     "--basic-button-hover-background": translucent(line, BUTTON_IDLE),
     "--basic-button-down-background": translucent(line, BUTTON_DOWN),
     "--secondary-color-focus": secondary,
     "--secondary-color-down": secondary,
     "--secondary-color-active": secondary,
     "--strong-selected-border-color": line,
-    "--disabled-border-color": softLine,
+    "--disabled-border-color": soft,
     "--input-highlight-background": role(mood, "surface.selected"),
     "--input-placeholder-focus-color": role(mood, "text.secondary"),
     "--form-select-background": raised,
@@ -562,8 +587,8 @@ function renderUiCss(mood: ResolvedMood): string {
     "--message-background": raised,
     "--vertical-menu-background": translucent(raised, FLOATING_MENU),
     "--inline-dropdown-menu-background": translucent(raised, FLOATING_MENU),
-    "--note-list-bar-pinned-section-header-background": tray,
-    "--note-list-bar-section-header-background": tray,
+    "--note-list-bar-pinned-section-header-background": recess,
+    "--note-list-bar-section-header-background": recess,
   });
 
   return `${renderHeader(mood, "ui")}@layer theme.ui {
@@ -763,14 +788,14 @@ function renderSyntaxCss(mood: ResolvedMood): string {
 
   // Code blocks and tables read as filled surfaces with a near-bg hairline rather
   // than boxed outlines (Kanagawa style); panel/inline-code edges stay a soft line.
-  const hairline = `color-mix(in srgb, ${role(mood, "border.subtle")} 30%, ${role(mood, "surface.raised")})`;
-  const softLine = `${role(mood, "border.subtle")}66`;
+  const hair = hairline(mood);
+  const soft = softLine(mood);
   Object.assign(vars, {
-    "--editor-gutter-border-right": `1px solid ${hairline}`,
-    "--editor-panel-border-color": softLine,
-    "--md-codeblock-border-color": hairline,
-    "--md-table-border-color": hairline,
-    "--md-inline-code-border-color": softLine,
+    "--editor-gutter-border-right": `1px solid ${hair}`,
+    "--editor-panel-border-color": soft,
+    "--md-codeblock-border-color": hair,
+    "--md-table-border-color": hair,
+    "--md-inline-code-border-color": soft,
   });
 
   return `${renderHeader(mood, "syntax")}@layer theme.syntax {
@@ -852,7 +877,10 @@ function renderPreviewCss(mood: ResolvedMood): string {
     "--mermaid-line-color": role(mood, "border.subtle"),
     "--mermaid-label-text-color": role(mood, "text.primary"),
     "--mermaid-edge-label-background-color": role(mood, "surface.canvas"),
-    "--mermaid-cluster-background-color": `color-mix(in srgb, ${role(mood, "surface.raised")} 72%, transparent)`,
+    "--mermaid-cluster-background-color": translucent(
+      role(mood, "surface.raised"),
+      MERMAID_CLUSTER,
+    ),
     "--mermaid-cluster-border-color": role(mood, "border.subtle"),
     "--mermaid-title-text-color": role(mood, "text.primary"),
     "--mermaid-primary-color": role(mood, "accent.primary"),
@@ -891,13 +919,13 @@ function renderPreviewCss(mood: ResolvedMood): string {
   };
 
   // Subtle, filled-surface borders for rendered code blocks and tables.
-  const hairline = `color-mix(in srgb, ${role(mood, "border.subtle")} 30%, ${role(mood, "surface.raised")})`;
-  const softLine = `${role(mood, "border.subtle")}66`;
+  const hair = hairline(mood);
+  const soft = softLine(mood);
   Object.assign(vars, {
-    "--border-color": softLine,
-    "--md-codeblock-border-color": hairline,
-    "--md-table-border-color": hairline,
-    "--md-inline-code-border-color": softLine,
+    "--border-color": soft,
+    "--md-codeblock-border-color": hair,
+    "--md-table-border-color": hair,
+    "--md-inline-code-border-color": soft,
   });
 
   return `${renderHeader(mood, "preview")}@layer theme.preview {
@@ -924,12 +952,12 @@ ${cssVars(vars, "    ")}
   .mde-preview code,
   .mde-preview pre {
     background: ${cssValue(role(mood, "surface.raised"))};
-    border-color: ${cssValue(hairline)};
+    border-color: ${cssValue(hair)};
   }
 
   .mde-preview table th,
   .mde-preview table td {
-    border-color: ${cssValue(hairline)};
+    border-color: ${cssValue(hair)};
   }
 }
 `;

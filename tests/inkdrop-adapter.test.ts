@@ -1,7 +1,9 @@
 import { describe, expect, test } from "bun:test";
+import type { SemanticToken } from "../packages/tokens/generated/themes";
 import { themeBundle } from "../packages/tokens/generated/themes";
 import { renderInkdropPackages } from "../packages/tokens/src/adapters/inkdrop";
 import { contrastRatio, hexToRgb } from "../packages/tokens/src/color";
+import { tray, wash } from "../packages/tokens/src/derive";
 
 const HEX = /^#[0-9a-f]{6}$/;
 const STYLE_SHEETS = ["palette.css", "ui.css", "syntax.css", "preview.css"];
@@ -281,16 +283,13 @@ describe("Hue -> Inkdrop adapter", () => {
   test("themes segments and tabs instead of inheriting neutral greys", () => {
     for (const pack of packages) {
       const ui = fileContent(pack, "styles/ui.css");
-      const raised = moodOf(pack.moodId).semantic["surface.raised"].toLowerCase();
+      const mood = moodOf(pack.moodId);
+      const raised = mood.semantic["surface.raised"].toLowerCase();
       expect(ui).toContain(`--segment-background: ${raised};`);
       expect(ui).toContain(`--tabular-menu-active-background: ${raised};`);
-      for (const key of [
-        "--secondary-segment-background",
-        "--grouped-segment-hover-background",
-        "--grouped-segment-group-segment-box-shadow",
-      ]) {
-        expect(ui).toMatch(new RegExp(`${key}: [^;]*${raised}`));
-      }
+      // The footer tray sits between the card and the canvas, shared with the
+      // derived tray every other host uses.
+      expect(ui).toContain(`--secondary-segment-background: ${tray(mood).toLowerCase()};`);
     }
   });
 
@@ -324,14 +323,40 @@ describe("Hue -> Inkdrop adapter", () => {
   });
 
   // Regression: tag/label chips are Hue-tinted via the chromatic families, each
-  // with a color-mix background derived from the canvas.
+  // on a wash of the canvas toward its own hue.
   test("emits Hue-tinted tag chip colors in UI packages", () => {
     for (const pack of packages) {
       const css = fileContent(pack, "styles/ui.css");
-      for (const family of ["red", "yellow", "green", "blue", "violet"]) {
-        expect(css).toContain(`--${family}-background:`);
+      const mood = moodOf(pack.moodId);
+      const chips: Record<string, SemanticToken> = {
+        red: "status.error",
+        yellow: "status.warning",
+        green: "status.success",
+        blue: "status.info",
+        violet: "accent.secondary",
+      };
+      for (const [family, hue] of Object.entries(chips)) {
+        const bg = wash(mood, hue, 0.22);
+        expect(css).toContain(`--${family}-background: ${bg.toLowerCase()};`);
+        // The chip's own hue reads as text on its tint.
+        expect(contrastRatio(mood.semantic[hue], bg)).toBeGreaterThanOrEqual(3);
       }
-      expect(css).toContain("color-mix(in srgb,");
+    }
+  });
+
+  // A blend written as CSS cannot be measured by a test, and two alpha syntaxes
+  // side by side invite drift. Known pairs are precomputed hexes; anything that
+  // must composite over an unknown background is rgb(… / N%).
+  test("writes one colour syntax: hex, or rgb() with alpha", () => {
+    for (const pack of packages) {
+      for (const sheet of STYLE_SHEETS) {
+        const css = fileContent(pack, `styles/${sheet}`);
+        expect(css).not.toContain("color-mix(");
+        expect(css).not.toMatch(/#[0-9a-f]{8}\b/i);
+        for (const [, alpha] of css.matchAll(/rgb\(\d+ \d+ \d+ \/ (\d+)%\)/g)) {
+          expect(Number(alpha)).toBeLessThan(100);
+        }
+      }
     }
   });
 });

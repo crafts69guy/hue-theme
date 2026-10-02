@@ -137,8 +137,8 @@
     --task-progress-view-background-color: #ffffff;
     --task-progress-view-foreground-color: #00753c;
     --task-progress-view-completed-color: #00753c;
-    --mark-background-color: #a15a0039;
-    --mark-border-color: #a15a0066;
+    --mark-background-color: rgb(161 90 0 / 22%);
+    --mark-border-color: rgb(161 90 0 / 40%);
     --mark-color: #001f3e;
     --kbd-background: #ffffff;
     --red: #c20a19;
@@ -148,7 +148,7 @@
     --red-focus: #c20a19;
     --red-down: #c20a19;
     --red-active: #c20a19;
-    --red-background: color-mix(in srgb, #c20a19 22%, #edf3fe);
+    --red-background: #e4c0cc;
     --pink: #c20a19;
     --pink-text-color: #c20a19;
     --pink-header-color: #c20a19;
@@ -156,7 +156,7 @@
     --pink-focus: #c20a19;
     --pink-down: #c20a19;
     --pink-active: #c20a19;
-    --pink-background: color-mix(in srgb, #c20a19 22%, #edf3fe);
+    --pink-background: #e4c0cc;
     --orange: #a15a00;
     --orange-text-color: #a15a00;
     --orange-header-color: #a15a00;
@@ -164,7 +164,7 @@
     --orange-focus: #a15a00;
     --orange-down: #a15a00;
     --orange-active: #a15a00;
-    --orange-background: color-mix(in srgb, #a15a00 22%, #edf3fe);
+    --orange-background: #dcd1c6;
     --yellow: #a15a00;
     --yellow-text-color: #a15a00;
     --yellow-header-color: #a15a00;
@@ -172,7 +172,7 @@
     --yellow-focus: #a15a00;
     --yellow-down: #a15a00;
     --yellow-active: #a15a00;
-    --yellow-background: color-mix(in srgb, #a15a00 22%, #edf3fe);
+    --yellow-background: #dcd1c6;
     --brown: #a15a00;
     --brown-text-color: #a15a00;
     --brown-header-color: #a15a00;
@@ -180,7 +180,7 @@
     --brown-focus: #a15a00;
     --brown-down: #a15a00;
     --brown-active: #a15a00;
-    --brown-background: color-mix(in srgb, #a15a00 22%, #edf3fe);
+    --brown-background: #dcd1c6;
     --olive: #00753c;
     --olive-text-color: #00753c;
     --olive-header-color: #00753c;
@@ -188,7 +188,7 @@
     --olive-focus: #00753c;
     --olive-down: #00753c;
     --olive-active: #00753c;
-    --olive-background: color-mix(in srgb, #00753c 22%, #edf3fe);
+    --olive-background: #b9d7d3;
     --green: #00753c;
     --green-text-color: #00753c;
     --green-header-color: #00753c;
@@ -196,7 +196,7 @@
     --green-focus: #00753c;
     --green-down: #00753c;
     --green-active: #00753c;
-    --green-background: color-mix(in srgb, #00753c 22%, #edf3fe);
+    --green-background: #b9d7d3;
     --teal: #0033c9;
     --teal-text-color: #0033c9;
     --teal-header-color: #0033c9;
@@ -204,7 +204,7 @@
     --teal-focus: #0033c9;
     --teal-down: #0033c9;
     --teal-active: #0033c9;
-    --teal-background: color-mix(in srgb, #0033c9 22%, #edf3fe);
+    --teal-background: #b9c9f2;
     --blue: #0033c9;
     --blue-text-color: #0033c9;
     --blue-header-color: #0033c9;
@@ -212,7 +212,7 @@
     --blue-focus: #0033c9;
     --blue-down: #0033c9;
     --blue-active: #0033c9;
-    --blue-background: color-mix(in srgb, #0033c9 22%, #edf3fe);
+    --blue-background: #b9c9f2;
     --violet: #6b2fd0;
     --violet-text-color: #6b2fd0;
     --violet-header-color: #6b2fd0;
@@ -220,7 +220,7 @@
     --violet-focus: #6b2fd0;
     --violet-down: #6b2fd0;
     --violet-active: #6b2fd0;
-    --violet-background: color-mix(in srgb, #6b2fd0 22%, #edf3fe);
+    --violet-background: #d0c8f4;
     --purple: #6b2fd0;
     --purple-text-color: #6b2fd0;
     --purple-header-color: #6b2fd0;
@@ -228,27 +228,27 @@
     --purple-focus: #6b2fd0;
     --purple-down: #6b2fd0;
     --purple-active: #6b2fd0;
-    --purple-background: color-mix(in srgb, #6b2fd0 22%, #edf3fe);
-    --border-color: #5c7ba866;
-    --internal-border-color: #5c7ba866;
-    --solid-internal-border-color: #5c7ba866;
-    --strong-border-color: #5c7ba866;
-    --popup-border-color: #5c7ba866;
-    --tooltip-border-color: #5c7ba866;
-    --dropdown-menu-border-color: #5c7ba866;
-    --sidebar-border-right: 1px solid color-mix(in srgb, #5c7ba8 30%, #ffffff);
-    --sidebar-menu-section-separator-color: color-mix(in srgb, #5c7ba8 30%, #ffffff);
-    --note-list-bar-border-right: 1px solid color-mix(in srgb, #5c7ba8 30%, #ffffff);
-    --note-list-view-item-separator-border: 1px solid color-mix(in srgb, #5c7ba8 30%, #ffffff);
-    --editor-drawer-border-left: 1px solid color-mix(in srgb, #5c7ba8 30%, #ffffff);
+    --purple-background: #d0c8f4;
+    --border-color: rgb(92 123 168 / 40%);
+    --internal-border-color: rgb(92 123 168 / 40%);
+    --solid-internal-border-color: rgb(92 123 168 / 40%);
+    --strong-border-color: rgb(92 123 168 / 40%);
+    --popup-border-color: rgb(92 123 168 / 40%);
+    --tooltip-border-color: rgb(92 123 168 / 40%);
+    --dropdown-menu-border-color: rgb(92 123 168 / 40%);
+    --sidebar-border-right: 1px solid #ced7e5;
+    --sidebar-menu-section-separator-color: #ced7e5;
+    --note-list-bar-border-right: 1px solid #ced7e5;
+    --note-list-view-item-separator-border: 1px solid #ced7e5;
+    --editor-drawer-border-left: 1px solid #ced7e5;
     --segment-background: #ffffff;
-    --secondary-segment-background: color-mix(in srgb, #ffffff 50%, #edf3fe);
+    --secondary-segment-background: #f6f9ff;
     --secondary-segment-color: #384b63;
-    --grouped-segment-divider: 1px solid color-mix(in srgb, #5c7ba8 30%, #ffffff);
-    --grouped-segment-group-segment-box-shadow: 0 0 0 1px color-mix(in srgb, #5c7ba8 30%, #ffffff);
-    --grouped-segment-hover-background: color-mix(in srgb, #8ccbff 50%, #ffffff);
+    --grouped-segment-divider: 1px solid #ced7e5;
+    --grouped-segment-group-segment-box-shadow: 0 0 0 1px #ced7e5;
+    --grouped-segment-hover-background: #c6e5ff;
     --piled-segments-background: #ffffff;
-    --tabular-menu-border-color: #5c7ba866;
+    --tabular-menu-border-color: rgb(92 123 168 / 40%);
     --tabular-menu-active-background: #ffffff;
     --tabular-menu-active-color: #001f3e;
     --button-background: rgb(92 123 168 / 18%);
@@ -256,14 +256,14 @@
     --button-down-background-color: rgb(92 123 168 / 24%);
     --button-active-background-color: rgb(92 123 168 / 30%);
     --button-text-color: #001f3e;
-    --button-box-shadow: 0 0 0 1px #5c7ba866 inset;
+    --button-box-shadow: 0 0 0 1px rgb(92 123 168 / 40%) inset;
     --basic-button-hover-background: rgb(92 123 168 / 18%);
     --basic-button-down-background: rgb(92 123 168 / 24%);
     --secondary-color-focus: #6b2fd0;
     --secondary-color-down: #6b2fd0;
     --secondary-color-active: #6b2fd0;
     --strong-selected-border-color: #5c7ba8;
-    --disabled-border-color: #5c7ba866;
+    --disabled-border-color: rgb(92 123 168 / 40%);
     --input-highlight-background: #8ccbff;
     --input-placeholder-focus-color: #384b63;
     --form-select-background: #ffffff;
@@ -273,8 +273,8 @@
     --message-background: #ffffff;
     --vertical-menu-background: rgb(255 255 255 / 70%);
     --inline-dropdown-menu-background: rgb(255 255 255 / 70%);
-    --note-list-bar-pinned-section-header-background: color-mix(in srgb, #ffffff 50%, #edf3fe);
-    --note-list-bar-section-header-background: color-mix(in srgb, #ffffff 50%, #edf3fe);
+    --note-list-bar-pinned-section-header-background: #f6f9ff;
+    --note-list-bar-section-header-background: #f6f9ff;
   }
 
   /* Accent bar on the active note-list row, so the (subtle) selection still reads

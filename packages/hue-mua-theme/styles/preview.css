@@ -59,7 +59,7 @@
     --mermaid-line-color: #4e7aa6;
     --mermaid-label-text-color: #e5f4ff;
     --mermaid-edge-label-background-color: #001f3e;
-    --mermaid-cluster-background-color: color-mix(in srgb, #0a2e52 72%, transparent);
+    --mermaid-cluster-background-color: rgb(10 46 82 / 72%);
     --mermaid-cluster-border-color: #4e7aa6;
     --mermaid-title-text-color: #e5f4ff;
     --mermaid-primary-color: #00cf6a;
@@ -95,10 +95,10 @@
     --mermaid-gantt-done-task-color: #00cf6a;
     --mermaid-gantt-critical-task-color: #ff5a63;
     --mermaid-git-branch-label-color: #001f3e;
-    --border-color: #4e7aa666;
-    --md-codeblock-border-color: color-mix(in srgb, #4e7aa6 30%, #0a2e52);
-    --md-table-border-color: color-mix(in srgb, #4e7aa6 30%, #0a2e52);
-    --md-inline-code-border-color: #4e7aa666;
+    --border-color: rgb(78 122 166 / 40%);
+    --md-codeblock-border-color: #1e456b;
+    --md-table-border-color: #1e456b;
+    --md-inline-code-border-color: rgb(78 122 166 / 40%);
   }
 
   .mde-preview,
@@ -119,11 +119,11 @@
   .mde-preview code,
   .mde-preview pre {
     background: #0a2e52;
-    border-color: color-mix(in srgb, #4e7aa6 30%, #0a2e52);
+    border-color: #1e456b;
   }
 
   .mde-preview table th,
   .mde-preview table td {
-    border-color: color-mix(in srgb, #4e7aa6 30%, #0a2e52);
+    border-color: #1e456b;
   }
 }

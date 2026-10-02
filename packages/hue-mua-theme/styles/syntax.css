@@ -12,7 +12,7 @@
     --editor-active-line-background-color: rgb(18 63 110 / 35%);
     --editor-special-char-color: #4e7aa6;
     --editor-spelling-error-color: #ff5a63;
-    --editor-gutter-border-right: 1px solid color-mix(in srgb, #4e7aa6 30%, #0a2e52);
+    --editor-gutter-border-right: 1px solid #1e456b;
     --editor-gutter-color: #9db4d4;
     --editor-gutter-background-color: transparent;
     --editor-gutter-background-solid-color: #001f3e;
@@ -163,10 +163,10 @@
     --syntax-link-text-decoration: underline;
     --syntax-strikethrough-text-decoration: line-through;
     --syntax-invalid-border-bottom: 1px dotted #ff5a63;
-    --editor-panel-border-color: #4e7aa666;
-    --md-codeblock-border-color: color-mix(in srgb, #4e7aa6 30%, #0a2e52);
-    --md-table-border-color: color-mix(in srgb, #4e7aa6 30%, #0a2e52);
-    --md-inline-code-border-color: #4e7aa666;
+    --editor-panel-border-color: rgb(78 122 166 / 40%);
+    --md-codeblock-border-color: #1e456b;
+    --md-table-border-color: #1e456b;
+    --md-inline-code-border-color: rgb(78 122 166 / 40%);
   }
 
   :root:has(body.acrylic-window) {

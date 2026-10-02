@@ -59,7 +59,7 @@
     --mermaid-line-color: #587168;
     --mermaid-label-text-color: #d6dad0;
     --mermaid-edge-label-background-color: #0f1d19;
-    --mermaid-cluster-background-color: color-mix(in srgb, #182a24 72%, transparent);
+    --mermaid-cluster-background-color: rgb(24 42 36 / 72%);
     --mermaid-cluster-border-color: #587168;
     --mermaid-title-text-color: #d6dad0;
     --mermaid-primary-color: #6fd0a8;
@@ -95,10 +95,10 @@
     --mermaid-gantt-done-task-color: #6fd0a8;
     --mermaid-gantt-critical-task-color: #d38478;
     --mermaid-git-branch-label-color: #0f1d19;
-    --border-color: #58716866;
-    --md-codeblock-border-color: color-mix(in srgb, #587168 30%, #182a24);
-    --md-table-border-color: color-mix(in srgb, #587168 30%, #182a24);
-    --md-inline-code-border-color: #58716866;
+    --border-color: rgb(88 113 104 / 40%);
+    --md-codeblock-border-color: #2b3f38;
+    --md-table-border-color: #2b3f38;
+    --md-inline-code-border-color: rgb(88 113 104 / 40%);
   }
 
   .mde-preview,
@@ -119,11 +119,11 @@
   .mde-preview code,
   .mde-preview pre {
     background: #182a24;
-    border-color: color-mix(in srgb, #587168 30%, #182a24);
+    border-color: #2b3f38;
   }
 
   .mde-preview table th,
   .mde-preview table td {
-    border-color: color-mix(in srgb, #587168 30%, #182a24);
+    border-color: #2b3f38;
   }
 }

@@ -12,7 +12,7 @@
     --editor-active-line-background-color: rgb(36 78 66 / 35%);
     --editor-special-char-color: #587168;
     --editor-spelling-error-color: #d38478;
-    --editor-gutter-border-right: 1px solid color-mix(in srgb, #587168 30%, #182a24);
+    --editor-gutter-border-right: 1px solid #2b3f38;
     --editor-gutter-color: #98a59c;
     --editor-gutter-background-color: transparent;
     --editor-gutter-background-solid-color: #0f1d19;
@@ -163,10 +163,10 @@
     --syntax-link-text-decoration: underline;
     --syntax-strikethrough-text-decoration: line-through;
     --syntax-invalid-border-bottom: 1px dotted #d38478;
-    --editor-panel-border-color: #58716866;
-    --md-codeblock-border-color: color-mix(in srgb, #587168 30%, #182a24);
-    --md-table-border-color: color-mix(in srgb, #587168 30%, #182a24);
-    --md-inline-code-border-color: #58716866;
+    --editor-panel-border-color: rgb(88 113 104 / 40%);
+    --md-codeblock-border-color: #2b3f38;
+    --md-table-border-color: #2b3f38;
+    --md-inline-code-border-color: rgb(88 113 104 / 40%);
   }
 
   :root:has(body.acrylic-window) {
