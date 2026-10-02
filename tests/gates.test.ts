@@ -1,6 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import { themeBundle } from "../packages/tokens/generated/themes";
-import { contrastFailures, contrastGates, RECEDING_SYNTAX } from "../packages/tokens/src/gates";
+import { textOn, tray, wash } from "../packages/tokens/src/derive";
+import {
+  contrastFailures,
+  contrastGates,
+  derivedFailures,
+  RECEDING_SYNTAX,
+} from "../packages/tokens/src/gates";
 
 describe("contrast gates", () => {
   test("every shipped mood clears every gate", () => {
@@ -42,5 +48,30 @@ describe("contrast gates", () => {
     expect(contrastFailures("probe", mood).join("\n")).toContain(
       "syntax.comment on surface.canvas",
     );
+  });
+
+  test("every shipped mood clears every derived-colour floor", () => {
+    for (const theme of themeBundle.themes) expect(derivedFailures(theme)).toEqual([]);
+  });
+});
+
+describe("derived colours", () => {
+  test("textOn picks whichever of canvas and primary text reads better", () => {
+    for (const theme of themeBundle.themes) {
+      const s = theme.semantic;
+      expect([s["surface.canvas"], s["text.primary"]]).toContain(
+        textOn(theme, s["status.warning"]),
+      );
+      expect(textOn(theme, s["surface.canvas"])).toBe(s["text.primary"]);
+    }
+  });
+
+  test("wash and tray stay between their endpoints", () => {
+    for (const theme of themeBundle.themes) {
+      const s = theme.semantic;
+      expect(wash(theme, "status.error", 0)).toBe(s["surface.canvas"]);
+      expect(wash(theme, "status.error", 1)).toBe(s["status.error"]);
+      expect([s["surface.canvas"], s["surface.raised"]]).not.toContain(tray(theme));
+    }
   });
 });

@@ -66,6 +66,12 @@ return {
       "#0033C9",
       "#EDF3FE",
     },
+    derived = {
+      ["diff.added"] = "#C8E0D8",
+      ["diff.removed"] = "#EECBD2",
+      ["diff.changed"] = "#C8D4F4",
+      ["diff.text"] = "#9FB3EC",
+    },
   },
   huong = {
     label = "Huế Hương",
@@ -132,6 +138,12 @@ return {
       "#7FBAC8",
       "#D6DAD0",
     },
+    derived = {
+      ["diff.added"] = "#1A3128",
+      ["diff.removed"] = "#2E231F",
+      ["diff.changed"] = "#1E2D2F",
+      ["diff.text"] = "#31494D",
+    },
   },
   mua = {
     label = "Huế Mưa",
@@ -197,6 +209,12 @@ return {
       "#8A7BFF",
       "#10B6F8",
       "#E5F4FF",
+    },
+    derived = {
+      ["diff.added"] = "#003228",
+      ["diff.removed"] = "#321B26",
+      ["diff.changed"] = "#032D43",
+      ["diff.text"] = "#064866",
     },
   },
 }

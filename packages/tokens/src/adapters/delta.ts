@@ -29,8 +29,8 @@
 // policy every other terminal adapter follows.
 
 import type { StatusToken } from "../../generated/themes";
-import { mixHex } from "../color";
 import type { AdapterManifest } from "../contract";
+import { diffRow, tray, wash } from "../derive";
 import { type ResolvedMood, role } from "../mood";
 
 export const deltaManifest = {
@@ -44,29 +44,11 @@ export const deltaManifest = {
 /** The feature name every mood declares. The mood switch is a symlink, not an edit. */
 export const DELTA_FEATURE = "hue";
 
-/**
- * A diff row background carrying the status hue, not the canvas hue.
- *
- * The obvious derivation — `mixHex(canvas, status, w)` — fails on Mưa: a navy
- * canvas drags any blend toward itself, so at a readable weight "added" lands on
- * teal and "removed" on purple, and the one signal a diff must never lose is
- * red-vs-green. So the status colour is shaded toward black (dark moods) or
- * white (light moods) first, which drops lightness while keeping hue, and only
- * then blended back toward the canvas so the row still belongs to the mood.
- *
- * `shade` is how far the status colour is taken toward the pole, `blend` how
- * much canvas is mixed back in. Measured, not chosen: across the three moods
- * every `syntax.*` role keeps at least 0.75x the contrast it has on the canvas,
- * and `text.primary` stays above 11:1 — asserted in tests/terminal-adapters.test.ts.
- */
-function tint(mood: ResolvedMood, status: StatusToken, shade: number, blend: number): string {
-  const pole = mood.appearance === "dark" ? "#000000" : "#FFFFFF";
-  return mixHex(mixHex(role(mood, status), pole, shade), role(mood, "surface.canvas"), blend);
-}
-
-const base = (mood: ResolvedMood, status: StatusToken) => tint(mood, status, 0.72, 0.3);
-const emph = (mood: ResolvedMood, status: StatusToken) => tint(mood, status, 0.55, 0.2);
-const nonEmph = (mood: ResolvedMood, status: StatusToken) => tint(mood, status, 0.8, 0.45);
+// Row tints come from `diffRow` in src/derive.ts, shared with tuicr and Neovim
+// so the same change reads the same colour in every pane that shows it.
+const base = (mood: ResolvedMood, status: StatusToken) => diffRow(mood, status, "line");
+const emph = (mood: ResolvedMood, status: StatusToken) => diffRow(mood, status, "emph");
+const nonEmph = (mood: ResolvedMood, status: StatusToken) => diffRow(mood, status, "quiet");
 
 type Entry = { key: string; value: (mood: ResolvedMood) => string; comment?: string };
 
@@ -120,8 +102,7 @@ const ENTRIES: Entry[] = [
   // mistaken for content.
   {
     key: "whitespace-error-style",
-    value: (m) =>
-      `"${role(m, "status.warning")}" "${mixHex(role(m, "surface.canvas"), role(m, "status.warning"), 0.25)}"`,
+    value: (m) => `"${role(m, "status.warning")}" "${wash(m, "status.warning", 0.25)}"`,
   },
 
   // `git log`/`show` chrome.
@@ -140,7 +121,7 @@ const ENTRIES: Entry[] = [
     value: (m) =>
       `"${[
         role(m, "surface.canvas"),
-        mixHex(role(m, "surface.canvas"), role(m, "surface.raised"), 0.5),
+        tray(m),
         role(m, "surface.raised"),
         role(m, "surface.selected"),
       ].join(" ")}"`,

@@ -5,6 +5,7 @@
 import type { SemanticToken } from "../../generated/themes";
 import { hexToRgb } from "../color";
 import type { AdapterManifest } from "../contract";
+import { textOn } from "../derive";
 import { type ResolvedMood, role } from "../mood";
 
 export const inkdropManifest = {
@@ -305,6 +306,8 @@ function renderScrollbarCss(mood: ResolvedMood): string {
 }
 
 function renderUiCss(mood: ResolvedMood): string {
+  // Text on accent fills (selected items, filled buttons), picked by contrast.
+  const onAccent = textOn(mood, role(mood, "accent.primary"));
   const vars: Record<string, string> = {
     "--primary-color": role(mood, "accent.primary"),
     "--secondary-color": role(mood, "accent.secondary"),
@@ -344,8 +347,8 @@ function renderUiCss(mood: ResolvedMood): string {
     "--warning-header-color": role(mood, "status.warning"),
     // Unlike the other families, Inkdrop v6 only reads this one as text *on* a
     // `--warning-color` fill — the plugin "latest version" badge and the sidebar
-    // update banners. Matching the fill made both unreadable.
-    "--warning-text-color": role(mood, "surface.canvas"),
+    // update banners — so it is picked against that fill.
+    "--warning-text-color": textOn(mood, role(mood, "status.warning")),
     "--success-color": role(mood, "status.success"),
     "--success-background-color": role(mood, "surface.raised"),
     "--success-border-color": role(mood, "status.success"),
@@ -405,7 +408,7 @@ function renderUiCss(mood: ResolvedMood): string {
     // The base sets this per appearance and, for light themes, falls back to
     // `--warning-text-color`; pinning it keeps every mood on the same rule.
     "--sidebar-notification-view-background": role(mood, "status.warning"),
-    "--sidebar-notification-view-color": role(mood, "surface.canvas"),
+    "--sidebar-notification-view-color": textOn(mood, role(mood, "status.warning")),
     "--scrollbar-track-background": "transparent",
     "--scrollbar-thumb-background": translucent(role(mood, "border.subtle"), SCROLLBAR_IDLE),
     "--scrollbar-width": SCROLLBAR_TRACK,
@@ -433,12 +436,12 @@ function renderUiCss(mood: ResolvedMood): string {
     "--preferences-view-background": role(mood, "surface.canvas"),
     // Text shown ON accent/colored backgrounds (selected items, filled buttons).
     // Inkdrop has no default here; without it light text on a jade fill is unreadable.
-    "--inverted-text-color": role(mood, "surface.canvas"),
-    "--inverted-muted-text-color": role(mood, "surface.canvas"),
-    "--inverted-light-text-color": role(mood, "surface.canvas"),
-    "--inverted-hovered-text-color": role(mood, "surface.canvas"),
-    "--inverted-pressed-text-color": role(mood, "surface.canvas"),
-    "--inverted-selected-text-color": role(mood, "surface.canvas"),
+    "--inverted-text-color": onAccent,
+    "--inverted-muted-text-color": onAccent,
+    "--inverted-light-text-color": onAccent,
+    "--inverted-hovered-text-color": onAccent,
+    "--inverted-pressed-text-color": onAccent,
+    "--inverted-selected-text-color": onAccent,
     "--inverted-unselected-text-color": role(mood, "surface.raised"),
     "--inverted-disabled-text-color": role(mood, "surface.raised"),
     // Note status dots in the note list.
@@ -853,13 +856,13 @@ function renderPreviewCss(mood: ResolvedMood): string {
     "--mermaid-cluster-border-color": role(mood, "border.subtle"),
     "--mermaid-title-text-color": role(mood, "text.primary"),
     "--mermaid-primary-color": role(mood, "accent.primary"),
-    "--mermaid-primary-text-color": role(mood, "surface.canvas"),
+    "--mermaid-primary-text-color": textOn(mood, role(mood, "accent.primary")),
     "--mermaid-primary-border-color": role(mood, "accent.primary"),
     "--mermaid-secondary-color": role(mood, "accent.secondary"),
-    "--mermaid-secondary-text-color": role(mood, "surface.canvas"),
+    "--mermaid-secondary-text-color": textOn(mood, role(mood, "accent.secondary")),
     "--mermaid-secondary-border-color": role(mood, "accent.secondary"),
     "--mermaid-tertiary-color": role(mood, "status.warning"),
-    "--mermaid-tertiary-text-color": role(mood, "surface.canvas"),
+    "--mermaid-tertiary-text-color": textOn(mood, role(mood, "status.warning")),
     "--mermaid-tertiary-border-color": role(mood, "status.warning"),
     "--mermaid-note-background-color": role(mood, "status.notice"),
     "--mermaid-note-border-color": role(mood, "status.warning"),

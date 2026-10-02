@@ -13,7 +13,7 @@ import { renderTmuxFiles, tmuxManifest } from "../src/adapters/tmux";
 import { renderTuicrFiles, tuicrManifest } from "../src/adapters/tuicr";
 import { renderYaakPluginSource, yaakManifest } from "../src/adapters/yaak";
 import { CONTRACT, validateManifest } from "../src/contract";
-import { contrastFailures } from "../src/gates";
+import { contrastFailures, derivedFailures } from "../src/gates";
 
 type Token = { $value: unknown };
 type Node = Token | string | { [key: string]: Node };
@@ -163,7 +163,10 @@ if (!contracts.every((contract) => contract === contracts[0])) {
 
 // Contrast floors (src/gates.ts). Every failure is reported at once so a palette
 // edit shows its whole cost, not just the first token it broke.
-const failures = themes.flatMap((theme) => contrastFailures(theme.id, theme.semantic));
+const failures = themes.flatMap((theme) => [
+  ...contrastFailures(theme.id, theme.semantic),
+  ...derivedFailures(theme),
+]);
 if (failures.length > 0) throw new Error(`Contrast gates failed:\n  ${failures.join("\n  ")}`);
 
 // All moods share one contract (validated above), so any mood's keys describe it.

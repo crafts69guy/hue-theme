@@ -1,7 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import { themeBundle } from "../packages/tokens/generated/themes";
-import { neovimManifest, renderNeovimFiles } from "../packages/tokens/src/adapters/neovim";
+import {
+  NEOVIM_DERIVED_KEYS,
+  neovimManifest,
+  renderNeovimFiles,
+} from "../packages/tokens/src/adapters/neovim";
 import { validateManifest } from "../packages/tokens/src/contract";
+import { diffRow } from "../packages/tokens/src/derive";
 
 const HEX = /#[0-9A-F]{6}/;
 const moods = [...themeBundle.themes];
@@ -44,7 +49,7 @@ describe("Hue → Neovim adapter", () => {
     const referenced = [...groups.matchAll(/c\["([^"]+)"\]/g)].map((m) => m[1]);
     expect(referenced.length).toBeGreaterThan(0);
     for (const mood of moods) {
-      const roles = Object.keys(mood.semantic);
+      const roles = [...Object.keys(mood.semantic), ...NEOVIM_DERIVED_KEYS];
       for (const role of referenced) {
         expect(roles).toContain(role);
       }
@@ -180,5 +185,18 @@ describe("Hue → Neovim adapter", () => {
         expect(value[2]).toMatch(HEX);
       }
     }
+  });
+
+  // Regression: DiffAdd/DiffDelete sat on surface.raised with no hue, so vimdiff
+  // and the pager showed the same change in two different colours.
+  test("diff rows carry the same tint delta and tuicr draw", () => {
+    const palette = file("lua/hue/palette.lua");
+    const groups = file("lua/hue/groups.lua");
+    for (const mood of moods) {
+      expect(palette).toContain(`["diff.added"] = "${diffRow(mood, "status.success")}"`);
+      expect(palette).toContain(`["diff.removed"] = "${diffRow(mood, "status.error")}"`);
+    }
+    expect(groups).toContain(`["DiffAdd"] = { bg = c["diff.added"] }`);
+    expect(groups).toContain(`["DiffDelete"] = { fg = c["status.error"], bg = c["diff.removed"] }`);
   });
 });

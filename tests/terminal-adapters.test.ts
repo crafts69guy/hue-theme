@@ -255,8 +255,8 @@ describe("Hue → delta adapter", () => {
 
   // A diff row tints the background under highlighted code, so the test that
   // matters is not an absolute floor but how much contrast the tint costs. The
-  // floor is relative because some roles start dim by design — Cung's comment
-  // is 2.69:1 on its own canvas.
+  // floor is relative because some roles start dim by design (comments and
+  // punctuation are gated at 3:1, not 4.5:1).
   test("row tints keep syntax legible", () => {
     for (const mood of moods) {
       const row = values(mood.id);

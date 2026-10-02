@@ -25,8 +25,8 @@
 // hunk header's background is derived from `panel_bg` (and is `Reset` whenever
 // transparency is on), and comment-author chrome uses a hard-coded ANSI palette.
 
-import { contrastRatio, mixHex } from "../color";
 import type { AdapterManifest } from "../contract";
+import { diffRow, textMuted, textOn } from "../derive";
 import { type ResolvedMood, role } from "../mood";
 
 export const tuicrManifest = {
@@ -34,34 +34,9 @@ export const tuicrManifest = {
   omits: {},
 } satisfies AdapterManifest;
 
-// Two values tuicr needs that the Hue contract does not name. Both are derived
-// here rather than added to `CONTRACT`: `text` is a closed family, so a new role
-// would be a breaking change rippling through every other adapter — nvim, tmux,
-// Ghostty, Fish, Yaak, Inkdrop, bat, lazygit, herdr — to serve one host. The
-// precedent is hunk.ts's `accentMuted`, which reached for a primitive the same way.
-
-/**
- * A step dimmer than `text.secondary`, for the lowest-rank chrome text.
- *
- * The weight is measured, not chosen: at 0.4 the light mood's dim text falls to
- * 2.44:1 on its own canvas, below the 3:1 floor the test holds it to. 0.25 keeps
- * every mood above 3:1 while still reading a clear step down from secondary
- * (5.32:1 → 3.21:1 on the tightest of them).
- */
-function textMuted(mood: ResolvedMood): string {
-  return mixHex(role(mood, "text.secondary"), role(mood, "surface.canvas"), 0.25);
-}
-
-/**
- * Legible text on a filled `background`. Not a fixed choice: whichever of the
- * canvas and the primary text contrasts more with the fill wins, which is the
- * same measurement a WCAG check would make.
- */
-function textOn(mood: ResolvedMood, background: string): string {
-  const canvas = role(mood, "surface.canvas");
-  const primary = role(mood, "text.primary");
-  return contrastRatio(canvas, background) >= contrastRatio(primary, background) ? canvas : primary;
-}
+// tuicr needs a dimmer text tier and a legible foreground for filled badges,
+// neither of which the contract names; both come from src/derive.ts, gated
+// there rather than re-measured here.
 
 // The 41 required colour keys, in tuicr's own documented order so the emitted
 // file reads alongside `docs/CONFIG.md`. Every one of them must be here.
@@ -74,34 +49,22 @@ const KEYS: Key[] = [
   { key: "fg_primary", value: (m) => role(m, "text.primary") },
   { key: "fg_secondary", value: (m) => role(m, "text.secondary") },
   { key: "fg_dim", value: textMuted },
-  // Diff. The add/remove row tints are the canvas nudged toward the status
-  // colour, the same blend hunk.ts used, so the diff sits on the Hue canvas
-  // rather than a stock theme's near-black.
+  // Diff. Row tints are `diffRow`, the same derivation delta uses for the pager,
+  // so a change reads the same colour in the review pane and in lazygit.
   { key: "diff_add", value: (m) => role(m, "status.success") },
-  {
-    key: "diff_add_bg",
-    value: (m) => mixHex(role(m, "surface.canvas"), role(m, "status.success"), 0.24),
-  },
+  { key: "diff_add_bg", value: (m) => diffRow(m, "status.success") },
   { key: "diff_del", value: (m) => role(m, "status.error") },
-  {
-    key: "diff_del_bg",
-    value: (m) => mixHex(role(m, "surface.canvas"), role(m, "status.error"), 0.24),
-  },
+  { key: "diff_del_bg", value: (m) => diffRow(m, "status.error") },
   { key: "diff_context", value: (m) => role(m, "text.primary") },
   // Misleading name: this is the *directory icon* in the file list, not the
   // hunk header (whose background is derived and unthemeable).
   { key: "diff_hunk_header", value: (m) => role(m, "accent.secondary") },
   { key: "expanded_context_fg", value: textMuted },
-  // The same rows when syntax highlighting is on: a lighter tint, so the
-  // highlighted code stays readable through it.
-  {
-    key: "syntax_add_bg",
-    value: (m) => mixHex(role(m, "surface.canvas"), role(m, "status.success"), 0.15),
-  },
-  {
-    key: "syntax_del_bg",
-    value: (m) => mixHex(role(m, "surface.canvas"), role(m, "status.error"), 0.15),
-  },
+  // The same rows when syntax highlighting is on. delta draws highlighted code on
+  // this very tint (`plus-style = syntax …`), and the gate in src/gates.ts holds
+  // every syntax role to 0.7x of its canvas contrast on it, so no lighter step.
+  { key: "syntax_add_bg", value: (m) => diffRow(m, "status.success") },
+  { key: "syntax_del_bg", value: (m) => diffRow(m, "status.error") },
   // File status.
   { key: "file_added", value: (m) => role(m, "status.success") },
   { key: "file_modified", value: (m) => role(m, "status.info") },

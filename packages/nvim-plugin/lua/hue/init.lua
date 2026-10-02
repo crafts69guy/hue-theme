@@ -92,7 +92,10 @@ function M.load(mood)
     vim.g["terminal_color_" .. (index - 1)] = color
   end
 
-  local groups = require("hue.groups")(entry.semantic)
+  -- Semantic roles plus the derived values (diff rows); "error" refuses a key
+  -- present in both, so a derived value can never shadow a contract role.
+  local c = vim.tbl_extend("error", {}, entry.semantic, entry.derived)
+  local groups = require("hue.groups")(c)
   for group, spec in pairs(groups) do
     vim.api.nvim_set_hl(0, group, spec)
   end

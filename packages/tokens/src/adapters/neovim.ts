@@ -9,6 +9,7 @@
 
 import type { SemanticToken } from "../../generated/themes";
 import type { AdapterManifest } from "../contract";
+import { diffRow } from "../derive";
 import type { ResolvedMood } from "../mood";
 import { terminalColors } from "./terminal";
 
@@ -18,7 +19,19 @@ export const neovimManifest = {
   omits: {},
 } satisfies AdapterManifest;
 
-type Color = SemanticToken | "NONE";
+// Values the contract does not name, derived once in src/derive.ts and shipped
+// in palette.lua beside the semantic map. Diff rows match delta and tuicr.
+const DERIVED = {
+  "diff.added": (m: ResolvedMood) => diffRow(m, "status.success"),
+  "diff.removed": (m: ResolvedMood) => diffRow(m, "status.error"),
+  "diff.changed": (m: ResolvedMood) => diffRow(m, "status.info"),
+  "diff.text": (m: ResolvedMood) => diffRow(m, "status.info", "emph"),
+} as const satisfies Record<string, (mood: ResolvedMood) => string>;
+
+export type DerivedColor = keyof typeof DERIVED;
+export const NEOVIM_DERIVED_KEYS = Object.keys(DERIVED) as DerivedColor[];
+
+type Color = SemanticToken | DerivedColor | "NONE";
 type Style = "bold" | "italic" | "underline" | "undercurl" | "strikethrough" | "reverse";
 
 // One highlight group: either a `link` to another group, or a set of
@@ -249,10 +262,13 @@ const GROUPS: readonly HlSpec[] = [
   { group: "DiagnosticDeprecated", fg: "text.secondary", style: ["strikethrough"] },
 
   // --- Diff / git ----------------------------------------------------------
-  { group: "DiffAdd", fg: "status.success", bg: "surface.raised" },
-  { group: "DiffChange", fg: "status.info", bg: "surface.raised" },
-  { group: "DiffDelete", fg: "status.error", bg: "surface.raised" },
-  { group: "DiffText", fg: "status.warning", bg: "surface.selected" },
+  // Rows carry their status hue in the background only, so syntax highlighting
+  // shows through — the same tint delta draws in the pager. DiffDelete keeps an
+  // fg because its filler lines are drawn with `-` characters.
+  { group: "DiffAdd", bg: "diff.added" },
+  { group: "DiffChange", bg: "diff.changed" },
+  { group: "DiffDelete", fg: "status.error", bg: "diff.removed" },
+  { group: "DiffText", bg: "diff.text" },
   { group: "diffAdded", fg: "status.success" },
   { group: "diffRemoved", fg: "status.error" },
   { group: "diffChanged", fg: "status.info" },
@@ -389,6 +405,7 @@ function luaStr(value: string): string {
 
 function resolve(mood: ResolvedMood, role: Color): string {
   if (role === "NONE") return "NONE";
+  if (role in DERIVED) return DERIVED[role as DerivedColor](mood);
   const value = mood.semantic[role];
   if (!value) throw new Error(`Mood ${mood.id} is missing semantic role ${role}`);
   return value;
@@ -419,6 +436,9 @@ function renderPalette(moods: readonly ResolvedMood[]): string {
       const terminal = terminalColors(mood)
         .map((value) => `      ${luaStr(value)},`)
         .join("\n");
+      const derived = NEOVIM_DERIVED_KEYS.map(
+        (key) => `      [${luaStr(key)}] = ${luaStr(DERIVED[key](mood))},`,
+      ).join("\n");
       return `  ${mood.id} = {
     label = ${luaStr(mood.label)},
     appearance = ${luaStr(mood.appearance)},
@@ -431,6 +451,9 @@ ${primitive}
     terminal = {
 ${terminal}
     },
+    derived = {
+${derived}
+    },
   },`;
     })
     .join("\n");
@@ -441,7 +464,7 @@ ${terminal}
 function renderGroups(): string {
   const body = GROUPS.map(renderHlSpec).join("\n");
   return `${HEADER}
--- c is a mood's resolved semantic color map (see palette.lua).
+-- c is a mood's resolved semantic map merged with its derived values (see palette.lua).
 return function(c)
   return {
 ${body}
@@ -564,7 +587,10 @@ function M.load(mood)
     vim.g["terminal_color_" .. (index - 1)] = color
   end
 
-  local groups = require("hue.groups")(entry.semantic)
+  -- Semantic roles plus the derived values (diff rows); "error" refuses a key
+  -- present in both, so a derived value can never shadow a contract role.
+  local c = vim.tbl_extend("error", {}, entry.semantic, entry.derived)
+  local groups = require("hue.groups")(c)
   for group, spec in pairs(groups) do
     vim.api.nvim_set_hl(0, group, spec)
   end

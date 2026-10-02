@@ -8,6 +8,15 @@
 3. **Adapters** map stable roles to host-specific APIs. An adapter must not
    change primitive or semantic source data.
 
+Between the semantic layer and the adapters sits a small set of **derived**
+colours in `packages/tokens/src/derive.ts`: values several hosts need that the
+contract does not name — diff row tints, a muted text tier, legible text on a
+filled background, a canvas wash, the tray between canvas and raised. They are
+not contract roles, so adding one is not a breaking change, but each concept is
+derived exactly once: delta, tuicr and Neovim draw the same diff row with the
+same function, so one change reads one colour in every pane that shows it. The
+build gates derived values alongside the tokens (`src/gates.ts`).
+
 The semantic contract is versioned. Removing or changing the meaning of a role
 requires a major version. The contract is declared in
 `packages/tokens/src/contract.ts`: each family is marked `closed` (themes must
@@ -111,10 +120,10 @@ body is drawn by the pager, so before this adapter existed lazygit's Patch panel
 and `git diff` alike were colored by whatever feature the user's `~/.gitconfig`
 named. Every mood declares the same feature, `[delta "hue"]`, so the mood is
 switched by re-pointing an included symlink rather than by editing the user's
-config. Two derivations are specific to it: the added/removed row backgrounds
-shade the status color toward black or white before blending it back toward the
-canvas — a plain canvas/status mix reads teal and purple on Mưa's navy, losing
-the one distinction a diff cannot lose — and `zero-style` is deliberately left
+config. Its added/removed row backgrounds are `diffRow` from `src/derive.ts`,
+which shades the status color toward black or white before blending it back
+toward the canvas — a plain canvas/status mix reads teal and purple on Mưa's
+navy, losing the one distinction a diff cannot lose. `zero-style` is deliberately left
 without a background so a translucent terminal still shows through context
 lines. Syntax highlighting is deferred to bat: `syntax-theme` names the
 `hue-<mood>` `.tmTheme` this repo already generates.
@@ -123,10 +132,10 @@ The herdr adapter (`adapters/herdr.ts`) generates `themes/hue-<mood>.toml`
 fragments spliced into herdr's `[theme.custom]`, and the tuicr adapter
 (`adapters/tuicr.ts`) generates the review TUI's own colour keys into the same
 package. tuicr resolves `syntax_theme` relative to its theme file, so the bat
-`.tmTheme` is copied in beside it and the two install together. Both derive two
+`.tmTheme` is copied in beside it and the two install together. tuicr needs two
 values the contract does not name — a dimmer text tier and a legible foreground
-for filled backgrounds — at the adapter rather than widening the closed `text`
-family for one host.
+for filled backgrounds — and takes both from `src/derive.ts` rather than
+widening the closed `text` family for one host. Its diff rows are delta's.
 
 ## Accessibility policy
 

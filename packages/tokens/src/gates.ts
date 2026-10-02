@@ -10,7 +10,17 @@
 // glance against the canvas, and 1.4:1 is the floor below which it was not —
 // Cung's selection once sat at 1.29:1 and could not be seen in a light editor.
 
+import type { SemanticToken } from "../generated/themes";
 import { contrastRatio } from "./color";
+import {
+  DIFF_STATUS,
+  DIFF_WEIGHT_NAMES,
+  type DiffWeight,
+  diffRow,
+  textMuted,
+  textOn,
+} from "./derive";
+import { type ResolvedMood, role } from "./mood";
 
 export type ContrastGate = {
   /** Token drawn on top. */
@@ -71,4 +81,53 @@ export function contrastFailures(id: string, semantic: Readonly<Record<string, s
         ]
       : [];
   });
+}
+
+// Derived colours (src/derive.ts) are gated like tokens: each one is only
+// defensible if it measures up, and a palette edit can break them silently.
+// Share of its canvas contrast a syntax role must keep on a diff row. `emph`
+// marks only the few words that changed, and it is meant to shout, so it trades
+// legibility for salience at a lower floor; whole rows keep 0.7x.
+const ROW_SYNTAX_KEEP: Record<DiffWeight, number> = { line: 0.7, quiet: 0.7, emph: 0.5 };
+const FILL_TEXT = 4.5;
+const FILLS: readonly SemanticToken[] = [
+  "accent.primary",
+  "accent.secondary",
+  "status.success",
+  "status.info",
+  "status.notice",
+  "status.warning",
+  "status.error",
+];
+
+/** Every derived-colour floor a mood fails. Empty means the mood passes. */
+export function derivedFailures(mood: ResolvedMood): string[] {
+  const failures: string[] = [];
+  const canvas = role(mood, "surface.canvas");
+  const check = (label: string, ratio: number, minimum: number) => {
+    if (ratio < minimum) {
+      failures.push(`${mood.id}: ${label} is ${ratio.toFixed(2)}, below ${minimum}`);
+    }
+  };
+
+  check("text.muted on surface.canvas", contrastRatio(textMuted(mood), canvas), RECEDING);
+
+  for (const fill of FILLS) {
+    const bg = role(mood, fill);
+    check(`text on a ${fill} fill`, contrastRatio(textOn(mood, bg), bg), FILL_TEXT);
+  }
+
+  for (const [side, status] of Object.entries(DIFF_STATUS)) {
+    for (const weight of DIFF_WEIGHT_NAMES) {
+      const row = diffRow(mood, status, weight);
+      const where = `${side} ${weight} diff row`;
+      check(`text.primary on the ${where}`, contrastRatio(role(mood, "text.primary"), row), TEXT);
+      for (const [token, value] of Object.entries(mood.semantic)) {
+        if (!token.startsWith("syntax.")) continue;
+        const kept = contrastRatio(value, row) / contrastRatio(value, canvas);
+        check(`${token} contrast kept on the ${where}`, kept, ROW_SYNTAX_KEEP[weight]);
+      }
+    }
+  }
+  return failures;
 }
