@@ -1,145 +1,38 @@
 import { chmod, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
-import { CONTRACT, validateManifest } from "../src/contract";
+import {
+  assertSameContract,
+  renderBundleFiles,
+  resolveTheme,
+  type ThemeSource,
+  validateAgainstContract,
+} from "../src/bundle";
+import { validateManifest } from "../src/contract";
 import { contrastFailures, derivedFailures } from "../src/gates";
 import { ADAPTERS } from "../src/registry";
 
-type Token = { $value: unknown };
-type Node = Token | string | { [key: string]: Node };
-type ThemeSource = {
-  $description: string;
-  meta: { id: string; label: string; appearance: "dark" | "light" };
-  primitive: Record<string, Token>;
-  semantic: Record<string, Node>;
-};
+// I/O only: every decision lives in src/ (bundle, gates, registry) where the
+// tests reach it. This file reads the theme sources and writes or checks files.
 
 const root = resolve(import.meta.dir, "..");
 const sourceDirectory = resolve(root, "src/themes");
 const outputDirectory = resolve(root, "generated");
 const checkOnly = process.argv.includes("--check");
-// The resolved bundle's format version, written into themes.json/.ts/.js.
-const BUNDLE_VERSION = "0.2.0";
-
-function isToken(value: unknown): value is Token {
-  return Boolean(value && typeof value === "object" && "$value" in value);
-}
-
-function colorHex(token: Token): string {
-  const value = token.$value;
-  if (
-    typeof value === "object" &&
-    value !== null &&
-    "hex" in value &&
-    typeof value.hex === "string"
-  ) {
-    return value.hex.toUpperCase();
-  }
-  throw new Error(`Expected a DTCG color object, received ${JSON.stringify(value)}`);
-}
-
-function resolveValue(value: unknown, source: ThemeSource, stack: string[] = []): string {
-  if (typeof value === "object" && value !== null && "hex" in value) {
-    return colorHex({ $value: value });
-  }
-
-  if (typeof value !== "string") {
-    throw new Error(`Unsupported token value ${JSON.stringify(value)}`);
-  }
-
-  const match = value.match(/^\{(.+)\}$/);
-  if (!match) return value;
-  const path = match[1];
-  if (stack.includes(path)) {
-    throw new Error(`Circular token alias: ${[...stack, path].join(" -> ")}`);
-  }
-
-  const target = path
-    .split(".")
-    .reduce<unknown>(
-      (current, key) =>
-        current && typeof current === "object"
-          ? (current as Record<string, unknown>)[key]
-          : undefined,
-      source,
-    );
-  if (!isToken(target)) throw new Error(`Unresolved token alias {${path}}`);
-  return resolveValue(target.$value, source, [...stack, path]);
-}
-
-function flatten(
-  node: Record<string, Node>,
-  source: ThemeSource,
-  prefix = "",
-): Record<string, string> {
-  const output: Record<string, string> = {};
-  for (const [key, value] of Object.entries(node)) {
-    if (key.startsWith("$")) continue;
-    const path = prefix ? `${prefix}.${key}` : key;
-    if (isToken(value)) output[path] = resolveValue(value.$value, source);
-    else if (typeof value === "object") {
-      Object.assign(output, flatten(value as Record<string, Node>, source, path));
-    }
-  }
-  return output;
-}
-
-// Validate a mood's resolved semantic keys against the declared contract:
-// every token must belong to a declared family; closed families must match
-// exactly; open families must include at least the declared roles.
-function validateAgainstContract(id: string, semantic: Record<string, string>): void {
-  const actual = new Map<string, Set<string>>();
-  for (const key of Object.keys(semantic)) {
-    const dot = key.indexOf(".");
-    const family = key.slice(0, dot);
-    if (!(family in CONTRACT)) {
-      throw new Error(`${id}: token ${key} has no declared family in the contract`);
-    }
-    actual.set(family, (actual.get(family) ?? new Set()).add(key.slice(dot + 1)));
-  }
-  for (const [family, spec] of Object.entries(CONTRACT)) {
-    const declared: readonly string[] = spec.roles;
-    const roles = actual.get(family) ?? new Set<string>();
-    const missing = declared.filter((role) => !roles.has(role));
-    if (missing.length > 0) {
-      throw new Error(`${id}: ${family} is missing role(s): ${missing.join(", ")}`);
-    }
-    const extra = spec.closed ? [...roles].filter((role) => !declared.includes(role)) : [];
-    if (extra.length > 0) {
-      throw new Error(`${id}: ${family} is closed; undeclared role(s): ${extra.join(", ")}`);
-    }
-  }
-}
 
 const files = (await readdir(sourceDirectory)).filter((file) => file.endsWith(".json")).sort();
 const themes = await Promise.all(
-  files.map(async (file) => {
-    const source = JSON.parse(
-      await readFile(resolve(sourceDirectory, file), "utf8"),
-    ) as ThemeSource;
-    const primitive = Object.fromEntries(
-      Object.entries(source.primitive)
-        .filter(([key]) => !key.startsWith("$"))
-        .map(([key, token]) => [key, colorHex(token)]),
-    );
-    const semantic = flatten(source.semantic, source);
-    return { ...source.meta, description: source.$description, primitive, semantic };
-  }),
+  files.map(async (file) =>
+    resolveTheme(JSON.parse(await readFile(resolve(sourceDirectory, file), "utf8")) as ThemeSource),
+  ),
 );
 
 // Primary check: every mood conforms to the declared contract.
-for (const theme of themes) {
-  validateAgainstContract(theme.id, theme.semantic);
-}
+for (const theme of themes) validateAgainstContract(theme.id, theme.semantic);
 
 // Each adapter must consciously account for every contract family.
 for (const adapter of ADAPTERS) validateManifest(adapter.name, adapter.manifest);
 
-// Secondary check: moods agree with each other (catches open-family drift,
-// where a role is allowed but must still be present in every mood).
-const contracts = themes.map((theme) => Object.keys(theme.semantic).sort().join("\n"));
-if (!contracts.every((contract) => contract === contracts[0])) {
-  throw new Error("Every mood must implement the same semantic token contract");
-}
+assertSameContract(themes);
 
 // Contrast floors (src/gates.ts). Every failure is reported at once so a palette
 // edit shows its whole cost, not just the first token it broke.
@@ -149,103 +42,10 @@ const failures = themes.flatMap((theme) => [
 ]);
 if (failures.length > 0) throw new Error(`Contrast gates failed:\n  ${failures.join("\n  ")}`);
 
-// All moods share one contract (validated above), so any mood's keys describe it.
-const semanticKeys = Object.keys(themes[0].semantic);
-const families = new Map<string, string[]>();
-for (const key of semanticKeys) {
-  const family = key.slice(0, key.indexOf("."));
-  families.set(family, [...(families.get(family) ?? []), key]);
-}
-const pascal = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);
-
-const tokenContract = [
-  `export type SemanticToken =\n${semanticKeys.map((key) => `  | "${key}"`).join("\n")};`,
-  ...[...families].map(([family, keys]) => {
-    const constName = `${family.toUpperCase()}_TOKENS`;
-    return [
-      `export const ${constName} = [\n${keys.map((key) => `  "${key}",`).join("\n")}\n] as const;`,
-      `export type ${pascal(family)}Token = (typeof ${constName})[number];`,
-    ].join("\n");
-  }),
-].join("\n\n");
-
-const json = `${JSON.stringify({ version: BUNDLE_VERSION, themes }, null, 2)}\n`;
-const typescript = `// Generated by scripts/build.ts. Do not edit.
-export const themeBundle = ${JSON.stringify({ version: BUNDLE_VERSION, themes }, null, 2)} as const;
-export type ThemeId = (typeof themeBundle.themes)[number]["id"];
-export type ResolvedTheme = (typeof themeBundle.themes)[number];
-
-export function getTheme(id: ThemeId): ResolvedTheme {
-  const theme = themeBundle.themes.find((candidate) => candidate.id === id);
-  if (!theme) throw new Error(\`Unknown Hue Theme mood: \${id}\`);
-  return theme;
-}
-
-${tokenContract}
-`;
-const javascript = `// Generated by scripts/build.ts. Do not edit.
-export const themeBundle = ${JSON.stringify({ version: BUNDLE_VERSION, themes }, null, 2)};
-
-export function getTheme(id) {
-  const theme = themeBundle.themes.find((candidate) => candidate.id === id);
-  if (!theme) throw new Error(\`Unknown Hue Theme mood: \${id}\`);
-  return theme;
-}
-
-${[...families]
-  .map(
-    ([family, keys]) =>
-      `export const ${family.toUpperCase()}_TOKENS = ${JSON.stringify(keys, null, 2)};`,
-  )
-  .join("\n\n")}
-`;
-const declarationContract = [
-  `export type SemanticToken =\n${semanticKeys.map((key) => `  | "${key}"`).join("\n")};`,
-  ...[...families].map(([family, keys]) => {
-    const constName = `${family.toUpperCase()}_TOKENS`;
-    return [
-      `export declare const ${constName}: readonly ${JSON.stringify(keys)};`,
-      `export type ${pascal(family)}Token = (typeof ${constName})[number];`,
-    ].join("\n");
-  }),
-].join("\n\n");
-const declaration = `// Generated by scripts/build.ts. Do not edit.
-export type ThemeId = ${themes.map((theme) => `"${theme.id}"`).join(" | ")};
-export type Appearance = "light" | "dark";
-${declarationContract}
-
-export interface ResolvedTheme {
-  readonly id: ThemeId;
-  readonly label: string;
-  readonly appearance: Appearance;
-  readonly description: string;
-  readonly primitive: Readonly<Record<string, string>>;
-  readonly semantic: Readonly<Record<SemanticToken, string>>;
-}
-
-export declare const themeBundle: {
-  readonly version: string;
-  readonly themes: readonly ResolvedTheme[];
-};
-
-export declare function getTheme(id: ThemeId): ResolvedTheme;
-`;
-const css = `${themes
-  .map(
-    (theme) => `[data-hue-theme="${theme.id}"] {
-${Object.entries(theme.semantic)
-  .map(([key, value]) => `  --hue-${key.replaceAll(".", "-")}: ${value};`)
-  .join("\n")}
-}`,
-  )
-  .join("\n\n")}\n`;
-
 const outputs: Array<[string, string]> = [
-  [resolve(outputDirectory, "themes.json"), json],
-  [resolve(outputDirectory, "themes.ts"), typescript],
-  [resolve(outputDirectory, "themes.js"), javascript],
-  [resolve(outputDirectory, "themes.d.ts"), declaration],
-  [resolve(outputDirectory, "themes.css"), css],
+  ...renderBundleFiles(themes).map(
+    (file) => [resolve(outputDirectory, file.path), file.content] as [string, string],
+  ),
   ...ADAPTERS.flatMap((adapter) =>
     adapter
       .render(themes)

@@ -1,0 +1,12 @@
+# Coverage gate, enforced by `bun run ci` (which runs `bun test --coverage`).
+#
+# Bun applies the threshold to every file, not to the total: one file under 97%
+# fails the run even when the suite as a whole is above it. It also fails with
+# exit code 1 and no message — read the table and find the row below 97%.
+#
+# Bun only measures files a test imports. tests/coverage.test.ts loads every
+# module under packages/tokens/src so a new one cannot escape the report, and
+# scripts/build.ts is kept to I/O so there is no logic left unmeasured there.
+[test]
+coverageSkipTestFiles = true
+coverageThreshold = { lines = 0.97, functions = 0.97 }

@@ -50,6 +50,18 @@ describe("contrast gates", () => {
     );
   });
 
+  test("reports a derived colour that falls below its floor", () => {
+    const [theme] = themeBundle.themes;
+    // A primary text that matches the canvas leaves nothing readable on a row.
+    const washedOut = {
+      ...theme,
+      semantic: { ...theme.semantic, "text.primary": theme.semantic["surface.canvas"] },
+    };
+    expect(derivedFailures(washedOut).join("\n")).toContain(
+      "text.primary on the added line diff row",
+    );
+  });
+
   test("every shipped mood clears every derived-colour floor", () => {
     for (const theme of themeBundle.themes) expect(derivedFailures(theme)).toEqual([]);
   });

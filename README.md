@@ -108,7 +108,8 @@ Quality gates (Biome is the single formatter/linter for TS, JS, JSON, CSS):
 ```fish
 bun run format     # apply Biome formatting/import-order fixes before CI
 bun run format:check
-bun run quality    # biome check + token check + tests
+bun run quality    # biome check + token check + tests with coverage
+bun run test:coverage
 bun run ci         # the full non-mutating gate, incl. build
 ```
 
@@ -116,6 +117,10 @@ bun run ci         # the full non-mutating gate, incl. build
 before typechecks, tests, or builds run. After changing token adapters, run
 `bun run build` first so generated artifacts are refreshed, then `bun run format`
 and `bun run ci`.
+
+Tests run with coverage in `bun run ci` and `bun run quality`, gated at 97% of
+lines and functions **per file** (`bunfig.toml`). A file under the floor fails
+the run with exit code 1 and no message; the coverage table shows which row.
 
 Releasing touches four channels, only two of which `scripts/release-all.sh`
 covers — see [`docs/distribution.md`](docs/distribution.md) for which host is

@@ -66,4 +66,20 @@ describe("adapter registry", () => {
       expect(() => validateManifest(adapter.name, adapter.manifest)).not.toThrow();
     }
   });
+
+  // The registry is what the build writes from, so its paths are the contract:
+  // every file an adapter renders must land on the file the repo ships.
+  test("every adapter renders exactly the files on disk", () => {
+    const tokens = resolve(import.meta.dir, "../packages/tokens");
+    for (const adapter of ADAPTERS) {
+      const files = adapter.render(themeBundle.themes);
+      expect(files.length).toBeGreaterThan(0);
+      for (const file of files) {
+        const path = resolve(tokens, adapter.outDir, file.path);
+        expect(`${adapter.name}: ${readFileSync(path, "utf8") === file.content}`).toBe(
+          `${adapter.name}: true`,
+        );
+      }
+    }
+  });
 });
