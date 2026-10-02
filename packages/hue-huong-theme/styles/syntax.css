@@ -34,6 +34,8 @@
     --editor-search-match-background-color: #a9a0c8;
     --editor-search-match-selected-background-color: #dcbb80;
     --editor-search-match-selected-outline: 1px solid #dcbb80;
+    --hue-editor-search-match-color: #0f1d19;
+    --hue-editor-search-match-selected-color: #0f1d19;
     --editor-placeholder-color: #98a59c;
     --editor-nes-ghost-color: #98a59c;
     --editor-highlight-space-color: #182a24;
@@ -172,5 +174,18 @@
   :root:has(body.acrylic-window) {
     --editor-background-color: transparent;
     --editor-gutter-background-solid-color: transparent;
+  }
+
+  /* CodeMirror's token styles are unlayered, so only !important from inside a
+   * layer outranks them. The descendant selector covers a match that wraps
+   * token spans; the bare one a match nested inside a token. */
+  .cm-editor .cm-searchMatch,
+  .cm-editor .cm-searchMatch * {
+    color: var(--hue-editor-search-match-color) !important;
+  }
+
+  .cm-editor .cm-searchMatch.cm-searchMatch-selected,
+  .cm-editor .cm-searchMatch.cm-searchMatch-selected * {
+    color: var(--hue-editor-search-match-selected-color) !important;
   }
 }

@@ -704,6 +704,13 @@ ${renderScrollbarCss(mood)}}
 }
 
 function renderSyntaxCss(mood: ResolvedMood): string {
+  // Search matches are solid status fills, as in Neovim's Search/IncSearch.
+  // Inkdrop has no variable for the text inside a match, so the tokens keep
+  // their syntax colour — and headings are `status.warning`, the very fill of
+  // the current match, which made a matched heading word vanish. The rules at
+  // the end of the sheet put `textOn` the fill over every token in a match.
+  const searchMatch = role(mood, "status.notice");
+  const searchMatchSelected = role(mood, "status.warning");
   const vars: Record<string, string> = {
     "--editor-foreground-color": role(mood, "text.primary"),
     "--editor-background-color": role(mood, "surface.canvas"),
@@ -738,9 +745,11 @@ function renderSyntaxCss(mood: ResolvedMood): string {
     "--editor-matching-bracket-outline": `1px solid ${role(mood, "accent.secondary")}`,
     "--editor-nonmatching-bracket-outline": `1px solid ${role(mood, "status.error")}`,
     "--editor-selection-match-background-color": role(mood, "surface.raised"),
-    "--editor-search-match-background-color": role(mood, "status.notice"),
-    "--editor-search-match-selected-background-color": role(mood, "status.warning"),
-    "--editor-search-match-selected-outline": `1px solid ${role(mood, "status.warning")}`,
+    "--editor-search-match-background-color": searchMatch,
+    "--editor-search-match-selected-background-color": searchMatchSelected,
+    "--editor-search-match-selected-outline": `1px solid ${searchMatchSelected}`,
+    "--hue-editor-search-match-color": textOn(mood, searchMatch),
+    "--hue-editor-search-match-selected-color": textOn(mood, searchMatchSelected),
     "--editor-placeholder-color": role(mood, "text.secondary"),
     "--editor-nes-ghost-color": role(mood, "text.secondary"),
     "--editor-highlight-space-color": role(mood, "surface.raised"),
@@ -899,6 +908,19 @@ ${cssVars(vars, "    ")}
   :root:has(body.acrylic-window) {
     --editor-background-color: transparent;
     --editor-gutter-background-solid-color: transparent;
+  }
+
+  /* CodeMirror's token styles are unlayered, so only !important from inside a
+   * layer outranks them. The descendant selector covers a match that wraps
+   * token spans; the bare one a match nested inside a token. */
+  .cm-editor .cm-searchMatch,
+  .cm-editor .cm-searchMatch * {
+    color: var(--hue-editor-search-match-color) !important;
+  }
+
+  .cm-editor .cm-searchMatch.cm-searchMatch-selected,
+  .cm-editor .cm-searchMatch.cm-searchMatch-selected * {
+    color: var(--hue-editor-search-match-selected-color) !important;
   }
 }
 `;

@@ -282,6 +282,29 @@ describe("Hue -> Inkdrop adapter", () => {
     }
   });
 
+  // Regression: the current search match is a status.warning fill and headings
+  // are status.warning text, so a matched heading word disappeared. Inkdrop has
+  // no foreground variable for matches; the theme overrides token colour itself.
+  test("keeps text inside editor search matches readable", () => {
+    for (const pack of packages) {
+      const syntax = fileContent(pack, "styles/syntax.css");
+      const varOf = (key: string) =>
+        syntax.match(new RegExp(`\\s${key}: (#[0-9a-f]{6});`))?.[1] ?? "";
+      const pairs = [
+        ["--editor-search-match-background-color", "--hue-editor-search-match-color"],
+        [
+          "--editor-search-match-selected-background-color",
+          "--hue-editor-search-match-selected-color",
+        ],
+      ];
+      for (const [fill, text] of pairs) {
+        expect(contrastRatio(varOf(text), varOf(fill))).toBeGreaterThanOrEqual(4.5);
+      }
+      expect(syntax).toContain("color: var(--hue-editor-search-match-selected-color) !important;");
+      expect(syntax).toContain(".cm-editor .cm-searchMatch.cm-searchMatch-selected *");
+    }
+  });
+
   // Regression: segments and tabs fell back to Inkdrop's neutral greys, which
   // showed as grey cards and tabs on the plugin pages.
   test("themes segments and tabs instead of inheriting neutral greys", () => {
