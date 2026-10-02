@@ -4,7 +4,6 @@
 @layer theme.preview {
   :root {
     color-scheme: light;
-    --page-background: #edf3fe;
     --text-color: #001f3e;
     --link-color: #00753c;
     --link-hover-color: #00753c;
@@ -101,9 +100,10 @@
     --md-inline-code-border-color: rgb(92 123 168 / 40%);
   }
 
+  /* No background: the base leaves the preview transparent over the editor
+   * pane, which is what lets it follow --editor-background under acrylic. */
   .mde-preview,
   .mde-preview .markdown-body {
-    background: #edf3fe;
     color: #001f3e;
   }
 

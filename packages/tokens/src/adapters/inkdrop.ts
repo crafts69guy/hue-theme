@@ -907,8 +907,14 @@ ${cssVars(vars, "    ")}
 }
 
 function renderPreviewCss(mood: ResolvedMood): string {
+  // No `--page-background` here. `theme.preview` cascades after `theme.ui`, so a
+  // page colour declared in this layer beat the acrylic block's `transparent`
+  // in ui.css and put an opaque canvas behind every panel: the acrylic setting
+  // graded the panels correctly over a solid colour and never showed the
+  // material. Measured 2026-10-02 — sidebar, note list and editor matched
+  // 50/70/90% of their tokens over #001F3E to within one step. The page belongs
+  // to ui.css alone.
   const vars: Record<string, string> = {
-    "--page-background": role(mood, "surface.canvas"),
     "--text-color": role(mood, "text.primary"),
     "--link-color": role(mood, "text.accent"),
     "--link-hover-color": role(mood, "accent.primary"),
@@ -1028,9 +1034,10 @@ function renderPreviewCss(mood: ResolvedMood): string {
 ${cssVars(vars, "    ")}
   }
 
+  /* No background: the base leaves the preview transparent over the editor
+   * pane, which is what lets it follow --editor-background under acrylic. */
   .mde-preview,
   .mde-preview .markdown-body {
-    background: ${cssValue(role(mood, "surface.canvas"))};
     color: ${cssValue(role(mood, "text.primary"))};
   }
 

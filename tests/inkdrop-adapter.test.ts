@@ -427,4 +427,45 @@ describe("Hue -> Inkdrop adapter", () => {
       expect(win32).toBe(mood.appearance === "dark");
     }
   });
+
+  // Inkdrop cascades its layers theme < theme.ui < theme.preview < theme.syntax,
+  // and a later layer wins outright. preview.css once declared --page-background
+  // in plain :root, which beat the acrylic block's `transparent` in ui.css and
+  // kept an opaque canvas behind every panel for as long as acrylic existed.
+  test("no later stylesheet overrides the acrylic block or disagrees on a shared variable", () => {
+    const order = ["palette.css", "ui.css", "preview.css", "syntax.css"];
+    const rootVars = (css: string) =>
+      new Map(
+        [
+          ...(css.match(/\n {2}:root \{([^}]*)\}/)?.[1] ?? "").matchAll(/(--[\w-]+): ([^;]+);/g),
+        ].map((m) => [m[1], m[2]] as [string, string]),
+      );
+    for (const pack of packages) {
+      const sheets = order.map((sheet) => rootVars(fileContent(pack, `styles/${sheet}`)));
+      const ui = fileContent(pack, "styles/ui.css");
+      const acrylic = ui.match(/:root:has\(body\.acrylic-window\) \{([^}]*)\}/)?.[1] ?? "";
+      const acrylicKeys = [...acrylic.matchAll(/(--[\w-]+):/g)].map((m) => m[1]);
+      expect(acrylicKeys.length).toBeGreaterThan(3);
+      for (const key of acrylicKeys) {
+        for (const later of [2, 3]) {
+          expect(`${order[later]} ${key}: ${sheets[later].has(key)}`).toBe(
+            `${order[later]} ${key}: false`,
+          );
+        }
+      }
+      for (let a = 0; a < sheets.length; a += 1) {
+        for (let b = a + 1; b < sheets.length; b += 1) {
+          for (const [key, value] of sheets[a]) {
+            if (!sheets[b].has(key)) continue;
+            expect(`${order[b]} ${key}: ${sheets[b].get(key)}`).toBe(
+              `${order[b]} ${key}: ${value}`,
+            );
+          }
+        }
+      }
+      expect(fileContent(pack, "styles/preview.css")).not.toMatch(
+        /\.mde-preview,\s+\.mde-preview \.markdown-body \{[^}]*background:/,
+      );
+    }
+  });
 });
