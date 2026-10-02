@@ -4,9 +4,9 @@
 # apply.sh also copies `accent` into [ui].accent; keep it first.
 accent = "#00753C"
 panel_bg = "#FFFFFF"
-surface0 = "#B0DDFF"
+surface0 = "#8CCBFF"
 surface1 = "#5C7BA8"
-surface_dim = "#B0DDFF"
+surface_dim = "#8CCBFF"
 overlay0 = "#7D96C1"
 overlay1 = "#66798B"
 text = "#001F3E"

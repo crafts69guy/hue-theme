@@ -2,11 +2,11 @@
 # Huế Cung — Hue theme for Tide fish prompt.
 
 # Prompt frame + connection
-set -g tide_prompt_color_frame_and_connection '#B0DDFF'
-set -g tide_prompt_color_separator_same_color '#B0DDFF'
+set -g tide_prompt_color_frame_and_connection '#8CCBFF'
+set -g tide_prompt_color_separator_same_color '#8CCBFF'
 
 # Left prompt
-set -g tide_os_bg_color '#B0DDFF'
+set -g tide_os_bg_color '#8CCBFF'
 set -g tide_os_color '#001F3E'
 set -g tide_pwd_bg_color '#00753C'
 set -g tide_pwd_color_dirs '#EDF3FE'
@@ -16,7 +16,7 @@ set -g tide_character_color '#00753C'
 set -g tide_character_color_failure '#C20A19'
 
 # Git
-set -g tide_git_bg_color '#B0DDFF'
+set -g tide_git_bg_color '#8CCBFF'
 set -g tide_git_bg_color_unstable '#C39F72'
 set -g tide_git_bg_color_urgent '#D57380'
 set -g tide_git_color_branch '#001F3E'
@@ -35,11 +35,11 @@ set -g tide_status_bg_color_failure '#C20A19'
 set -g tide_status_color_failure '#EDF3FE'
 set -g tide_cmd_duration_bg_color '#A15A00'
 set -g tide_cmd_duration_color '#EDF3FE'
-set -g tide_context_bg_color '#B0DDFF'
+set -g tide_context_bg_color '#8CCBFF'
 set -g tide_context_color_default '#A15A00'
 set -g tide_context_color_root '#C20A19'
 set -g tide_context_color_ssh '#0033C9'
-set -g tide_jobs_bg_color '#B0DDFF'
+set -g tide_jobs_bg_color '#8CCBFF'
 set -g tide_jobs_color '#00753C'
 set -g tide_direnv_bg_color '#A15A00'
 set -g tide_direnv_bg_color_denied '#C20A19'
@@ -51,7 +51,7 @@ set -g tide_time_color '#EDF3FE'
 # Language/tool segments
 set -g tide_node_bg_color '#00753C'
 set -g tide_node_color '#EDF3FE'
-set -g tide_python_bg_color '#B0DDFF'
+set -g tide_python_bg_color '#8CCBFF'
 set -g tide_python_color '#0033C9'
 set -g tide_rustc_bg_color '#C20A19'
 set -g tide_rustc_color '#EDF3FE'

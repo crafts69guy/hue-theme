@@ -7,7 +7,7 @@ return {
     semantic = {
       ["surface.canvas"] = "#EDF3FE",
       ["surface.raised"] = "#FFFFFF",
-      ["surface.selected"] = "#B0DDFF",
+      ["surface.selected"] = "#8CCBFF",
       ["text.primary"] = "#001F3E",
       ["text.secondary"] = "#384B63",
       ["text.accent"] = "#00753C",
@@ -35,7 +35,7 @@ return {
     primitive = {
       ink = "#EDF3FE",
       stone = "#FFFFFF",
-      pool = "#B0DDFF",
+      pool = "#8CCBFF",
       rain = "#5C7BA8",
       drizzle = "#C9DCF2",
       paper = "#001F3E",

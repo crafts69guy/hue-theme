@@ -43,7 +43,7 @@
     --mde-preview-inline-code-border-color: #5c7ba8;
     --mde-preview-inline-code-border-width: 1px;
     --mde-preview-codeblock-background-color: #ffffff;
-    --mde-preview-codeblock-meta-background-color: #b0ddff;
+    --mde-preview-codeblock-meta-background-color: #8ccbff;
     --mde-preview-image-background-color: #ffffff;
     --mde-preview-inline-mark-background-color: #6b2fd0;
     --mde-preview-inline-mark-text-color: #001f3e;
@@ -77,7 +77,7 @@
     --mermaid-actor-background-color: #ffffff;
     --mermaid-actor-border-color: #00753c;
     --mermaid-actor-text-color: #001f3e;
-    --mermaid-activation-background-color: #b0ddff;
+    --mermaid-activation-background-color: #8ccbff;
     --mermaid-activation-border-color: #00753c;
     --mermaid-sequence-number-color: #384b63;
     --mermaid-loop-text-color: #001f3e;

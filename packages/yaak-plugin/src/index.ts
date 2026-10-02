@@ -13,7 +13,7 @@ export const plugin: PluginDefinition = {
         text: "#001F3E",
         textSubtle: "#384B63",
         textSubtlest: "#5C7BA8",
-        selection: "#B0DDFF",
+        selection: "#8CCBFF",
         surfaceActive: "#FFFFFF",
         border: "#5C7BA8",
         borderSubtle: "#FFFFFF",

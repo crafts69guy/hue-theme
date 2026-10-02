@@ -11,7 +11,7 @@
       "$value": { "colorSpace": "srgb", "components": [1.0, 1.0, 1.0], "hex": "#FFFFFF" }
     },
     "pool": {
-      "$value": { "colorSpace": "srgb", "components": [0.69, 0.867, 1.0], "hex": "#B0DDFF" }
+      "$value": { "colorSpace": "srgb", "components": [0.549, 0.796, 1.0], "hex": "#8CCBFF" }
     },
     "rain": {
       "$value": { "colorSpace": "srgb", "components": [0.361, 0.482, 0.659], "hex": "#5C7BA8" }
