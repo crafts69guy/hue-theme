@@ -62,6 +62,16 @@ describe("contrast gates", () => {
     );
   });
 
+  test("reports a colour scale that folds back on itself", () => {
+    const [theme] = themeBundle.themes;
+    // A border lighter than secondary text puts step 500 above step 300.
+    const folded = {
+      ...theme,
+      semantic: { ...theme.semantic, "border.subtle": "#FFFFFF" },
+    };
+    expect(derivedFailures(folded).join("\n")).toContain("neutral scale step");
+  });
+
   test("every shipped mood clears every derived-colour floor", () => {
     for (const theme of themeBundle.themes) expect(derivedFailures(theme)).toEqual([]);
   });

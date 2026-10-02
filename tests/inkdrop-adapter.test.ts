@@ -1,9 +1,13 @@
 import { describe, expect, test } from "bun:test";
 import type { SemanticToken } from "../packages/tokens/generated/themes";
 import { themeBundle } from "../packages/tokens/generated/themes";
-import { renderInkdropPackages } from "../packages/tokens/src/adapters/inkdrop";
-import { contrastRatio, hexToRgb } from "../packages/tokens/src/color";
-import { tray, wash } from "../packages/tokens/src/derive";
+import {
+  INKDROP_HUE_SCALES,
+  INKDROP_NEUTRAL_SCALES,
+  renderInkdropPackages,
+} from "../packages/tokens/src/adapters/inkdrop";
+import { contrastRatio, hexToRgb, hslChannels } from "../packages/tokens/src/color";
+import { neutralRamp, RAMP_STEPS, tray, wash } from "../packages/tokens/src/derive";
 
 const HEX = /^#[0-9a-f]{6}$/;
 const STYLE_SHEETS = ["palette.css", "ui.css", "syntax.css", "preview.css"];
@@ -357,6 +361,70 @@ describe("Hue -> Inkdrop adapter", () => {
           expect(Number(alpha)).toBeLessThan(100);
         }
       }
+    }
+  });
+
+  // Inkdrop's base draws whatever Hue does not override from 22 stock scales.
+  // Rebuilding them from the mood is what keeps every unmapped hover, border and
+  // acrylic wash in the mood, so the full set has to be there.
+  test("rebuilds all of Inkdrop's stock colour scales from the mood", () => {
+    for (const pack of packages) {
+      const palette = fileContent(pack, "styles/palette.css");
+      const mood = moodOf(pack.moodId);
+      const scales = [...INKDROP_NEUTRAL_SCALES, ...Object.keys(INKDROP_HUE_SCALES)];
+      expect(scales).toHaveLength(22);
+      const neutral = neutralRamp(mood);
+      for (const name of scales) {
+        for (const step of RAMP_STEPS) {
+          expect(palette).toMatch(
+            new RegExp(`--hsl-${name}-${step}: [\\d.]+deg [\\d.]+% [\\d.]+%;`),
+          );
+        }
+      }
+      for (const name of INKDROP_NEUTRAL_SCALES) {
+        expect(palette).toContain(`--hsl-${name}-950: ${hslChannels(neutral[950])};`);
+      }
+      // The scale's ends are the mood's own canvas and text, not stock grey.
+      const [dark, light] =
+        mood.appearance === "dark"
+          ? [mood.semantic["surface.canvas"], mood.semantic["text.primary"]]
+          : [mood.semantic["text.primary"], mood.semantic["surface.raised"]];
+      expect(neutral[950]).toBe(dark);
+      expect(neutral[50]).toBe(light);
+      expect(palette).toContain(`--hsl-blue-500: ${hslChannels(mood.semantic["status.info"])};`);
+    }
+  });
+
+  // Regression: at 15% the sidebar showed the macOS material, not the mood, and
+  // came out darker than the editor; the unfocused selection was opaque canvas
+  // and vanished into it; floating menus stayed 70% over the material.
+  test("keeps the mood in the acrylic sidebar and the glass unbroken", () => {
+    for (const pack of packages) {
+      const ui = fileContent(pack, "styles/ui.css");
+      const mood = moodOf(pack.moodId);
+      const acrylic = ui.match(/:root:has\(body\.acrylic-window\) \{([^}]*)\}/)?.[1] ?? "";
+      const alpha = acrylic.match(/--sidebar-background: rgb\(\d+ \d+ \d+ \/ (\d+)%\);/)?.[1];
+      expect(Number(alpha)).toBeGreaterThanOrEqual(45);
+
+      const raised = mood.semantic["surface.raised"].toLowerCase();
+      for (const key of [
+        "--vertical-menu-background",
+        "--inline-dropdown-menu-background",
+        "--editor-drawer-background",
+      ]) {
+        expect(acrylic).toContain(`${key}: ${raised};`);
+      }
+
+      for (const key of [
+        "--sidebar-menu-item-active-background",
+        "--sidebar-menu-item-inactive-background",
+        "--sidebar-sync-status-view-background",
+      ]) {
+        expect(ui).toMatch(new RegExp(`${key}: rgb\\(\\d+ \\d+ \\d+ / \\d+%\\);`));
+      }
+
+      const win32 = ui.includes(":root:has(body.acrylic-window.platform-win32)");
+      expect(win32).toBe(mood.appearance === "dark");
     }
   });
 });

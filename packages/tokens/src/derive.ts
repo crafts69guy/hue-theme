@@ -98,3 +98,87 @@ export const DIFF_STATUS = {
 } as const satisfies Record<string, StatusToken>;
 
 export const DIFF_WEIGHT_NAMES = Object.keys(DIFF_WEIGHTS) as DiffWeight[];
+
+/** The eleven steps of a Tailwind-shaped colour scale, lightest first. */
+export const RAMP_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const;
+export type RampStep = (typeof RAMP_STEPS)[number];
+export type Ramp = Record<RampStep, string>;
+
+// Where each mood's own roles sit on the neutral scale. Steps between anchors
+// are interpolated, so the scale passes through the mood's real surfaces and
+// text rather than approximating them. Dark moods run text -> canvas; light
+// moods run the other way, with the white raised panel lightest.
+const NEUTRAL_ANCHORS: Record<"dark" | "light", Partial<Record<RampStep, SemanticToken>>> = {
+  dark: {
+    50: "text.primary",
+    300: "text.secondary",
+    500: "border.subtle",
+    800: "border.faint",
+    900: "surface.raised",
+    950: "surface.canvas",
+  },
+  light: {
+    50: "surface.raised",
+    100: "surface.canvas",
+    200: "border.faint",
+    500: "border.subtle",
+    700: "text.secondary",
+    950: "text.primary",
+  },
+};
+
+/**
+ * The mood as a neutral scale: a host that draws its chrome from a stock grey
+ * ramp (Inkdrop's base stylesheet) gets the mood's own surfaces, boundaries and
+ * text at the steps it reaches for, and blends between them elsewhere.
+ */
+export function neutralRamp(mood: ResolvedMood): Ramp {
+  const anchors = Object.entries(NEUTRAL_ANCHORS[mood.appearance]).map(
+    ([step, token]) => [RAMP_STEPS.indexOf(Number(step) as RampStep), role(mood, token)] as const,
+  );
+  const ramp = {} as Ramp;
+  RAMP_STEPS.forEach((step, index) => {
+    const after = anchors.findIndex(([at]) => at >= index);
+    const [toIndex, to] = anchors[after];
+    if (toIndex === index || after === 0) {
+      ramp[step] = to;
+      return;
+    }
+    const [fromIndex, from] = anchors[after - 1];
+    ramp[step] = mixHex(from, to, (index - fromIndex) / (toIndex - fromIndex));
+  });
+  return ramp;
+}
+
+// How far each step travels from the role toward the mood's own light or dark
+// end. 500 is the role itself.
+const HUE_RAMP_WEIGHTS: Record<RampStep, number> = {
+  50: 0.9,
+  100: 0.78,
+  200: 0.6,
+  300: 0.4,
+  400: 0.2,
+  500: 0,
+  600: 0.2,
+  700: 0.4,
+  800: 0.6,
+  900: 0.75,
+  950: 0.85,
+};
+
+/**
+ * A chromatic scale built on one role. Steps lighter than 500 blend toward the
+ * neutral scale's light end and darker ones toward its dark end, so every scale
+ * converges on the mood's own text and canvas rather than on stock white and
+ * black.
+ */
+export function hueRamp(mood: ResolvedMood, token: SemanticToken): Ramp {
+  const neutral = neutralRamp(mood);
+  const base = role(mood, token);
+  const ramp = {} as Ramp;
+  for (const step of RAMP_STEPS) {
+    const pole = step < 500 ? neutral[50] : neutral[950];
+    ramp[step] = mixHex(base, pole, HUE_RAMP_WEIGHTS[step]);
+  }
+  return ramp;
+}

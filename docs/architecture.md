@@ -109,6 +109,16 @@ variables; the preview stylesheet keeps rendered Markdown, code blocks, and
 Mermaid diagrams aligned with the same roles. Inkdrop stylesheets do not set
 fonts.
 
+`palette.css` also rebuilds Inkdrop's 22 stock colour scales (`--hsl-neutral-*`,
+`--hsl-blue-*`, …), which the base stylesheet reads as bare HSL channels for
+everything a theme does not override — the approach Solarized Dark takes. The
+five grey families take `neutralRamp()` from `src/derive.ts`, a scale anchored
+on the mood's own canvas, raised surface, boundaries and text; the chromatic
+families take `hueRamp()` on the status or accent role they group onto. Under
+the acrylic window the sidebar, note list and editor keep 50/70/90% of their
+colour, Solarized's grade rather than the base's 10/50/60, because a coloured
+mood over the macOS material loses its identity where a neutral one does not.
+
 The bat adapter (`adapters/bat.ts`) generates `bat/hue-<mood>.tmTheme` into
 `packages/terminal-themes/` — a Sublime-format plist, because that is the only
 theme format bat reads. The lazygit adapter (`adapters/lazygit.ts`) writes

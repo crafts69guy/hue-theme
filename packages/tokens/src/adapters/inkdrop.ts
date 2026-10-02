@@ -3,9 +3,9 @@
 // Mermaid diagram variables through layered CSS stylesheets.
 
 import type { SemanticToken } from "../../generated/themes";
-import { hexToRgb, mixHex } from "../color";
+import { hexToRgb, hslChannels, mixHex } from "../color";
 import type { AdapterManifest } from "../contract";
-import { textOn, tray, wash } from "../derive";
+import { hueRamp, neutralRamp, RAMP_STEPS, type Ramp, textOn, tray, wash } from "../derive";
 import { type ResolvedMood, role } from "../mood";
 
 export const inkdropManifest = {
@@ -35,7 +35,9 @@ function cssValue(value: string): string {
 // in TypeScript, where the tests can measure its contrast. `translucent()` is
 // kept for colour that has to composite over a background the theme cannot
 // know: the active line over a selection, button washes on any surface, the
-// acrylic window. No `color-mix()` and no `#rrggbbaa` in the output.
+// acrylic window. No `color-mix()` and no `#rrggbbaa` in the output. The one
+// other form is the bare HSL channels of the `--hsl-*` scales in palette.css,
+// because that is the shape Inkdrop's base stylesheet reads them in.
 function translucent(hex: string, percent: number): string {
   const [r, g, b] = hexToRgb(hex);
   return `rgb(${r} ${g} ${b} / ${percent}%)`;
@@ -61,12 +63,6 @@ function softLine(mood: ResolvedMood): string {
   return translucent(role(mood, "border.subtle"), SOFT_LINE);
 }
 
-// How much of its own colour each surface keeps once the acrylic window is on.
-// Not one figure for all three: Inkdrop's base stylesheet grades them, and the
-// grade is the point. Chrome is nearly clear so the window reads as glass, while
-// the surface carrying body text stays mostly solid so the text keeps its
-// ground. Matching that grade is what makes a theme look as translucent as the
-// stock ones — a single figure across all three reads as a tinted pane instead.
 // Scrollbars. Inkdrop styles `::-webkit-scrollbar` only under
 // `body.platform-win32, body.platform-linux`, so on macOS its scrollbar
 // variables are inert and the native grey overlay shows instead — measured on a
@@ -99,12 +95,36 @@ const BUTTON_IDLE = 18;
 const BUTTON_HOVER = 30;
 const BUTTON_DOWN = 24;
 // Vertical and inline dropdown menus keep the base's 70% so whatever they sit
-// over still reads faintly through.
+// over still reads faintly through — on an opaque window. Under acrylic they go
+// solid (see acrylicVars).
 const FLOATING_MENU = 70;
 
-const ACRYLIC_SIDEBAR = 15;
-const ACRYLIC_NOTE_LIST = 50;
-const ACRYLIC_EDITOR = 60;
+// How much of its own colour each surface keeps once the acrylic window is on.
+// Graded, not one figure: chrome is clearest so the window reads as glass, and
+// the surface carrying body text is nearly solid so the text keeps its ground.
+//
+// The grade is Solarized Dark's, not the base stylesheet's. The base runs the
+// sidebar at 10% because its colours *are* the neutral grey of the macOS
+// material, so revealing the material costs it nothing. A coloured mood loses
+// itself instead: over the measured dark material rgb(10,14,28), Mưa's sidebar
+// kept 15% of its navy at 15% alpha and read as grey glass, darker than its own
+// editor. At 50% it keeps half its colour and stays lighter than the editor, as
+// it is on an opaque window.
+const ACRYLIC_SIDEBAR = 50;
+const ACRYLIC_NOTE_LIST = 70;
+const ACRYLIC_EDITOR = 90;
+// The window's own ground on Windows, where the acrylic material is light and
+// clear enough that dark panels over it lose their edges. Dark moods only, as
+// in the base stylesheet.
+const ACRYLIC_WIN32_PAGE = 40;
+
+// Selection fills in the sidebar are washes of `surface.selected`, never opaque
+// surfaces: under acrylic an opaque fill is a solid block in a glass pane, and
+// the unfocused selection used to be `surface.canvas`, which landed within a
+// shade of the translucent sidebar and disappeared.
+const SIDEBAR_ACTIVE = 90;
+const SIDEBAR_INACTIVE = 45;
+const SIDEBAR_SYNC_STATUS = 50;
 
 // When the user turns on the acrylic/vibrancy window, Inkdrop paints a macOS
 // vibrancy layer behind the window and marks the document `body.acrylic-window`.
@@ -121,8 +141,10 @@ const ACRYLIC_EDITOR = 60;
 // The page behind the three panels stays fully transparent rather than taking a
 // figure of its own: they tile the window, and two stacked alpha layers multiply
 // into something close to opaque. One alpha layer per region is the mechanism.
-// Floating panels (drawers, dropdowns, menus) stay opaque — they overlap
-// arbitrary content.
+// Floating panels (drawers, dropdowns, menus) go opaque — they overlap
+// arbitrary content, and a 70% menu over the material reads washed out. The base
+// stylesheet does the same, but Hue's own 70% in `:root` outranks the base
+// layer, so the acrylic block has to say it again.
 function acrylicVars(mood: ResolvedMood): Record<string, string> {
   const raised = role(mood, "surface.raised");
   return {
@@ -130,7 +152,20 @@ function acrylicVars(mood: ResolvedMood): Record<string, string> {
     "--sidebar-background": translucent(raised, ACRYLIC_SIDEBAR),
     "--note-list-bar-background": translucent(raised, ACRYLIC_NOTE_LIST),
     "--editor-background": translucent(role(mood, "surface.canvas"), ACRYLIC_EDITOR),
+    "--vertical-menu-background": raised,
+    "--inline-dropdown-menu-background": raised,
+    "--editor-drawer-background": raised,
   };
+}
+
+function renderAcrylicWin32(mood: ResolvedMood): string {
+  if (mood.appearance !== "dark") return "";
+  const page = translucent(role(mood, "surface.canvas"), ACRYLIC_WIN32_PAGE);
+  return `
+  :root:has(body.acrylic-window.platform-win32) {
+    --page-background: ${page};
+  }
+`;
 }
 
 function packageName(mood: ResolvedMood): string {
@@ -283,15 +318,65 @@ function hueVarName(key: string): string {
   return `--hue-${key.replaceAll(".", "-")}`;
 }
 
+// Inkdrop's base stylesheet draws everything Hue does not override from 22
+// stock colour scales (`--hsl-neutral-900`, `--hsl-blue-300`, …), read as bare
+// HSL channels inside `hsl(var(--hsl-x) / N%)`. Redefining the scales is what
+// Solarized Dark does, and it is the difference between patching grey leaks one
+// variable at a time and having none: every translucent hover, border, button and
+// acrylic wash the base computes now comes out in the mood.
+//
+// The five grey families all take the mood's neutral scale — the base uses
+// neutral on its dark side and gray/slate on its light side, so overriding only
+// neutral (as Solarized can, being dark-only) would leave Cung on stock greys.
+// The chromatic families group onto Hue's five chromatic roles the same way the
+// tag chips do.
+export const INKDROP_NEUTRAL_SCALES = ["neutral", "gray", "slate", "zinc", "stone"] as const;
+export const INKDROP_HUE_SCALES: Record<string, SemanticToken> = {
+  red: "status.error",
+  rose: "status.error",
+  pink: "status.error",
+  orange: "status.warning",
+  amber: "status.warning",
+  yellow: "status.warning",
+  lime: "status.success",
+  green: "status.success",
+  emerald: "status.success",
+  teal: "status.info",
+  cyan: "status.info",
+  sky: "status.info",
+  blue: "status.info",
+  indigo: "accent.secondary",
+  violet: "accent.secondary",
+  purple: "accent.secondary",
+  fuchsia: "accent.secondary",
+};
+
+function scaleVars(name: string, ramp: Ramp): Record<string, string> {
+  return Object.fromEntries(
+    RAMP_STEPS.map((step) => [`--hsl-${name}-${step}`, hslChannels(ramp[step])]),
+  );
+}
+
 function renderPaletteCss(mood: ResolvedMood): string {
   const vars = Object.fromEntries(
     Object.entries(mood.semantic).map(([key, value]) => [hueVarName(key), value]),
   );
+  const neutral = neutralRamp(mood);
+  const scales = Object.assign(
+    {},
+    ...INKDROP_NEUTRAL_SCALES.map((name) => scaleVars(name, neutral)),
+    ...Object.entries(INKDROP_HUE_SCALES).map(([name, token]) =>
+      scaleVars(name, hueRamp(mood, token)),
+    ),
+  ) as Record<string, string>;
 
   return `${renderHeader(mood, "palette")}@layer theme {
   :root {
     color-scheme: ${mood.appearance};
 ${cssVars(vars, "    ")}
+
+    /* Inkdrop's stock colour scales, rebuilt from the mood. */
+${cssVars(scales, "    ")}
   }
 }
 `;
@@ -424,12 +509,21 @@ function renderUiCss(mood: ResolvedMood): string {
     "--modal-box-content-background": role(mood, "surface.canvas"),
     "--modal-box-actions-background": role(mood, "surface.raised"),
     "--sidebar-background": role(mood, "surface.raised"),
-    "--sidebar-menu-item-inactive-background": role(mood, "surface.canvas"),
-    "--sidebar-menu-item-active-background": role(mood, "surface.selected"),
+    "--sidebar-menu-item-inactive-background": translucent(
+      role(mood, "surface.selected"),
+      SIDEBAR_INACTIVE,
+    ),
+    "--sidebar-menu-item-active-background": translucent(
+      role(mood, "surface.selected"),
+      SIDEBAR_ACTIVE,
+    ),
     "--sidebar-menu-section-color": role(mood, "text.secondary"),
     "--sidebar-menu-item-color": role(mood, "text.secondary"),
     "--sidebar-menu-active-item-color": role(mood, "text.primary"),
-    "--sidebar-sync-status-view-background": role(mood, "surface.canvas"),
+    "--sidebar-sync-status-view-background": translucent(
+      role(mood, "surface.canvas"),
+      SIDEBAR_SYNC_STATUS,
+    ),
     "--sidebar-sync-status-view-text-color": role(mood, "text.secondary"),
     // The base sets this per appearance and, for light themes, falls back to
     // `--warning-text-color`; pinning it keeps every mood on the same rule.
@@ -606,7 +700,7 @@ ${cssVars(vars, "    ")}
   :root:has(body.acrylic-window) {
 ${cssVars(acrylicVars(mood), "    ")}
   }
-
+${renderAcrylicWin32(mood)}
 ${renderScrollbarCss(mood)}}
 `;
 }

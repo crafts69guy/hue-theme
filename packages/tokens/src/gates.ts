@@ -11,12 +11,16 @@
 // Cung's selection once sat at 1.29:1 and could not be seen in a light editor.
 
 import type { SemanticToken } from "../generated/themes";
-import { contrastRatio } from "./color";
+import { contrastRatio, relativeLuminance } from "./color";
 import {
   DIFF_STATUS,
   DIFF_WEIGHT_NAMES,
   type DiffWeight,
   diffRow,
+  hueRamp,
+  neutralRamp,
+  RAMP_STEPS,
+  type Ramp,
   textMuted,
   textOn,
 } from "./derive";
@@ -128,6 +132,20 @@ export function derivedFailures(mood: ResolvedMood): string[] {
         check(`${token} contrast kept on the ${where}`, kept, ROW_SYNTAX_KEEP[weight]);
       }
     }
+  }
+  // A colour scale is only usable if every step is darker than the one before:
+  // a host reaching for "the 800" expects something between 700 and 900.
+  const scales: Array<[string, Ramp]> = [
+    ["neutral", neutralRamp(mood)],
+    ...FILLS.map((fill): [string, Ramp] => [fill, hueRamp(mood, fill)]),
+  ];
+  for (const [name, ramp] of scales) {
+    RAMP_STEPS.slice(1).forEach((step, index) => {
+      const lighter = RAMP_STEPS[index];
+      if (relativeLuminance(ramp[step]) >= relativeLuminance(ramp[lighter])) {
+        failures.push(`${mood.id}: ${name} scale step ${step} is not darker than ${lighter}`);
+      }
+    });
   }
   return failures;
 }

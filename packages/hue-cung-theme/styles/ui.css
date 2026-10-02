@@ -90,12 +90,12 @@
     --modal-box-content-background: #edf3fe;
     --modal-box-actions-background: #ffffff;
     --sidebar-background: #ffffff;
-    --sidebar-menu-item-inactive-background: #edf3fe;
-    --sidebar-menu-item-active-background: #8ccbff;
+    --sidebar-menu-item-inactive-background: rgb(140 203 255 / 45%);
+    --sidebar-menu-item-active-background: rgb(140 203 255 / 90%);
     --sidebar-menu-section-color: #384b63;
     --sidebar-menu-item-color: #384b63;
     --sidebar-menu-active-item-color: #001f3e;
-    --sidebar-sync-status-view-background: #edf3fe;
+    --sidebar-sync-status-view-background: rgb(237 243 254 / 50%);
     --sidebar-sync-status-view-text-color: #384b63;
     --sidebar-notification-view-background: #a15a00;
     --sidebar-notification-view-color: #edf3fe;
@@ -285,9 +285,12 @@
 
   :root:has(body.acrylic-window) {
     --page-background: transparent;
-    --sidebar-background: rgb(255 255 255 / 15%);
-    --note-list-bar-background: rgb(255 255 255 / 50%);
-    --editor-background: rgb(237 243 254 / 60%);
+    --sidebar-background: rgb(255 255 255 / 50%);
+    --note-list-bar-background: rgb(255 255 255 / 70%);
+    --editor-background: rgb(237 243 254 / 90%);
+    --vertical-menu-background: #ffffff;
+    --inline-dropdown-menu-background: #ffffff;
+    --editor-drawer-background: #ffffff;
   }
 
   ::-webkit-scrollbar {

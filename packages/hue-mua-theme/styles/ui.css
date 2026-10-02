@@ -90,12 +90,12 @@
     --modal-box-content-background: #001f3e;
     --modal-box-actions-background: #0a2e52;
     --sidebar-background: #0a2e52;
-    --sidebar-menu-item-inactive-background: #001f3e;
-    --sidebar-menu-item-active-background: #123f6e;
+    --sidebar-menu-item-inactive-background: rgb(18 63 110 / 45%);
+    --sidebar-menu-item-active-background: rgb(18 63 110 / 90%);
     --sidebar-menu-section-color: #9db4d4;
     --sidebar-menu-item-color: #9db4d4;
     --sidebar-menu-active-item-color: #e5f4ff;
-    --sidebar-sync-status-view-background: #001f3e;
+    --sidebar-sync-status-view-background: rgb(0 31 62 / 50%);
     --sidebar-sync-status-view-text-color: #9db4d4;
     --sidebar-notification-view-background: #ff8d00;
     --sidebar-notification-view-color: #001f3e;
@@ -285,9 +285,16 @@
 
   :root:has(body.acrylic-window) {
     --page-background: transparent;
-    --sidebar-background: rgb(10 46 82 / 15%);
-    --note-list-bar-background: rgb(10 46 82 / 50%);
-    --editor-background: rgb(0 31 62 / 60%);
+    --sidebar-background: rgb(10 46 82 / 50%);
+    --note-list-bar-background: rgb(10 46 82 / 70%);
+    --editor-background: rgb(0 31 62 / 90%);
+    --vertical-menu-background: #0a2e52;
+    --inline-dropdown-menu-background: #0a2e52;
+    --editor-drawer-background: #0a2e52;
+  }
+
+  :root:has(body.acrylic-window.platform-win32) {
+    --page-background: rgb(0 31 62 / 40%);
   }
 
   ::-webkit-scrollbar {
