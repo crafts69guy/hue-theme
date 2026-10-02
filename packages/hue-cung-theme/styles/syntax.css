@@ -38,7 +38,7 @@
     --editor-nes-ghost-color: #384b63;
     --editor-highlight-space-color: #ffffff;
     --editor-trailing-space-background-color: #c20a19;
-    --syntax-comment-color: #7d96c1;
+    --syntax-comment-color: #6e84aa;
     --syntax-name-color: #001f3e;
     --syntax-name-constant-color: #a15a00;
     --syntax-name-standard-color: #0033c9;
@@ -105,7 +105,7 @@
     --syntax-document-meta-color: #384b63;
     --syntax-annotation-color: #c20a19;
     --syntax-processing-instruction-color: #6b2fd0;
-    --syntax-meta-color: #7d96c1;
+    --syntax-meta-color: #6e84aa;
     --syntax-invalid-color: #c20a19;
     --md-inline-code-background-color: #ffffff;
     --md-codeblock-color: #001f3e;

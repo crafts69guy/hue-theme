@@ -12,8 +12,8 @@ import { renderTideFiles, tideManifest } from "../src/adapters/tide";
 import { renderTmuxFiles, tmuxManifest } from "../src/adapters/tmux";
 import { renderTuicrFiles, tuicrManifest } from "../src/adapters/tuicr";
 import { renderYaakPluginSource, yaakManifest } from "../src/adapters/yaak";
-import { contrastRatio } from "../src/color";
 import { CONTRACT, validateManifest } from "../src/contract";
+import { contrastFailures } from "../src/gates";
 
 type Token = { $value: unknown };
 type Node = Token | string | { [key: string]: Node };
@@ -161,21 +161,10 @@ if (!contracts.every((contract) => contract === contracts[0])) {
   throw new Error("Every mood must implement the same semantic token contract");
 }
 
-for (const theme of themes) {
-  const canvas = theme.semantic["surface.canvas"];
-  const pairs: Array<[string, number]> = [
-    ["text.primary", 4.5],
-    ["text.secondary", 4.5],
-    ["accent.primary", 4.5],
-    ["border.subtle", 3],
-  ];
-  for (const [token, minimum] of pairs) {
-    const ratio = contrastRatio(theme.semantic[token], canvas);
-    if (ratio < minimum) {
-      throw new Error(`${theme.id}:${token} contrast ${ratio.toFixed(2)} is below ${minimum}:1`);
-    }
-  }
-}
+// Contrast floors (src/gates.ts). Every failure is reported at once so a palette
+// edit shows its whole cost, not just the first token it broke.
+const failures = themes.flatMap((theme) => contrastFailures(theme.id, theme.semantic));
+if (failures.length > 0) throw new Error(`Contrast gates failed:\n  ${failures.join("\n  ")}`);
 
 // All moods share one contract (validated above), so any mood's keys describe it.
 const semanticKeys = Object.keys(themes[0].semantic);

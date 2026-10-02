@@ -130,9 +130,15 @@ family for one host.
 
 - Primary and secondary body text: WCAG 2.2 AA, at least 4.5:1.
 - Interactive boundaries and focus indicators: at least 3:1.
-- Syntax colors are audited against the editor background and with simulated
-  color-vision deficiencies. Exceptions must be documented.
+- Syntax and status colors: at least 4.5:1 against the canvas. Documented
+  exception: `syntax.comment` and `syntax.punctuation` are held to 3:1, because
+  they are meant to recede behind the code around them.
+- Selection: `surface.selected` at least 1.4:1 against the canvas so it can be
+  found at a glance, with `text.primary` on it at 4.5:1.
 - Information must not rely on color alone.
+
+The floors are declared as data in `packages/tokens/src/gates.ts`; the build
+refuses any mood that fails one and lists every failure at once.
 
 References:
 
