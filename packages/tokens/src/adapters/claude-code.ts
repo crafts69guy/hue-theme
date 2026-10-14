@@ -136,7 +136,7 @@ export function renderClaudeCodeFiles(
     },
     {
       path: `statusline/hue-${mood.id}.json`,
-      content: `{\n  "segments": ["model", "directory", "branch", "context"],\n  "palette": ${JSON.stringify(mood.semantic, null, 2).replace(/\n/g, "\n  ")}\n}\n`,
+      content: `{\n  "segments": ["repo", "branch", "context", "tokens", "diff", "model", "agents"],\n  "palette": ${JSON.stringify(mood.semantic, null, 2).replace(/\n/g, "\n  ")}\n}\n`,
     },
   ]);
 }

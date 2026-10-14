@@ -21,8 +21,8 @@ claude-statusline --mood huong --
 ```
 
 That launcher passes the plugin and session settings to Claude and renders the
-model, directory basename, branch and compact context percentage using
-`statusline/hue-<mood>.json`. Choosing another `/theme` during a session does not
+repo, branch, context bar, tokens, diff, model and agents (the default layout,
+recolored by the palette) using `statusline/hue-<mood>.json`. Choosing another `/theme` during a session does not
 synchronize the statusline. Choose the terminal's Hue mood separately.
 
 Theme format and color semantics follow the

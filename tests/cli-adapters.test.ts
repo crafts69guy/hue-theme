@@ -54,7 +54,7 @@ describe("CLI themes", () => {
       ).toEqual(mapMoodToClaudeCode(mood));
       expect(
         JSON.parse(files.find((f) => f.path === `statusline/hue-${mood.id}.json`)?.content ?? ""),
-      ).toEqual({ segments: ["model", "directory", "branch", "context"], palette: mood.semantic });
+      ).toEqual({ segments: ["repo", "branch", "context", "tokens", "diff", "model", "agents"], palette: mood.semantic });
     }
     const plugin = JSON.parse(
       readFileSync(

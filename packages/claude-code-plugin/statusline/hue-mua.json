@@ -1,5 +1,5 @@
 {
-  "segments": ["model", "directory", "branch", "context"],
+  "segments": ["repo", "branch", "context", "tokens", "diff", "model", "agents"],
   "palette": {
     "surface.canvas": "#001F3E",
     "surface.raised": "#0A2E52",
