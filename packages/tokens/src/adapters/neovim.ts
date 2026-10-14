@@ -312,6 +312,18 @@ const GROUPS: readonly HlSpec[] = [
   { group: "SnacksPickerSelected", fg: "accent.primary", style: ["bold"] },
   { group: "SnacksPickerMatch", fg: "status.warning", style: ["bold"] },
   { group: "SnacksDashboardNormal", fg: "text.primary", bg: "surface.raised" },
+  // Snacks diff preview (git status / git diff pickers). Snacks links these to
+  // DiffAdd/DiffChange and bakes the gutter from their fg at load, so under
+  // `transparent` the rows lose their tint, `+`/`-` render in plain text, and
+  // every context row is painted DiffChange blue. Its own groups keep the delta
+  // tint and colour the sign and line numbers by status; context stays bare.
+  { group: "SnacksDiffHeader", fg: "accent.primary", style: ["bold"] },
+  { group: "SnacksDiffAdd", fg: "status.success", bg: "diff.added" },
+  { group: "SnacksDiffDelete", fg: "status.error", bg: "diff.removed" },
+  { group: "SnacksDiffContext", fg: "text.primary" },
+  { group: "SnacksDiffAddLineNr", fg: "status.success", bg: "diff.added" },
+  { group: "SnacksDiffDeleteLineNr", fg: "status.error", bg: "diff.removed" },
+  { group: "SnacksDiffContextLineNr", fg: "border.subtle" },
   // Indent guides (snacks.indent, indent-blankline, mini.indentscope).
   // Regular guides use border.faint (rain pre-blended into the canvas at
   // 40%, matching Inkdrop's alpha borders) so they recede; only the current

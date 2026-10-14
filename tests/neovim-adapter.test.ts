@@ -199,4 +199,19 @@ describe("Hue → Neovim adapter", () => {
     expect(groups).toContain(`["DiffAdd"] = { bg = c["diff.added"] }`);
     expect(groups).toContain(`["DiffDelete"] = { fg = c["status.error"], bg = c["diff.removed"] }`);
   });
+
+  // Regression: Snacks' diff preview linked DiffAdd/DiffDelete, which
+  // `transparent` clears, so added and removed rows looked identical.
+  test("snacks diff preview keeps its tint under transparent", () => {
+    const groups = file("lua/hue/groups.lua");
+    const init = file("lua/hue/init.lua");
+    expect(groups).toContain(
+      `["SnacksDiffAdd"] = { fg = c["status.success"], bg = c["diff.added"] }`,
+    );
+    expect(groups).toContain(
+      `["SnacksDiffDelete"] = { fg = c["status.error"], bg = c["diff.removed"] }`,
+    );
+    expect(init).not.toContain(`"SnacksDiffAdd"`);
+    expect(init).not.toContain(`"SnacksDiffDelete"`);
+  });
 });
