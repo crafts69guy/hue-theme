@@ -1,0 +1,5 @@
+{
+  "name": "hue-theme",
+  "owner": { "name": "crafts69guy" },
+  "plugins": [{ "name": "hue-theme", "source": "./packages/claude-code-plugin" }]
+}
