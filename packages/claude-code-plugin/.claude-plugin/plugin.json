@@ -1,6 +1,6 @@
 {
   "name": "hue-theme",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Three Hue token-based Claude Code themes",
   "author": { "name": "crafts69guy" },
   "experimental": { "themes": "./themes/" }

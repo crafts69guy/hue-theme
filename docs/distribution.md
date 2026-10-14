@@ -15,7 +15,7 @@ registry, so "releasing" it reached nobody.
 | herdr, tuicr | local plugin path | `herdr plugin action invoke apply-mood --plugin hue-theme` | `~/.config/herdr/config.toml`; `~/.config/tuicr/themes/hue-<mood>.toml` matches the repo |
 | Fish / Tide | sourced from a working copy | nothing to publish | `hue-theme <mood>` |
 | ChatGPT/Codex | local share string | nothing to publish | import `hue-<mood>.txt` in Appearance |
-| claude-code | local plugin directory | nothing to publish | load `packages/claude-code-plugin` with `--plugin-dir`, select `/theme` |
+| claude-code | git marketplace (`.claude-plugin/marketplace.json`) | push, after bumping `packages/claude-code-plugin/.claude-plugin/plugin.json` | `claude plugin update hue-theme@hue-theme`, then `base` in `~/.claude/plugins/cache/hue-theme/hue-theme/<version>/themes/` |
 | codex-cli | local native theme files | nothing to publish | copy `packages/codex-cli-themes/themes` into `$CODEX_HOME/themes`, select `/theme` |
 | Token package (`@crafts69guy/hue-theme-tokens`) | **npm** | `npm publish packages/tokens --provenance=false`, run by the owner | `curl` the registry, below |
 
@@ -45,6 +45,9 @@ fragment is only read if `~/.gitconfig` includes it, so
 the fragment makes delta exit rather than fall back.
 
 Claude Code and Codex CLI artifacts are not published by release scripts.
+The Claude marketplace caches plugins by version: without a `plugin.json` bump,
+`claude plugin update` reports "already at the latest version" and keeps
+serving the old themes even though the marketplace clone is current.
 The Claude plugin contributes themes using an experimental manifest field;
 matching statusline palettes are consumed by `claude-statusline.nvim`.
 `codex-statusline.nvim` bundles the CLI tmThemes and installs them explicitly.
