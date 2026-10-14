@@ -27,13 +27,16 @@ synchronize the statusline. Choose the terminal's Hue mood separately.
 
 Theme format and color semantics follow the
 [official custom-theme reference](https://code.claude.com/docs/en/terminal-config#create-a-custom-theme).
-Themes start from `dark-ansi` or `light-ansi`, then override every known color
-key verified in Claude Code 2.1.299. UI surfaces, text, borders, accents, status,
+Themes start from `dark` or `light`, then override every known color key
+verified in Claude Code 2.1.299. Not the `-ansi` presets: a base containing
+"ansi" makes the diff renderer quantize to 256 colors, which turns every tinted
+diff row grey. UI surfaces, text, borders, accents, status,
 diff line/word backgrounds, message and composer backgrounds, modes, usage
 meter, labels, subagent colors and rainbow/shimmer variants use Hue semantics
 or shared contrast-gated derivations. Named subagent and rainbow hues share
 nearby Hue roles where the palette has no separate cyan/orange color. Syntax scope colors are controlled by
-Claude; this plugin has no syntax-theme contract.
+Claude (its built-in Monokai/GitHub palettes on these bases); this plugin has no
+syntax-theme contract.
 
 Ten keys supplement the documented token reference: `skill`,
 `autoAcceptShimmer`, `claudeBlue_FOR_SYSTEM_SPINNER`,

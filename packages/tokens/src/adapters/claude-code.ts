@@ -100,8 +100,12 @@ export const CLAUDE_RUNTIME_KEYS = [
 export type ClaudeCodeTheme = {
   /** Display label shown by /theme. */
   name: string;
-  /** ANSI fallback keeps terminal palette behavior for anything the host adds later. */
-  base: "dark-ansi" | "light-ansi";
+  /**
+   * Not the `-ansi` presets: in 2.1.299 a base name containing "ansi" forces the
+   * diff renderer to 256 colours, which rounds every tinted diff row to grey.
+   * The cost is Claude's built-in syntax palette instead of the terminal's.
+   */
+  base: "dark" | "light";
   /** Resolved host color tokens, including verified version-sensitive runtime keys. */
   overrides: Record<string, string>;
 };
@@ -122,7 +126,7 @@ export function mapMoodToClaudeCode(mood: ResolvedMood): ClaudeCodeTheme {
   overrides.diffAddedWord = diffRow(mood, "status.success", "emph");
   overrides.diffRemovedWord = diffRow(mood, "status.error", "emph");
   overrides.subtle = textMuted(mood);
-  return { name: mood.label, base: `${mood.appearance}-ansi`, overrides };
+  return { name: mood.label, base: mood.appearance, overrides };
 }
 
 /** Render all themes and semantic statusline palettes relative to the plugin package. */

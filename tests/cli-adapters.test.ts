@@ -24,7 +24,7 @@ describe("CLI themes", () => {
       const theme = mapMoodToClaudeCode(mood);
       expect(Object.keys(theme.overrides).sort()).toEqual([...CLAUDE_KEYS].sort());
       expect(theme.name).toBe(mood.label);
-      expect(theme.base).toBe(`${mood.appearance}-ansi`);
+      expect(theme.base).toBe(mood.appearance);
       for (const value of Object.values(theme.overrides)) expect(value).toMatch(/^#[\dA-F]{6}$/i);
       expect(theme.overrides.text).toBe(mood.semantic["text.primary"]);
       expect(theme.overrides.background).toBe(mood.semantic["surface.canvas"]);
@@ -54,7 +54,10 @@ describe("CLI themes", () => {
       ).toEqual(mapMoodToClaudeCode(mood));
       expect(
         JSON.parse(files.find((f) => f.path === `statusline/hue-${mood.id}.json`)?.content ?? ""),
-      ).toEqual({ segments: ["repo", "branch", "context", "tokens", "diff", "model", "agents"], palette: mood.semantic });
+      ).toEqual({
+        segments: ["repo", "branch", "context", "tokens", "diff", "model", "agents"],
+        palette: mood.semantic,
+      });
     }
     const plugin = JSON.parse(
       readFileSync(

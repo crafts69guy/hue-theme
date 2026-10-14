@@ -1,6 +1,6 @@
 {
   "name": "Huế Cung",
-  "base": "light-ansi",
+  "base": "light",
   "overrides": {
     "autoAccept": "#6B2FD0",
     "skill": "#6B2FD0",

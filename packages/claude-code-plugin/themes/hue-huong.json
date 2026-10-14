@@ -1,6 +1,6 @@
 {
   "name": "Huế Hương",
-  "base": "dark-ansi",
+  "base": "dark",
   "overrides": {
     "autoAccept": "#A9A0C8",
     "skill": "#A9A0C8",

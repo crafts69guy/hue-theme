@@ -1,6 +1,6 @@
 {
   "name": "Huế Mưa",
-  "base": "dark-ansi",
+  "base": "dark",
   "overrides": {
     "autoAccept": "#8A7BFF",
     "skill": "#8A7BFF",
