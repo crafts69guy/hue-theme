@@ -24,6 +24,20 @@ type Rule = {
   fontStyle?: string;
 };
 
+/** A resolved tmTheme rule appended after Hue's common syntax rules. */
+export type ResolvedThemeRule = {
+  /** Human-readable rule label. */
+  name: string;
+  /** Sublime/syntect scope selector. */
+  scope: string;
+  /** Resolved foreground color, when supplied. */
+  foreground?: string;
+  /** Resolved background color, when supplied. */
+  background?: string;
+  /** Space-separated tmTheme styles; an empty string resets inherited styles. */
+  fontStyle?: string;
+};
+
 // Scope selectors follow common tmTheme practice (syntect resolves ties by
 // selector specificity, not rule order). Colors are Hue semantic role names.
 const RULES: Rule[] = [
@@ -186,13 +200,22 @@ function xmlEscape(value: string): string {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function renderRule(mood: ResolvedMood, rule: Rule): string {
+function renderRule(rule: ResolvedThemeRule): string {
   const settings: string[] = [];
-  if (rule.fg) {
-    settings.push(`        <key>foreground</key>\n        <string>${role(mood, rule.fg)}</string>`);
+  if (rule.foreground) {
+    settings.push(
+      `        <key>foreground</key>\n        <string>${xmlEscape(rule.foreground)}</string>`,
+    );
+  }
+  if (rule.background) {
+    settings.push(
+      `        <key>background</key>\n        <string>${xmlEscape(rule.background)}</string>`,
+    );
   }
   if (rule.fontStyle !== undefined) {
-    settings.push(`        <key>fontStyle</key>\n        <string>${rule.fontStyle}</string>`);
+    settings.push(
+      `        <key>fontStyle</key>\n        <string>${xmlEscape(rule.fontStyle)}</string>`,
+    );
   }
   return `    <dict>
       <key>name</key>
@@ -206,8 +229,11 @@ ${settings.join("\n")}
     </dict>`;
 }
 
-/** Render one bat/syntect .tmTheme for a mood. */
-function renderBatTheme(mood: ResolvedMood): string {
+/** Render a bat/syntect theme; optional resolved rules extend the shared syntax. */
+export function renderBatTheme(
+  mood: ResolvedMood,
+  extraRules: readonly ResolvedThemeRule[] = [],
+): string {
   const globals: Array<[string, string]> = [
     ["background", role(mood, "surface.canvas")],
     ["foreground", role(mood, "text.primary")],
@@ -241,7 +267,12 @@ function renderBatTheme(mood: ResolvedMood): string {
 ${globalEntries}
       </dict>
     </dict>
-${RULES.map((rule) => renderRule(mood, rule)).join("\n")}
+${[
+  ...RULES.map(({ fg, ...rule }) => ({ ...rule, foreground: fg ? role(mood, fg) : undefined })),
+  ...extraRules,
+]
+  .map(renderRule)
+  .join("\n")}
   </array>
 </dict>
 </plist>

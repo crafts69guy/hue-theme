@@ -33,6 +33,8 @@ declaration rather than only checking that the moods agree with each other.
 | LazyVim/Neovim  | shipped | highlight groups and terminal ANSI colors | Never set the user's font             |
 | Ghostty         | shipped | theme file (ANSI palette + bg/fg/cursor)  | Theme carries colors only             |
 | ChatGPT/Codex   | shipped | `codex-theme-v1` share string             | Use system-default fonts              |
+| claude-code | local | plugin JSON UI themes + semantic statusline palettes | Host controls syntax and typography |
+| codex-cli | local | native `.tmTheme` syntax, accent and diff scopes | CLI renders foreground and bold only |
 | tmux            | shipped | TPM plugin (status/pane/window theme)     | Never set the user's font             |
 | Fish/Tide       | shipped | sourceable Fish prompt theme              | Theme carries colors only             |
 | Inkdrop         | shipped | Unified v6 CSS custom properties          | Respect user font settings by default |
@@ -148,6 +150,20 @@ package. tuicr resolves `syntax_theme` relative to its theme file, so the bat
 values the contract does not name — a dimmer text tier and a legible foreground
 for filled backgrounds — and takes both from `src/derive.ts` rather than
 widening the closed `text` family for one host. Its diff rows are delta's.
+
+The `claude-code` adapter maps every color key verified in Claude Code 2.1.299,
+including ten runtime supplements listed in its package README. ANSI bases
+retain fallbacks for new host roles. Shimmers derive from semantic colors;
+diff backgrounds reuse `diffRow`. Syntax remains host-controlled. Statusline
+palettes serialize the semantic map for the existing Lua renderer.
+
+The `codex-cli` adapter reuses bat syntax and adds native `codex.accent` and
+added/deleted foreground/background scopes. In Codex 0.162.1 only syntax
+foreground and bold are consumed; tmTheme globals do not theme the entire TUI
+or footer background and borders are omitted. Selected footer fields consume
+semantic scopes when `status_line_use_colors` is enabled, with host adjustments
+to saturation and contrast. Desktop `codex` remains a distinct adapter.
+The shared bat renderer's optional rules preserve default bat/tuicr bytes.
 
 ## Accessibility policy
 

@@ -28,7 +28,11 @@ Ghostty, bat, lazygit, and delta theme files (`packages/terminal-themes`), the
 Fish/Tide theme files (`packages/fish-themes`), the herdr and tuicr fragments
 (`packages/herdr-plugin`), and the unified Inkdrop v6 packages
 (`packages/hue-*-theme`), plus ChatGPT/Codex share strings
-(`packages/codex-themes`). Generated artifacts must not be edited by hand.
+(`packages/codex-themes`), `claude-code` plugin themes and semantic statusline
+palettes (`packages/claude-code-plugin`), and `codex-cli` syntax/accent/diff
+themes (`packages/codex-cli-themes`). Generated artifacts must not be edited
+by hand. Claude syntax and Codex CLI borders/full chrome remain host-controlled;
+see the package READMEs for runtime keys and native loading.
 
 The root `bun run ci` starts with `biome ci .`; run `bun run format` from the
 repo root after rebuilding generated artifacts so formatter and import-order

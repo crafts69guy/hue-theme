@@ -5,7 +5,9 @@
 
 import { basename } from "node:path";
 import { batManifest, renderBatFiles } from "./adapters/bat";
+import { claudeCodeManifest, renderClaudeCodeFiles } from "./adapters/claude-code";
 import { codexManifest, renderCodexThemeFiles } from "./adapters/codex";
+import { codexCliManifest, renderCodexCliFiles } from "./adapters/codex-cli";
 import { deltaManifest, renderDeltaFiles } from "./adapters/delta";
 import { ghosttyManifest, renderGhosttyFiles } from "./adapters/ghostty";
 import { herdrManifest, renderHerdrFiles } from "./adapters/herdr";
@@ -31,6 +33,18 @@ export type Adapter = {
 };
 
 export const ADAPTERS: readonly Adapter[] = [
+  {
+    name: "claude-code",
+    manifest: claudeCodeManifest,
+    outDir: "../claude-code-plugin",
+    render: renderClaudeCodeFiles,
+  },
+  {
+    name: "codex-cli",
+    manifest: codexCliManifest,
+    outDir: "../codex-cli-themes",
+    render: renderCodexCliFiles,
+  },
   {
     name: "yaak",
     manifest: yaakManifest,

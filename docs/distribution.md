@@ -1,6 +1,6 @@
 # How themes reach users
 
-Twelve hosts, four channels — plus the token package itself on npm. The channel is not obvious from the package layout, and
+Fourteen hosts, four channels — plus the token package itself on npm. The channel is not obvious from the package layout, and
 guessing it wrong is how the Yaak theme sat three months stale — a script named
 `release-yaak.sh` pushes source to GitHub, but Yaak installs from its own
 registry, so "releasing" it reached nobody.
@@ -15,6 +15,8 @@ registry, so "releasing" it reached nobody.
 | herdr, tuicr | local plugin path | `herdr plugin action invoke apply-mood --plugin hue-theme` | `~/.config/herdr/config.toml`; `~/.config/tuicr/themes/hue-<mood>.toml` matches the repo |
 | Fish / Tide | sourced from a working copy | nothing to publish | `hue-theme <mood>` |
 | ChatGPT/Codex | local share string | nothing to publish | import `hue-<mood>.txt` in Appearance |
+| claude-code | local plugin directory | nothing to publish | load `packages/claude-code-plugin` with `--plugin-dir`, select `/theme` |
+| codex-cli | local native theme files | nothing to publish | copy `packages/codex-cli-themes/themes` into `$CODEX_HOME/themes`, select `/theme` |
 | Token package (`@crafts69guy/hue-theme-tokens`) | **npm** | `npm publish packages/tokens --provenance=false`, run by the owner | `curl` the registry, below |
 
 `scripts/release-all.sh` covers only the first two rows plus the Yaak *source*
@@ -41,6 +43,14 @@ fragment is only read if `~/.gitconfig` includes it, so
 `[delta] features = hue` are set once by hand. Confirm with `delta --show-config
 | grep plus-style`, not by reading the synced file — a syntax error anywhere in
 the fragment makes delta exit rather than fall back.
+
+Claude Code and Codex CLI artifacts are not published by release scripts.
+The Claude plugin contributes themes using an experimental manifest field;
+matching statusline palettes are consumed by `claude-statusline.nvim`.
+`codex-statusline.nvim` bundles the CLI tmThemes and installs them explicitly.
+Both launchers select a mood at startup; terminal selection is separate and
+Claude `/theme` changes do not synchronize the statusline mid-session. Neither
+package modifies persistent user settings automatically.
 
 ## Version numbers are independent
 

@@ -1,0 +1,31 @@
+{
+  "segments": ["model", "directory", "branch", "context"],
+  "palette": {
+    "surface.canvas": "#001F3E",
+    "surface.raised": "#0A2E52",
+    "surface.selected": "#123F6E",
+    "text.primary": "#E5F4FF",
+    "text.secondary": "#9DB4D4",
+    "text.accent": "#00CF6A",
+    "border.subtle": "#4E7AA6",
+    "border.faint": "#1B3A5C",
+    "accent.primary": "#00CF6A",
+    "accent.secondary": "#8A7BFF",
+    "status.success": "#00CF6A",
+    "status.info": "#10B6F8",
+    "status.notice": "#8A7BFF",
+    "status.warning": "#FF8D00",
+    "status.error": "#FF5A63",
+    "syntax.keyword": "#8A7BFF",
+    "syntax.string": "#00CF6A",
+    "syntax.number": "#FF8D00",
+    "syntax.function": "#10B6F8",
+    "syntax.comment": "#6B819A",
+    "syntax.operator": "#FF5A63",
+    "syntax.type": "#10B6F8",
+    "syntax.constant": "#FF8D00",
+    "syntax.property": "#E5F4FF",
+    "syntax.variable": "#E5F4FF",
+    "syntax.punctuation": "#8CA3BD"
+  }
+}
